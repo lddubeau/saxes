@@ -1,9 +1,9 @@
-var sax = require('../')
+var saxes = require('../')
 var xml = '<r>'
 var text = ''
-for (var i in sax.ENTITIES) {
+for (var i in saxes.ENTITIES) {
   xml += '&' + i + ';'
-  text += sax.ENTITIES[i]
+  text += saxes.ENTITIES[i]
 }
 xml += '</r>'
 require(__dirname).test({

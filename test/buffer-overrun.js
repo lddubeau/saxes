@@ -1,7 +1,7 @@
 // set this really low so that I don't have to put 64 MB of xml in here.
-var sax = require('../lib/sax')
-var bl = sax.MAX_BUFFER_LENGTH
-sax.MAX_BUFFER_LENGTH = 5
+var saxes = require('../lib/saxes')
+var bl = saxes.MAX_BUFFER_LENGTH
+saxes.MAX_BUFFER_LENGTH = 5
 
 require(__dirname).test({
   expect: [
@@ -27,4 +27,4 @@ require(__dirname).test({
   .write('yo')
   .write('</abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ>')
   .close()
-sax.MAX_BUFFER_LENGTH = bl
+saxes.MAX_BUFFER_LENGTH = bl

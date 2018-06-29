@@ -1,50 +1,38 @@
-# sax js
+# saxes
 
-A sax-style parser for XML and HTML.
+A sax-style non-validating parser for XML.
+
+Saxes is a fork of [sax-js](https://github.com/isaacs/sax-js)
+1.2.4. All references to sax in this project's documentation are
+references to sax 1.2.4.
 
 Designed with [node](http://nodejs.org/) in mind, but should work fine in
 the browser or other CommonJS implementations.
 
-## What This Is
+## Notable Differences from sax-js.
 
-* A very simple tool to parse through an XML string.
-* A stepping stone to a streaming HTML parser.
-* A handy way to deal with RSS and other mostly-ok-but-kinda-broken XML
-  docs.
-
-## What This Is (probably) Not
-
-* An HTML Parser - That's a fine goal, but this isn't it.  It's just
-  XML.
-* A DOM Builder - You can use it to build an object model out of XML,
-  but it doesn't do that out of the box.
-* XSLT - No DOM = no querying.
-* 100% Compliant with (some other SAX implementation) - Most SAX
-  implementations are in Java and do a lot more than this does.
-* An XML Validator - It does a little validation when in strict mode, but
-  not much.
-* A Schema-Aware XSD Thing - Schemas are an exercise in fetishistic
-  masochism.
-* A DTD-aware Thing - Fetching DTDs is a much bigger job.
+* Saxes aims to be much stricter than sax-js with regards to XML
+  well-formedness. sax-js, even in its so-called "strict mode", is not
+  strict. It silently accepts structures that are not well-formed
+  XML. Projects that need absolute compliance with well-formedness
+  constraints cannot use sax-js as-is.
+* Saxes does not support HTML, or anything short of XML.
+* Saxes does not aim to support antiquated platforms.
 
 ## Regarding `<!DOCTYPE`s and `<!ENTITY`s
 
-The parser will handle the basic XML entities in text nodes and attribute
-values: `&amp; &lt; &gt; &apos; &quot;`. It's possible to define additional
-entities in XML by putting them in the DTD. This parser doesn't do anything
-with that. If you want to listen to the `ondoctype` event, and then fetch
-the doctypes, and read the entities and add them to `parser.ENTITIES`, then
-be my guest.
-
-Unknown entities will fail in strict mode, and in loose mode, will pass
-through unmolested.
+The parser will handle the basic XML entities in text nodes and
+attribute values: `&amp; &lt; &gt; &apos; &quot;`. It's possible to
+define additional entities in XML by putting them in the DTD. This
+parser doesn't do anything with that. If you want to listen to the
+`ondoctype` event, and then fetch the doctypes, and read the entities
+and add them to `parser.ENTITIES`, then be my guest.
 
 ## Usage
 
 ```javascript
-var sax = require("./lib/sax"),
-  strict = true, // set to false for html-mode
-  parser = sax.parser(strict);
+var saxes = require("./lib/saxes"),
+  parser = saxes.parser();
 
 parser.onerror = function (e) {
   // an error happened.
@@ -66,8 +54,8 @@ parser.write('<xml>Hello, <who name="world">world</who>!</xml>').close();
 
 // stream usage
 // takes the same options as the parser
-var saxStream = require("sax").createStream(strict, options)
-saxStream.on("error", function (e) {
+var saxesStream = require("saxes").createStream(options)
+saxesStream.on("error", function (e) {
   // unhandled errors will throw, since this is a proper node
   // event emitter.
   console.error("error!", e)
@@ -75,22 +63,19 @@ saxStream.on("error", function (e) {
   this._parser.error = null
   this._parser.resume()
 })
-saxStream.on("opentag", function (node) {
+saxesStream.on("opentag", function (node) {
   // same object as above
 })
 // pipe is supported, and it's readable/writable
 // same chunks coming in also go out.
 fs.createReadStream("file.xml")
-  .pipe(saxStream)
+  .pipe(saxesStream)
   .pipe(fs.createWriteStream("file-copy.xml"))
 ```
-
 
 ## Arguments
 
 Pass the following arguments to the parser function.  All are optional.
-
-`strict` - Boolean. Whether or not to be a jerk. Default: `false`.
 
 `opt` - Object bag of settings regarding string formatting.  All default to `false`.
 
@@ -132,8 +117,6 @@ document where the parser currently is looking.
 `closed` - Boolean indicating whether or not the parser can be written to.
 If it's `true`, then wait for the `ready` event to write again.
 
-`strict` - Boolean indicating whether or not the parser is a jerk.
-
 `opt` - Any options passed into the constructor.
 
 `tag` - The current tag being dealt with.
@@ -152,8 +135,8 @@ When using the stream interface, assign handlers using the EventEmitter
 
 `error` - Indication that something bad happened. The error will be hanging
 out on `parser.error`, and must be deleted before parsing can continue. By
-listening to this event, you can keep an eye on that kind of stuff. Note:
-this happens *much* more in strict mode. Argument: instance of `Error`.
+listening to this event, you can keep an eye on that kind of stuff.
+Argument: instance of `Error`.
 
 `text` - Text node. Argument: string of text.
 
@@ -165,7 +148,7 @@ processing instructions have implementation dependent semantics.
 
 `sgmldeclaration` - Random SGML declarations. Stuff like `<!ENTITY p>`
 would trigger this kind of event. This is a weird thing to support, so it
-might go away at some point. SAX isn't intended to be used to parse SGML,
+might go away at some point. saxes isn't intended to be used to parse SGML,
 after all.
 
 `opentagstart` - Emitted immediately when the tag name is available,
@@ -173,21 +156,17 @@ but before any attributes are encountered.  Argument: object with a
 `name` field and an empty `attributes` set.  Note that this is the
 same object that will later be emitted in the `opentag` event.
 
-`opentag` - An opening tag. Argument: object with `name` and `attributes`.
-In non-strict mode, tag names are uppercased, unless the `lowercase`
-option is set.  If the `xmlns` option is set, then it will contain
+`opentag` - An opening tag. Argument: object with `name` and
+`attributes`.  If the `xmlns` option is set, then it will contain
 namespace binding information on the `ns` member, and will have a
 `local`, `prefix`, and `uri` member.
 
-`closetag` - A closing tag. In loose mode, tags are auto-closed if their
-parent closes. In strict mode, well-formedness is enforced. Note that
-self-closing tags will have `closeTag` emitted immediately after `openTag`.
-Argument: tag name.
+`closetag` - A closing tag. Note that self-closing tags will have
+`closeTag` emitted immediately after `openTag`.  Argument: tag name.
 
-`attribute` - An attribute node.  Argument: object with `name` and `value`.
-In non-strict mode, attribute names are uppercased, unless the `lowercase`
-option is set.  If the `xmlns` option is set, it will also contains namespace
-information.
+`attribute` - An attribute node.  Argument: object with `name` and
+`value`.  If the `xmlns` option is set, it will also contains
+namespace information.
 
 `comment` - A comment node.  Argument: the string of the comment.
 
@@ -210,16 +189,3 @@ signal the end of a namespace binding.
 
 `ready` - Indication that the stream has reset, and is ready to be written
 to.
-
-`noscript` - In non-strict mode, `<script>` tags trigger a `"script"`
-event, and their contents are not checked for special xml characters.
-If you pass `noscript: true`, then this behavior is suppressed.
-
-## Reporting Problems
-
-It's best to write a failing test if you find an issue.  I will always
-accept pull requests with failing tests if they demonstrate intended
-behavior, but it is very hard to figure out what issue you're describing
-without a test.  Writing a test is also the best way for you yourself
-to figure out if you really understand the issue you think you have with
-sax-js.

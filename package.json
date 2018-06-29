@@ -1,24 +1,28 @@
 {
-  "name": "sax",
+  "name": "saxes",
   "description": "An evented streaming XML parser in JavaScript",
-  "author": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)",
+  "author": "Louis-Dominique Dubeau <ldd@lddubeau.com>",
   "version": "1.2.4",
-  "main": "lib/sax.js",
+  "main": "lib/saxes.js",
   "license": "ISC",
   "scripts": {
     "test": "tap test/*.js --cov -j4",
     "posttest": "standard -F test/*.js lib/*.js",
     "preversion": "npm test",
     "postversion": "npm publish",
-    "postpublish": "git push origin --all; git push origin --tags"
+    "postpublish": "git push origin --all; git push origin --tags",
+    "commitmsg": "commitlint -E GIT_PARAMS"
   },
-  "repository": "git://github.com/isaacs/sax-js.git",
+  "repository": "git://github.com/lddubeau/saxes.git",
   "files": [
-    "lib/sax.js",
+    "lib/saxes.js",
     "LICENSE",
     "README.md"
   ],
   "devDependencies": {
+    "@commitlint/cli": "^7.0.0",
+    "@commitlint/config-angular": "^7.0.1",
+    "husky": "^0.14.3",
     "standard": "^8.6.0",
     "tap": "^10.5.1"
   }

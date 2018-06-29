@@ -1,18 +1,18 @@
-var sax = require('../lib/sax')
+var saxes = require('../lib/saxes')
 
 var t = require('tap')
 
-exports.sax = sax
+exports.saxes = saxes
 
 // handy way to do simple unit tests
 // if the options contains an xml string, it'll be written and the parser closed.
 // otherwise, it's assumed that the test will write and close.
 exports.test = function test (options) {
   var xml = options.xml
-  var parser = sax.parser(options.strict, options.opt)
+  var parser = saxes.parser(options.strict, options.opt)
   var expect = options.expect
   var e = 0
-  sax.EVENTS.forEach(function (ev) {
+  saxes.EVENTS.forEach(function (ev) {
     parser['on' + ev] = function (n) {
       if (process.env.DEBUG) {
         console.error({
