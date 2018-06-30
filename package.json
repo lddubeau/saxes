@@ -7,7 +7,7 @@
   "license": "ISC",
   "scripts": {
     "test": "tap test/*.js --cov -j4",
-    "posttest": "standard -F test/*.js lib/*.js",
+    "posttest": "eslint test/*.js lib/*.js",
     "preversion": "npm test",
     "postversion": "npm publish",
     "postpublish": "git push origin --all; git push origin --tags",
@@ -22,8 +22,9 @@
   "devDependencies": {
     "@commitlint/cli": "^7.0.0",
     "@commitlint/config-angular": "^7.0.1",
+    "eslint": "^4.19.1",
+    "eslint-config-lddubeau-base": "^2.0.1",
     "husky": "^0.14.3",
-    "standard": "^8.6.0",
     "tap": "^10.5.1"
   }
 }

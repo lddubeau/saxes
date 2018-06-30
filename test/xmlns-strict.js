@@ -1,333 +1,335 @@
-require(__dirname).test({
-  xml: '<root>' +
-    '<plain attr="normal" />' +
-    '<ns1 xmlns="uri:default">' +
-    '<plain attr="normal"/>' +
-    '</ns1>' +
-    '<ns2 xmlns:a="uri:nsa">' +
-    '<plain attr="normal"/>' +
-    '<a:ns a:attr="namespaced"/>' +
-    '</ns2>' +
-    '</root>',
+"use strict";
+
+require(".").test({
+  xml: "<root>" +
+    "<plain attr=\"normal\" />" +
+    "<ns1 xmlns=\"uri:default\">" +
+    "<plain attr=\"normal\"/>" +
+    "</ns1>" +
+    "<ns2 xmlns:a=\"uri:nsa\">" +
+    "<plain attr=\"normal\"/>" +
+    "<a:ns a:attr=\"namespaced\"/>" +
+    "</ns2>" +
+    "</root>",
   expect: [
     [
-      'opentagstart',
+      "opentagstart",
       {
-        name: 'root',
-        attributes: {},
-        ns: {}
-      }
-    ],
-    [
-      'opentag',
-      {
-        name: 'root',
-        prefix: '',
-        local: 'root',
-        uri: '',
+        name: "root",
         attributes: {},
         ns: {},
-        isSelfClosing: false
-      }
+      },
     ],
     [
-      'opentagstart',
+      "opentag",
       {
-        name: 'plain',
+        name: "root",
+        prefix: "",
+        local: "root",
+        uri: "",
         attributes: {},
-        ns: {}
-      }
+        ns: {},
+        isSelfClosing: false,
+      },
     ],
     [
-      'attribute',
+      "opentagstart",
       {
-        name: 'attr',
-        value: 'normal',
-        prefix: '',
-        local: 'attr',
-        uri: ''
-      }
+        name: "plain",
+        attributes: {},
+        ns: {},
+      },
     ],
     [
-      'opentag',
+      "attribute",
       {
-        name: 'plain',
-        prefix: '',
-        local: 'plain',
-        uri: '',
+        name: "attr",
+        value: "normal",
+        prefix: "",
+        local: "attr",
+        uri: "",
+      },
+    ],
+    [
+      "opentag",
+      {
+        name: "plain",
+        prefix: "",
+        local: "plain",
+        uri: "",
         attributes: {
-          'attr': {
-            name: 'attr',
-            value: 'normal',
-            prefix: '',
-            local: 'attr',
-            uri: ''
-          }
+          attr: {
+            name: "attr",
+            value: "normal",
+            prefix: "",
+            local: "attr",
+            uri: "",
+          },
         },
         ns: {},
-        isSelfClosing: true
-      }
+        isSelfClosing: true,
+      },
     ],
     [
-      'closetag',
-      'plain'
+      "closetag",
+      "plain",
     ],
     [
-      'opentagstart',
+      "opentagstart",
       {
-        name: 'ns1',
+        name: "ns1",
         attributes: {},
-        ns: {}
-      }
+        ns: {},
+      },
     ],
     [
-      'opennamespace',
+      "opennamespace",
       {
-        prefix: '',
-        uri: 'uri:default'
-      }
+        prefix: "",
+        uri: "uri:default",
+      },
     ],
     [
-      'attribute',
+      "attribute",
       {
-        name: 'xmlns',
-        value: 'uri:default',
-        prefix: 'xmlns',
-        local: '',
-        uri: 'http://www.w3.org/2000/xmlns/'
-      }
+        name: "xmlns",
+        value: "uri:default",
+        prefix: "xmlns",
+        local: "",
+        uri: "http://www.w3.org/2000/xmlns/",
+      },
     ],
     [
-      'opentag',
+      "opentag",
       {
-        name: 'ns1',
-        prefix: '',
-        local: 'ns1',
-        uri: 'uri:default',
+        name: "ns1",
+        prefix: "",
+        local: "ns1",
+        uri: "uri:default",
         attributes: {
-          'xmlns': {
-            name: 'xmlns',
-            value: 'uri:default',
-            prefix: 'xmlns',
-            local: '',
-            uri: 'http://www.w3.org/2000/xmlns/'
-          }
+          xmlns: {
+            name: "xmlns",
+            value: "uri:default",
+            prefix: "xmlns",
+            local: "",
+            uri: "http://www.w3.org/2000/xmlns/",
+          },
         },
         ns: {
-          '': 'uri:default'
+          "": "uri:default",
         },
-        isSelfClosing: false
-      }
+        isSelfClosing: false,
+      },
     ],
     [
-      'opentagstart',
+      "opentagstart",
       {
-        name: 'plain',
+        name: "plain",
         ns: {
-          '': 'uri:default'
+          "": "uri:default",
         },
-        attributes: {}
-      }
-    ],
-    [
-      'attribute',
-      {
-        name: 'attr',
-        value: 'normal',
-        prefix: '',
-        local: 'attr',
-        uri: ''
-      }
-    ],
-    [
-      'opentag',
-      {
-        name: 'plain',
-        prefix: '',
-        local: 'plain',
-        uri: 'uri:default',
-        ns: {
-          '': 'uri:default'
-        },
-        attributes: {
-          'attr': {
-            name: 'attr',
-            value: 'normal',
-            prefix: '',
-            local: 'attr',
-            uri: ''
-          }
-        },
-        isSelfClosing: true
-      }
-    ],
-    [
-      'closetag',
-      'plain'
-    ],
-    [
-      'closetag',
-      'ns1'
-    ],
-    [
-      'closenamespace',
-      {
-        prefix: '',
-        uri: 'uri:default'
-      }
-    ],
-    [
-      'opentagstart',
-      {
-        name: 'ns2',
         attributes: {},
-        ns: {}
-      }
+      },
     ],
     [
-      'opennamespace',
+      "attribute",
       {
-        prefix: 'a',
-        uri: 'uri:nsa'
-      }
+        name: "attr",
+        value: "normal",
+        prefix: "",
+        local: "attr",
+        uri: "",
+      },
     ],
     [
-      'attribute',
+      "opentag",
       {
-        name: 'xmlns:a',
-        value: 'uri:nsa',
-        prefix: 'xmlns',
-        local: 'a',
-        uri: 'http://www.w3.org/2000/xmlns/'
-      }
-    ],
-    [
-      'opentag',
-      {
-        name: 'ns2',
-        prefix: '',
-        local: 'ns2',
-        uri: '',
+        name: "plain",
+        prefix: "",
+        local: "plain",
+        uri: "uri:default",
+        ns: {
+          "": "uri:default",
+        },
         attributes: {
-          'xmlns:a': {
-            name: 'xmlns:a',
-            value: 'uri:nsa',
-            prefix: 'xmlns',
-            local: 'a',
-            uri: 'http://www.w3.org/2000/xmlns/'
-          }
+          attr: {
+            name: "attr",
+            value: "normal",
+            prefix: "",
+            local: "attr",
+            uri: "",
+          },
+        },
+        isSelfClosing: true,
+      },
+    ],
+    [
+      "closetag",
+      "plain",
+    ],
+    [
+      "closetag",
+      "ns1",
+    ],
+    [
+      "closenamespace",
+      {
+        prefix: "",
+        uri: "uri:default",
+      },
+    ],
+    [
+      "opentagstart",
+      {
+        name: "ns2",
+        attributes: {},
+        ns: {},
+      },
+    ],
+    [
+      "opennamespace",
+      {
+        prefix: "a",
+        uri: "uri:nsa",
+      },
+    ],
+    [
+      "attribute",
+      {
+        name: "xmlns:a",
+        value: "uri:nsa",
+        prefix: "xmlns",
+        local: "a",
+        uri: "http://www.w3.org/2000/xmlns/",
+      },
+    ],
+    [
+      "opentag",
+      {
+        name: "ns2",
+        prefix: "",
+        local: "ns2",
+        uri: "",
+        attributes: {
+          "xmlns:a": {
+            name: "xmlns:a",
+            value: "uri:nsa",
+            prefix: "xmlns",
+            local: "a",
+            uri: "http://www.w3.org/2000/xmlns/",
+          },
         },
         ns: {
-          a: 'uri:nsa'
+          a: "uri:nsa",
         },
-        isSelfClosing: false
-      }
+        isSelfClosing: false,
+      },
     ],
     [
-      'opentagstart',
+      "opentagstart",
       {
-        name: 'plain',
+        name: "plain",
         attributes: {},
         ns: {
-          a: 'uri:nsa'
-        }
-      }
+          a: "uri:nsa",
+        },
+      },
     ],
     [
-      'attribute',
+      "attribute",
       {
-        name: 'attr',
-        value: 'normal',
-        prefix: '',
-        local: 'attr',
-        uri: ''
-      }
+        name: "attr",
+        value: "normal",
+        prefix: "",
+        local: "attr",
+        uri: "",
+      },
     ],
     [
-      'opentag',
+      "opentag",
       {
-        name: 'plain',
-        prefix: '',
-        local: 'plain',
-        uri: '',
+        name: "plain",
+        prefix: "",
+        local: "plain",
+        uri: "",
         attributes: {
-          'attr': {
-            name: 'attr',
-            value: 'normal',
-            prefix: '',
-            local: 'attr',
-            uri: ''
-          }
+          attr: {
+            name: "attr",
+            value: "normal",
+            prefix: "",
+            local: "attr",
+            uri: "",
+          },
         },
         ns: {
-          a: 'uri:nsa'
+          a: "uri:nsa",
         },
-        isSelfClosing: true
-      }
+        isSelfClosing: true,
+      },
     ],
     [
-      'closetag',
-      'plain'
+      "closetag",
+      "plain",
     ],
     [
-      'opentagstart',
+      "opentagstart",
       {
-        name: 'a:ns',
+        name: "a:ns",
         attributes: {},
-        ns: { a: 'uri:nsa' }
-      }
+        ns: { a: "uri:nsa" },
+      },
     ],
     [
-      'attribute',
+      "attribute",
       {
-        name: 'a:attr',
-        value: 'namespaced',
-        prefix: 'a',
-        local: 'attr',
-        uri: 'uri:nsa'
-      }
+        name: "a:attr",
+        value: "namespaced",
+        prefix: "a",
+        local: "attr",
+        uri: "uri:nsa",
+      },
     ],
     [
-      'opentag',
+      "opentag",
       {
-        name: 'a:ns',
-        prefix: 'a',
-        local: 'ns',
-        uri: 'uri:nsa',
+        name: "a:ns",
+        prefix: "a",
+        local: "ns",
+        uri: "uri:nsa",
         attributes: {
-          'a:attr': {
-            name: 'a:attr',
-            value: 'namespaced',
-            prefix: 'a',
-            local: 'attr',
-            uri: 'uri:nsa'
-          }
+          "a:attr": {
+            name: "a:attr",
+            value: "namespaced",
+            prefix: "a",
+            local: "attr",
+            uri: "uri:nsa",
+          },
         },
-        ns: { a: 'uri:nsa' },
-        isSelfClosing: true
-      }
+        ns: { a: "uri:nsa" },
+        isSelfClosing: true,
+      },
     ],
     [
-      'closetag',
-      'a:ns'
+      "closetag",
+      "a:ns",
     ],
     [
-      'closetag',
-      'ns2'
+      "closetag",
+      "ns2",
     ],
     [
-      'closenamespace',
+      "closenamespace",
       {
-        prefix: 'a',
-        uri: 'uri:nsa'
-      }
+        prefix: "a",
+        uri: "uri:nsa",
+      },
     ],
     [
-      'closetag',
-      'root'
-    ]
+      "closetag",
+      "root",
+    ],
   ],
   opt: {
-    xmlns: true
-  }
-})
+    xmlns: true,
+  },
+});

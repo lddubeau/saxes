@@ -1,32 +1,34 @@
-require(__dirname).test({
-  xml: '<xmlns/>',
+"use strict";
+
+require(".").test({
+  xml: "<xmlns/>",
   expect: [
     [
-      'opentagstart',
+      "opentagstart",
       {
-        name: 'xmlns',
-        attributes: {},
-        ns: {}
-      }
-    ],
-    [
-      'opentag',
-      {
-        name: 'xmlns',
-        uri: '',
-        prefix: '',
-        local: 'xmlns',
+        name: "xmlns",
         attributes: {},
         ns: {},
-        isSelfClosing: true
-      }
+      },
     ],
     [
-      'closetag',
-      'xmlns'
-    ]
+      "opentag",
+      {
+        name: "xmlns",
+        uri: "",
+        prefix: "",
+        local: "xmlns",
+        attributes: {},
+        ns: {},
+        isSelfClosing: true,
+      },
+    ],
+    [
+      "closetag",
+      "xmlns",
+    ],
   ],
   opt: {
-    xmlns: true
-  }
-})
+    xmlns: true,
+  },
+});

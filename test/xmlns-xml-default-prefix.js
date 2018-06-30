@@ -1,30 +1,32 @@
-require(__dirname).test({
-  xml: '<xml:root/>',
+"use strict";
+
+require(".").test({
+  xml: "<xml:root/>",
   expect: [
     [
-      'opentagstart',
+      "opentagstart",
       {
-        name: 'xml:root',
-        attributes: {},
-        ns: {}
-      }
-    ],
-    [
-      'opentag',
-      {
-        name: 'xml:root',
-        uri: 'http://www.w3.org/XML/1998/namespace',
-        prefix: 'xml',
-        local: 'root',
+        name: "xml:root",
         attributes: {},
         ns: {},
-        isSelfClosing: true
-      }
+      },
     ],
     [
-      'closetag',
-      'xml:root'
-    ]
+      "opentag",
+      {
+        name: "xml:root",
+        uri: "http://www.w3.org/XML/1998/namespace",
+        prefix: "xml",
+        local: "root",
+        attributes: {},
+        ns: {},
+        isSelfClosing: true,
+      },
+    ],
+    [
+      "closetag",
+      "xml:root",
+    ],
   ],
-  opt: { xmlns: true }
-})
+  opt: { xmlns: true },
+});

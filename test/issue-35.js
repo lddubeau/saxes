@@ -1,11 +1,13 @@
+"use strict";
+
 // https://github.com/isaacs/sax-js/issues/35
-require(__dirname).test({
-  xml: '<xml>&#Xd;&#X0d;\n</xml>',
+require(".").test({
+  xml: "<xml>&#Xd;&#X0d;\n</xml>",
   expect: [
-    [ 'opentagstart', { name: 'xml', attributes: {} } ],
-    [ 'opentag', { name: 'xml', attributes: {}, isSelfClosing: false } ],
-    [ 'text', '\r\r\n' ],
-    [ 'closetag', 'xml' ]
+    ["opentagstart", { name: "xml", attributes: {} }],
+    ["opentag", { name: "xml", attributes: {}, isSelfClosing: false }],
+    ["text", "\r\r\n"],
+    ["closetag", "xml"],
   ],
-  opt: {}
-})
+  opt: {},
+});

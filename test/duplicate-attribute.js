@@ -1,17 +1,19 @@
-require(__dirname).test({
-  xml: '<span id="hello" id="there"></span>',
+"use strict";
+
+require(".").test({
+  xml: "<span id=\"hello\" id=\"there\"></span>",
   expect: [
-    [ 'opentagstart', {
-      name: 'span',
-      attributes: {}
-    } ],
-    [ 'attribute', { name: 'id', value: 'hello' } ],
-    [ 'opentag', {
-      name: 'span',
-      attributes: { id: 'hello' },
-      isSelfClosing: false
-    } ],
-    [ 'closetag', 'span' ]
+    ["opentagstart", {
+      name: "span",
+      attributes: {},
+    }],
+    ["attribute", { name: "id", value: "hello" }],
+    ["opentag", {
+      name: "span",
+      attributes: { id: "hello" },
+      isSelfClosing: false,
+    }],
+    ["closetag", "span"],
   ],
-  opt: {}
-})
+  opt: {},
+});

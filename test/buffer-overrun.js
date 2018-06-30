@@ -1,30 +1,34 @@
-// set this really low so that I don't have to put 64 MB of xml in here.
-var saxes = require('../lib/saxes')
-var bl = saxes.MAX_BUFFER_LENGTH
-saxes.MAX_BUFFER_LENGTH = 5
+"use strict";
 
-require(__dirname).test({
+// set this really low so that I don't have to put 64 MB of xml in here.
+const saxes = require("../lib/saxes");
+
+const bl = saxes.MAX_BUFFER_LENGTH;
+saxes.MAX_BUFFER_LENGTH = 5;
+
+require(".").test({
   expect: [
-    ['error', 'Max buffer length exceeded: tagName\nLine: 0\nColumn: 15\nChar: '],
-    ['error', 'Max buffer length exceeded: tagName\nLine: 0\nColumn: 30\nChar: '],
-    ['error', 'Max buffer length exceeded: tagName\nLine: 0\nColumn: 45\nChar: '],
-    ['opentagstart', {
-      'name': 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-      'attributes': {}
+    ["error", "Max buffer length exceeded: tagName\nLine: 0\nColumn: 15\nChar: "],
+    ["error", "Max buffer length exceeded: tagName\nLine: 0\nColumn: 30\nChar: "],
+    ["error", "Max buffer length exceeded: tagName\nLine: 0\nColumn: 45\nChar: "],
+    ["opentagstart", {
+      name: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      attributes: {},
     }],
-    ['opentag', {
-      'name': 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-      'attributes': {},
-      'isSelfClosing': false
+    ["opentag", {
+      name: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      attributes: {},
+      isSelfClosing: false,
     }],
-    ['text', 'yo'],
-    ['closetag', 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ']
-  ]
-}).write('<abcdefghijklmn')
-  .write('opqrstuvwxyzABC')
-  .write('DEFGHIJKLMNOPQR')
-  .write('STUVWXYZ>')
-  .write('yo')
-  .write('</abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ>')
-  .close()
-saxes.MAX_BUFFER_LENGTH = bl
+    ["text", "yo"],
+    ["closetag", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"],
+  ],
+}).write("<abcdefghijklmn")
+  .write("opqrstuvwxyzABC")
+  .write("DEFGHIJKLMNOPQR")
+  .write("STUVWXYZ>")
+  .write("yo")
+  .write("</abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ>")
+  .close();
+
+saxes.MAX_BUFFER_LENGTH = bl;

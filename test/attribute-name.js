@@ -1,43 +1,45 @@
-require(__dirname).test({
+"use strict";
+
+require(".").test({
   xml: "<root length='12345'></root>",
   expect: [
-    [ 'opentagstart', { name: 'root', attributes: {}, ns: {} } ],
+    ["opentagstart", { name: "root", attributes: {}, ns: {} }],
     [
-      'attribute',
+      "attribute",
       {
-        name: 'length',
-        value: '12345',
-        prefix: '',
-        local: 'length',
-        uri: ''
-      }
+        name: "length",
+        value: "12345",
+        prefix: "",
+        local: "length",
+        uri: "",
+      },
     ],
     [
-      'opentag',
+      "opentag",
       {
-        name: 'root',
-        prefix: '',
-        local: 'root',
-        uri: '',
+        name: "root",
+        prefix: "",
+        local: "root",
+        uri: "",
         attributes: {
           length: {
-            name: 'length',
-            value: '12345',
-            prefix: '',
-            local: 'length',
-            uri: ''
-          }
+            name: "length",
+            value: "12345",
+            prefix: "",
+            local: "length",
+            uri: "",
+          },
         },
         ns: {},
-        isSelfClosing: false
-      }
+        isSelfClosing: false,
+      },
     ],
     [
-      'closetag',
-      'root'
-    ]
+      "closetag",
+      "root",
+    ],
   ],
   opt: {
-    xmlns: true
-  }
-})
+    xmlns: true,
+  },
+});

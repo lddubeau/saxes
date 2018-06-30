@@ -1,25 +1,27 @@
-require(__dirname).test({
-  xml: '<root>',
+"use strict";
+
+require(".").test({
+  xml: "<root>",
   expect: [
     [
-      'opentagstart',
+      "opentagstart",
       {
-        name: 'root',
-        attributes: {}
-      }
-    ],
-    [
-      'opentag',
-      {
-        name: 'root',
+        name: "root",
         attributes: {},
-        isSelfClosing: false
-      }
+      },
     ],
     [
-      'error',
-      'Unclosed root tag\nLine: 0\nColumn: 6\nChar: '
-    ]
+      "opentag",
+      {
+        name: "root",
+        attributes: {},
+        isSelfClosing: false,
+      },
+    ],
+    [
+      "error",
+      "Unclosed root tag\nLine: 0\nColumn: 6\nChar: ",
+    ],
   ],
-  opt: {}
-})
+  opt: {},
+});

@@ -1,51 +1,53 @@
-require(__dirname).test({
+"use strict";
+
+require(".").test({
   opt: { xmlns: true },
   expect: [
     [
-      'opentagstart',
+      "opentagstart",
       {
-        name: 'root',
+        name: "root",
         attributes: {},
-        ns: {}
-      }
+        ns: {},
+      },
     ],
     [
-      'error',
-      'Unbound namespace prefix: "unbound"\nLine: 0\nColumn: 28\nChar: >'
+      "error",
+      "Unbound namespace prefix: \"unbound\"\nLine: 0\nColumn: 28\nChar: >",
     ],
     [
-      'attribute',
+      "attribute",
       {
-        name: 'unbound:attr',
-        value: 'value',
-        uri: 'unbound',
-        prefix: 'unbound',
-        local: 'attr'
-      }
+        name: "unbound:attr",
+        value: "value",
+        uri: "unbound",
+        prefix: "unbound",
+        local: "attr",
+      },
     ],
     [
-      'opentag',
+      "opentag",
       {
-        name: 'root',
-        uri: '',
-        prefix: '',
-        local: 'root',
+        name: "root",
+        uri: "",
+        prefix: "",
+        local: "root",
         attributes: {
-          'unbound:attr': {
-            name: 'unbound:attr',
-            value: 'value',
-            uri: 'unbound',
-            prefix: 'unbound',
-            local: 'attr'
-          }
+          "unbound:attr": {
+            name: "unbound:attr",
+            value: "value",
+            uri: "unbound",
+            prefix: "unbound",
+            local: "attr",
+          },
         },
         ns: {},
-        isSelfClosing: true
-      }
+        isSelfClosing: true,
+      },
     ],
     [
-      'closetag',
-      'root'
-    ]
-  ]
-}).write("<root unbound:attr='value'/>")
+      "closetag",
+      "root",
+    ],
+  ],
+}).write("<root unbound:attr='value'/>");

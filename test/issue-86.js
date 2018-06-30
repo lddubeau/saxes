@@ -1,41 +1,43 @@
-require(__dirname).test({
-  xml: '<root>abc</root>de<f',
+"use strict";
+
+require(".").test({
+  xml: "<root>abc</root>de<f",
   expect: [
     [
-      'opentagstart',
+      "opentagstart",
       {
-        name: 'root',
-        attributes: {}
-      }
-    ],
-    [
-      'opentag',
-      {
-        name: 'root',
+        name: "root",
         attributes: {},
-        isSelfClosing: false
-      }
+      },
     ],
     [
-      'text',
-      'abc'
+      "opentag",
+      {
+        name: "root",
+        attributes: {},
+        isSelfClosing: false,
+      },
     ],
     [
-      'closetag',
-      'root'
+      "text",
+      "abc",
     ],
     [
-      'error',
-      'Text data outside of root node.\nLine: 0\nColumn: 17\nChar: d'
+      "closetag",
+      "root",
     ],
     [
-      'text',
-      'de'
+      "error",
+      "Text data outside of root node.\nLine: 0\nColumn: 17\nChar: d",
     ],
     [
-      'error',
-      'Unexpected end\nLine: 0\nColumn: 20\nChar: '
+      "text",
+      "de",
+    ],
+    [
+      "error",
+      "Unexpected end\nLine: 0\nColumn: 20\nChar: ",
     ],
   ],
-  opt: {}
-})
+  opt: {},
+});

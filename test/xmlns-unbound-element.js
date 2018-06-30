@@ -1,99 +1,101 @@
-require(__dirname).test({
+"use strict";
+
+require(".").test({
   opt: { xmlns: true },
   expect: [
     [
-      'opentagstart',
+      "opentagstart",
       {
-        name: 'unbound:root',
-        attributes: {},
-        ns: {}
-      }
-    ],
-    [
-      'error',
-      'Unbound namespace prefix: "unbound:root"\nLine: 0\nColumn: 15\nChar: >'
-    ],
-    [
-      'opentag',
-      {
-        name: 'unbound:root',
-        uri: 'unbound',
-        prefix: 'unbound',
-        local: 'root',
+        name: "unbound:root",
         attributes: {},
         ns: {},
-        isSelfClosing: true
-      }
+      },
     ],
     [
-      'closetag',
-      'unbound:root'
-    ]
-  ]
-}).write('<unbound:root/>')
+      "error",
+      "Unbound namespace prefix: \"unbound:root\"\nLine: 0\nColumn: 15\nChar: >",
+    ],
+    [
+      "opentag",
+      {
+        name: "unbound:root",
+        uri: "unbound",
+        prefix: "unbound",
+        local: "root",
+        attributes: {},
+        ns: {},
+        isSelfClosing: true,
+      },
+    ],
+    [
+      "closetag",
+      "unbound:root",
+    ],
+  ],
+}).write("<unbound:root/>");
 
-require(__dirname).test({
+require(".").test({
   opt: {
-    xmlns: true
+    xmlns: true,
   },
   expect: [
     [
-      'opentagstart',
+      "opentagstart",
       {
-        name: 'unbound:root',
+        name: "unbound:root",
         attributes: {},
-        ns: {}
-      }
+        ns: {},
+      },
     ],
     [
-      'opennamespace',
+      "opennamespace",
       {
-        prefix: 'unbound',
-        uri: 'someuri'
-      }
+        prefix: "unbound",
+        uri: "someuri",
+      },
     ],
     [
-      'attribute',
+      "attribute",
       {
-        name: 'xmlns:unbound',
-        value: 'someuri',
-        prefix: 'xmlns',
-        local: 'unbound',
-        uri: 'http://www.w3.org/2000/xmlns/'
-      }
+        name: "xmlns:unbound",
+        value: "someuri",
+        prefix: "xmlns",
+        local: "unbound",
+        uri: "http://www.w3.org/2000/xmlns/",
+      },
     ],
     [
-      'opentag',
+      "opentag",
       {
-        name: 'unbound:root',
-        uri: 'someuri',
-        prefix: 'unbound',
-        local: 'root',
+        name: "unbound:root",
+        uri: "someuri",
+        prefix: "unbound",
+        local: "root",
         attributes: {
-          'xmlns:unbound': {
-            name: 'xmlns:unbound',
-            value: 'someuri',
-            prefix: 'xmlns',
-            local: 'unbound',
-            uri: 'http://www.w3.org/2000/xmlns/'
-          }
+          "xmlns:unbound": {
+            name: "xmlns:unbound",
+            value: "someuri",
+            prefix: "xmlns",
+            local: "unbound",
+            uri: "http://www.w3.org/2000/xmlns/",
+          },
         },
         ns: {
-          'unbound': 'someuri'
+          unbound: "someuri",
         },
-        isSelfClosing: true
-      }
+        isSelfClosing: true,
+      },
     ],
     [
-      'closetag',
-      'unbound:root'
+      "closetag",
+      "unbound:root",
     ],
     [
-      'closenamespace',
+      "closenamespace",
       {
-        prefix: 'unbound',
-        uri: 'someuri'
-      }
-    ]
-  ]
-}).write('<unbound:root xmlns:unbound="someuri"/>')
+        prefix: "unbound",
+        uri: "someuri",
+      },
+    ],
+  ],
+}).write("<unbound:root xmlns:unbound=\"someuri\"/>");

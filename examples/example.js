@@ -1,30 +1,42 @@
-var fs = require('fs'),
-  util = require('util'),
-  path = require('path'),
-  xml = fs.readFileSync(path.join(__dirname, 'test.xml'), 'utf8'),
-  saxes = require('../lib/saxes'),
-  parser = saxes.parser(),
-  inspector = function (ev) { return function (data) {
-    console.error('%s %s %j', this.line + ':' + this.column, ev, data)
-    if (ev === "error") {
-      parser.resume()
-    }
-  }}
+"use strict";
 
-saxes.EVENTS.forEach(function (ev) {
-  parser['on' + ev] = inspector(ev)
-})
-parser.onend = function () {
-  console.error('end')
-  console.error(parser)
+/* eslint-disable no-console */
+
+const fs = require("fs");
+const path = require("path");
+const saxes = require("../lib/saxes");
+
+const parser = saxes.parser();
+
+function inspector(ev) {
+  return function handler(data) {
+    console.error("%s %s %j", `${this.line}:${this.column}`, ev, data);
+    if (ev === "error") {
+      parser.resume();
+    }
+  };
 }
 
-// do this in random bits at a time to verify that it works.
-(function () {
+saxes.EVENTS.forEach((ev) => {
+  parser[`on${ev}`] = inspector(ev);
+});
+
+parser.onend = () => {
+  console.error("end");
+  console.error(parser);
+};
+
+let xml = fs.readFileSync(path.join(__dirname, "test.xml"), "utf8");
+function processChunk() {
   if (xml) {
-    var c = Math.ceil(Math.random() * 1000)
-    parser.write(xml.substr(0, c))
-    xml = xml.substr(c)
-    process.nextTick(arguments.callee)
-  } else parser.close()
-}())
+    const c = Math.ceil(Math.random() * 1000);
+    parser.write(xml.substr(0, c));
+    xml = xml.substr(c);
+    process.nextTick(processChunk);
+  }
+  else {
+    parser.close();
+  }
+}
+
+processChunk();

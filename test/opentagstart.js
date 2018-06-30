@@ -1,84 +1,86 @@
-require(__dirname).test({
+"use strict";
+
+require(".").test({
   xml: "<root length='12345'></root>",
   expect: [
     [
-      'opentagstart',
+      "opentagstart",
       {
-        name: 'root',
+        name: "root",
         ns: {},
-        attributes: {}
-      }
+        attributes: {},
+      },
     ],
     [
-      'attribute',
+      "attribute",
       {
-        name: 'length',
-        value: '12345',
-        prefix: '',
-        local: 'length',
-        uri: ''
-      }
+        name: "length",
+        value: "12345",
+        prefix: "",
+        local: "length",
+        uri: "",
+      },
     ],
     [
-      'opentag',
+      "opentag",
       {
-        name: 'root',
-        prefix: '',
-        local: 'root',
-        uri: '',
+        name: "root",
+        prefix: "",
+        local: "root",
+        uri: "",
         attributes: {
           length: {
-            name: 'length',
-            value: '12345',
-            prefix: '',
-            local: 'length',
-            uri: ''
-          }
+            name: "length",
+            value: "12345",
+            prefix: "",
+            local: "length",
+            uri: "",
+          },
         },
         ns: {},
-        isSelfClosing: false
-      }
+        isSelfClosing: false,
+      },
     ],
     [
-      'closetag',
-      'root'
-    ]
+      "closetag",
+      "root",
+    ],
   ],
   opt: {
-    xmlns: true
-  }
-})
+    xmlns: true,
+  },
+});
 
-require(__dirname).test({
+require(".").test({
   xml: "<root length='12345'></root>",
   expect: [
     [
-      'opentagstart',
+      "opentagstart",
       {
-        name: 'root',
-        attributes: {}
-      }
+        name: "root",
+        attributes: {},
+      },
     ],
     [
-      'attribute',
+      "attribute",
       {
-        name: 'length',
-        value: '12345'
-      }
+        name: "length",
+        value: "12345",
+      },
     ],
     [
-      'opentag',
+      "opentag",
       {
-        name: 'root',
+        name: "root",
         attributes: {
-          length: '12345'
+          length: "12345",
         },
-        isSelfClosing: false
-      }
+        isSelfClosing: false,
+      },
     ],
     [
-      'closetag',
-      'root'
-    ]
+      "closetag",
+      "root",
+    ],
   ],
-})
+});
