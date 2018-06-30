@@ -21,6 +21,5 @@ require(__dirname).test({
       'Unclosed root tag\nLine: 0\nColumn: 6\nChar: '
     ]
   ],
-  strict: true,
   opt: {}
 })

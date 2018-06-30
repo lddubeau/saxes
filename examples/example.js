@@ -2,27 +2,29 @@ var fs = require('fs'),
   util = require('util'),
   path = require('path'),
   xml = fs.readFileSync(path.join(__dirname, 'test.xml'), 'utf8'),
-  sax = require('../lib/sax'),
-  strict = sax.parser(true),
-  loose = sax.parser(false, {trim: true}),
+  saxes = require('../lib/saxes'),
+  parser = saxes.parser(),
   inspector = function (ev) { return function (data) {
-      console.error('%s %s %j', this.line + ':' + this.column, ev, data)
-    }}
+    console.error('%s %s %j', this.line + ':' + this.column, ev, data)
+    if (ev === "error") {
+      parser.resume()
+    }
+  }}
 
-sax.EVENTS.forEach(function (ev) {
-  loose['on' + ev] = inspector(ev)
+saxes.EVENTS.forEach(function (ev) {
+  parser['on' + ev] = inspector(ev)
 })
-loose.onend = function () {
+parser.onend = function () {
   console.error('end')
-  console.error(loose)
+  console.error(parser)
 }
 
 // do this in random bits at a time to verify that it works.
 (function () {
   if (xml) {
     var c = Math.ceil(Math.random() * 1000)
-    loose.write(xml.substr(0, c))
+    parser.write(xml.substr(0, c))
     xml = xml.substr(c)
     process.nextTick(arguments.callee)
-  } else loose.close()
-})()
+  } else parser.close()
+}())

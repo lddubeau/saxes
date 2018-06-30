@@ -26,7 +26,6 @@ require(__dirname).test({
       'xmlns'
     ]
   ],
-  strict: true,
   opt: {
     xmlns: true
   }

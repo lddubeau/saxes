@@ -8,6 +8,5 @@ require(__dirname).test({
     [ 'text', 'body' ],
     [ 'closetag', 'xml' ]
   ],
-  strict: false,
   opt: { lowercasetags: true, noscript: true }
 })

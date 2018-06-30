@@ -7,6 +7,5 @@ require(__dirname).test({
       ' stand alone comment '
     ]
   ],
-  strict: true,
   opt: {}
 })

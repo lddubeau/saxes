@@ -9,7 +9,7 @@ exports.saxes = saxes
 // otherwise, it's assumed that the test will write and close.
 exports.test = function test (options) {
   var xml = options.xml
-  var parser = saxes.parser(options.strict, options.opt)
+  var parser = saxes.parser(options.opt)
   var expect = options.expect
   var e = 0
   saxes.EVENTS.forEach(function (ev) {

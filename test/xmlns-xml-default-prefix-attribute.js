@@ -44,6 +44,5 @@ require(__dirname).test({
       'root'
     ]
   ],
-  strict: true,
   opt: { xmlns: true }
 })

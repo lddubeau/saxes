@@ -1,9 +1,14 @@
 require(__dirname).test({
-  xml: '<root attrib>',
+  xml: '<root attrib></root>',
   expect: [
-    ['opentagstart', {name: 'ROOT', attributes: {}}],
-    ['attribute', {name: 'ATTRIB', value: 'attrib'}],
-    ['opentag', {name: 'ROOT', attributes: {'ATTRIB': 'attrib'}, isSelfClosing: false}]
+    ['opentagstart', {name: 'root', attributes: {}}],
+    ['error', 'Attribute without value\n\
+Line: 0\n\
+Column: 13\n\
+Char: >'],
+    ['attribute', {name: 'attrib', value: 'attrib'}],
+    ['opentag', {name: 'root', attributes: {'attrib': 'attrib'}, isSelfClosing: false}],
+    ['closetag', 'root'],
   ],
   opt: { trim: true }
 })

@@ -81,7 +81,6 @@ iExpect.push([
 iExpect.push([ 'closetag', 'a' ])
 
 var parser = require(__dirname).test({
-  strict: true,
   expect: iExpect
 })
 

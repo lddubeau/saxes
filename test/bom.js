@@ -30,7 +30,6 @@ require(__dirname).test({
     ['opentag', {'name': 'P', attributes: {}, isSelfClosing: false}],
     ['closetag', 'P']
   ],
-  strict: true
 })
 
 // There is only one BOM allowed at the start
@@ -43,5 +42,4 @@ require(__dirname).test({
     ['opentag', {'name': 'P', attributes: {}, isSelfClosing: false}],
     ['closetag', 'P']
   ],
-  strict: true
 })

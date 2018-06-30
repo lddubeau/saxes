@@ -4,41 +4,6 @@ require(__dirname).test({
     [
       'opentagstart',
       {
-        name: 'ROOT',
-        attributes: {}
-      }
-    ],
-    [
-      'opentag',
-      {
-        name: 'ROOT',
-        attributes: {},
-        isSelfClosing: false
-      }
-    ],
-    [
-      'text',
-      'abc'
-    ],
-    [
-      'closetag',
-      'ROOT'
-    ],
-    [
-      'text',
-      'de<f'
-    ]
-  ],
-  strict: false,
-  opt: {}
-})
-
-require(__dirname).test({
-  xml: '<root>abc</root>de<f',
-  expect: [
-    [
-      'opentagstart',
-      {
         name: 'root',
         attributes: {}
       }
@@ -80,6 +45,5 @@ require(__dirname).test({
       'Unexpected end\nLine: 0\nColumn: 20\nChar: '
     ]
   ],
-  strict: true,
   opt: {}
 })

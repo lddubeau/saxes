@@ -85,7 +85,6 @@ xmls.forEach(function (x, i) {
   t.test({
     xml: x,
     expect: expected[i],
-    strict: true,
     opt: {
       xmlns: true
     }

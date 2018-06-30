@@ -1,5 +1,4 @@
 require(__dirname).test({
-  strict: true,
   opt: { xmlns: true },
   expect: [
     [

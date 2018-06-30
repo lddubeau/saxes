@@ -7,6 +7,5 @@ require(__dirname).test({
     [ 'text', '\r\r\n' ],
     [ 'closetag', 'xml' ]
   ],
-  strict: true,
   opt: {}
 })
