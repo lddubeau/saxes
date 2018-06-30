@@ -84,8 +84,6 @@ Settings supported:
 * `trim` - Boolean. Whether or not to trim text and comment nodes.
 * `normalize` - Boolean. If true, then turn any whitespace into a single
   space.
-* `lowercase` - Boolean. If true, then lowercase tag names and attribute names
-  in loose mode, rather than uppercasing them.
 * `xmlns` - Boolean. If true, then namespaces are supported.
 * `position` - Boolean. If false, then don't track line/col/position.
 
