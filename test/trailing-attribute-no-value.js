@@ -10,5 +10,5 @@ Char: >'],
     ['opentag', {name: 'root', attributes: {'attrib': 'attrib'}, isSelfClosing: false}],
     ['closetag', 'root'],
   ],
-  opt: { trim: true }
+  opt: {}
 })

@@ -9,19 +9,23 @@ require(__dirname).test({
   expect: [
     ['opentagstart', {name: 'root', attributes: {}}],
     ['opentag', {name: 'root', attributes: {}, isSelfClosing: false}],
+    ['text', '   '],
     ['opentagstart', {name: 'haha', attributes: {}}],
     ['opentag', {name: 'haha', attributes: {}, isSelfClosing: true}],
     ['closetag', 'haha'],
+    ['text', ' '],
     ['opentagstart', {name: 'haha', attributes: {}}],
     ['opentag', {name: 'haha', attributes: {}, isSelfClosing: true}],
     ['closetag', 'haha'],
+    ['text', '  '],
     // ["opentag", {name:"haha", attributes:{}}],
     // ["closetag", "haha"],
     ['opentagstart', {name: 'monkey', attributes: {}}],
     ['opentag', {name: 'monkey', attributes: {}, isSelfClosing: false}],
-    ['text', '=(|)'],
+    ['text', ' =(|)     '],
     ['closetag', 'monkey'],
-    ['closetag', 'root']
+    ['closetag', 'root'],
+    ['text', '  '],
   ],
-  opt: { trim: true }
+  opt: {}
 })

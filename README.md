@@ -81,7 +81,6 @@ Pass the following arguments to the parser function.  All are optional.
 
 Settings supported:
 
-* `trim` - Boolean. Whether or not to trim text and comment nodes.
 * `xmlns` - Boolean. If true, then namespaces are supported.
 * `position` - Boolean. If false, then don't track line/col/position.
 
