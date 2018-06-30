@@ -17,17 +17,7 @@ require(__dirname).test({
 Line: 0\n\
 Column: 23\n\
 Char: t'],
-    ['text', 't'],
-    ['error', 'Text data outside of root node.\n\
-Line: 0\n\
-Column: 24\n\
-Char: o'],
-    ['text', 'o '],
-    ['error', 'Text data outside of root node.\n\
-Line: 0\n\
-Column: 26\n\
-Char: m'],
-    ['text', 'm'],
+    ['text', 'to monkey land'],
     ['end'],
     ['ready']
   ],

@@ -30,20 +30,12 @@ require(__dirname).test({
     ],
     [
       'text',
-      'd'
-    ],
-    [
-      'error',
-      'Text data outside of root node.\nLine: 0\nColumn: 18\nChar: e'
-    ],
-    [
-      'text',
-      'e'
+      'de'
     ],
     [
       'error',
       'Unexpected end\nLine: 0\nColumn: 20\nChar: '
-    ]
+    ],
   ],
   opt: {}
 })
