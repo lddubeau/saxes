@@ -138,11 +138,6 @@ Argument: instance of `Error`.
 object with `name` and `body` members. Attributes are not parsed, as
 processing instructions have implementation dependent semantics.
 
-`sgmldeclaration` - Random SGML declarations. Stuff like `<!ENTITY p>`
-would trigger this kind of event. This is a weird thing to support, so it
-might go away at some point. saxes isn't intended to be used to parse SGML,
-after all.
-
 `opentagstart` - Emitted immediately when the tag name is available,
 but before any attributes are encountered.  Argument: object with a
 `name` field and an empty `attributes` set.  Note that this is the
