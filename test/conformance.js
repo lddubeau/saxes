@@ -29,7 +29,8 @@ class SaxesDriver extends BaseDriver {
           errors.push(err);
         };
 
-        parser.close(source);
+        parser.write(source);
+        parser.end();
         this.processResult(test, handling, errors.length === 0);
       });
   }
