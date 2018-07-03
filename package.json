@@ -6,7 +6,7 @@
   "main": "lib/saxes.js",
   "license": "ISC",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --delay",
     "posttest": "eslint test/*.js lib/*.js",
     "preversion": "npm test",
     "postversion": "npm publish",
