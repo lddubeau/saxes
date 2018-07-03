@@ -2,12 +2,6 @@
 
 const t = require(".");
 
-// should be the same both ways.
-const xmls = [
-  "<parent xmlns:a=\"http://ATTRIBUTE\" a:attr=\"value\" />",
-  "<parent a:attr=\"value\" xmlns:a=\"http://ATTRIBUTE\" />",
-];
-
 const ex1 = [
   ["opentagstart", { name: "parent", attributes: {}, ns: {} }],
   [
@@ -83,12 +77,20 @@ const ex1 = [
 const ex2 = [ex1[0], ex1[1], ex1[3], ex1[2]].concat(ex1.slice(4));
 const expected = [ex1, ex2];
 
-xmls.forEach((x, i) => {
-  t.test({
-    xml: x,
-    expect: expected[i],
-    opt: {
-      xmlns: true,
-    },
+// should be the same both ways.
+const xmls = [
+  "<parent xmlns:a=\"http://ATTRIBUTE\" a:attr=\"value\" />",
+  "<parent a:attr=\"value\" xmlns:a=\"http://ATTRIBUTE\" />",
+];
+describe("issue 41", () => {
+  xmls.forEach((x, i) => {
+    t.test({
+      name: `order ${i}`,
+      xml: x,
+      expect: expected[i],
+      opt: {
+        xmlns: true,
+      },
+    });
   });
 });

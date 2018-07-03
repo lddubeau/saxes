@@ -1,6 +1,7 @@
 "use strict";
 
-const parser = require(".").test({
+require(".").test({
+  name: "flush",
   expect: [
     ["opentagstart", { name: "T", attributes: {} }],
     ["opentag", { name: "T", attributes: {}, isSelfClosing: false }],
@@ -8,9 +9,10 @@ const parser = require(".").test({
     ["text", "rest"],
     ["closetag", "T"],
   ],
+  fn(parser) {
+    parser.write("<T>flush")
+      .flush()
+      .write("rest</T>")
+      .close();
+  },
 });
-
-parser.write("<T>flush");
-parser.flush();
-parser.write("rest</T>");
-parser.close();

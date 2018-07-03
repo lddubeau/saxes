@@ -1,6 +1,7 @@
 "use strict";
 
 require(".").test({
+  name: "duplicate attribute",
   xml: "<span id=\"hello\" id=\"there\"></span>",
   expect: [
     ["opentagstart", {

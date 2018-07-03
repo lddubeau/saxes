@@ -1,6 +1,7 @@
 "use strict";
 
 require(".").test({
+  name: "issue 86 (prevent open waka after root has closed)",
   xml: "<root>abc</root>de<f",
   expect: [
     [

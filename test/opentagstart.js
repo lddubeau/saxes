@@ -1,6 +1,7 @@
 "use strict";
 
 require(".").test({
+  name: "openstarttag (xmlns true)",
   xml: "<root length='12345'></root>",
   expect: [
     [
@@ -52,6 +53,7 @@ require(".").test({
 });
 
 require(".").test({
+  name: "openstarttag (xmlns false)",
   xml: "<root length='12345'></root>",
   expect: [
     [

@@ -1,6 +1,7 @@
 "use strict";
 
 require(".").test({
+  name: "cdata chunked",
   expect: [
     ["opentagstart", { name: "r", attributes: {} }],
     ["opentag", { name: "r", attributes: {}, isSelfClosing: false }],
@@ -9,6 +10,9 @@ require(".").test({
     ["closecdata", undefined],
     ["closetag", "r"],
   ],
-}).write("<r><![CDATA[ this is ").write("character data  ")
-.write("]]></r>")
-.close();
+  fn(parser) {
+    parser.write("<r><![CDATA[ this is ").write("character data  ")
+      .write("]]></r>")
+      .close();
+  },
+});

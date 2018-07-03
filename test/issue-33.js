@@ -2,6 +2,7 @@
 
 // https://github.com/isaacs/sax-js/issues/33
 require(".").test({
+  name: "issue 33 (comment with single dash)",
   xml: "<xml>\n" +
     "<!-- \n" +
     "  comment with a single dash- in it\n" +

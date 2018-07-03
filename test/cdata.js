@@ -1,6 +1,7 @@
 "use strict";
 
 require(".").test({
+  name: "cdata",
   xml: "<r><![CDATA[ this is character data  ]]></r>",
   expect: [
     ["opentagstart", { name: "r", attributes: {} }],

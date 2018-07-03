@@ -1,8 +1,9 @@
 "use strict";
 
-const tap = require("tap");
-const saxesStream = require("../lib/saxes").createStream();
+const saxes = require("../lib/saxes");
 
-tap.doesNotThrow(() => {
+it("end empty stream", () => {
+  const saxesStream = saxes.createStream();
+  // It musn't throw.
   saxesStream.end();
 });

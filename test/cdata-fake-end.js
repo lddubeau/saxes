@@ -1,6 +1,7 @@
 "use strict";
 
-const p = require(".").test({
+require(".").test({
+  name: "cdata fake end",
   expect: [
     ["opentagstart", { name: "r", attributes: {} }],
     ["opentag", { name: "r", attributes: {}, isSelfClosing: false }],
@@ -9,15 +10,17 @@ const p = require(".").test({
     ["closecdata", undefined],
     ["closetag", "r"],
   ],
+  fn(parser) {
+    const x = "<r><![CDATA[[[[[[[[[]]]]]]]]]]></r>";
+    for (let i = 0; i < x.length; i++) {
+      parser.write(x.charAt(i));
+    }
+    parser.close();
+  },
 });
 
-let x = "<r><![CDATA[[[[[[[[[]]]]]]]]]]></r>";
-for (let i = 0; i < x.length; i++) {
-  p.write(x.charAt(i));
-}
-p.close();
-
-const p2 = require(".").test({
+require(".").test({
+  name: "cdata fake end 2",
   expect: [
     ["opentagstart", { name: "r", attributes: {} }],
     ["opentag", { name: "r", attributes: {}, isSelfClosing: false }],
@@ -26,7 +29,5 @@ const p2 = require(".").test({
     ["closecdata", undefined],
     ["closetag", "r"],
   ],
+  xml: "<r><![CDATA[[[[[[[[[]]]]]]]]]]></r>",
 });
-
-x = "<r><![CDATA[[[[[[[[[]]]]]]]]]]></r>";
-p2.write(x).close();

@@ -1,6 +1,7 @@
 "use strict";
 
 require(".").test({
+  name: "attribute unquoted",
   expect: [
     ["opentagstart", { name: "root", attributes: {}, ns: {} }],
     ["error", "Unquoted attribute value\n\
@@ -32,11 +33,14 @@ Char: 1"],
       isSelfClosing: false,
     }],
     ["closetag", "root"],
-    ["end"],
-    ["ready"],
+    ["end", undefined],
+    ["ready", undefined],
   ],
   opt: {
     xmlns: true,
   },
-}).write("<root length=12").write("345></root>")
-.close();
+  fn(parser) {
+    parser.write("<root length=12").write("345></root>")
+      .close();
+  },
+});

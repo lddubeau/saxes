@@ -1,6 +1,7 @@
 "use strict";
 
 require(".").test({
+  name: "unclosed root",
   xml: "<root>",
   expect: [
     [

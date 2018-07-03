@@ -1,6 +1,7 @@
 "use strict";
 
 require(".").test({
+  name: "entity NaN",
   xml: "<r>&#NaN;</r>",
   expect: [
     ["opentagstart", { name: "r", attributes: {} }],

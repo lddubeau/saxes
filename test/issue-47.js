@@ -2,6 +2,7 @@
 
 // https://github.com/isaacs/sax-js/issues/47
 require(".").test({
+  name: "issue 47",
   xml: "<a href=\"query.svc?x=1&amp;y=2&amp;z=3\"/>",
   expect: [
     ["opentagstart", { name: "a", attributes: {} }],

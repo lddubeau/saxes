@@ -1,7 +1,8 @@
 "use strict";
 
-// https://github.com/isaacs/sax-js/issues/49
+// https://github.com/isaacs/sax-js/issues/84
 require(".").test({
+  name: "issue 84 (unbalanced quotes in pi)",
   xml: "<?has unbalanced \"quotes?><xml>body</xml>",
   expect: [
     ["processinginstruction", { name: "has", body: "unbalanced \"quotes" }],
@@ -10,5 +11,5 @@ require(".").test({
     ["text", "body"],
     ["closetag", "xml"],
   ],
-  opt: { lowercasetags: true, noscript: true },
+  opt: {},
 });

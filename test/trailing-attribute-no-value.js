@@ -1,6 +1,7 @@
 "use strict";
 
 require(".").test({
+  name: "trailing attribute without value",
   xml: "<root attrib></root>",
   expect: [
     ["opentagstart", { name: "root", attributes: {} }],

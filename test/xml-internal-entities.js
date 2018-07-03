@@ -84,13 +84,15 @@ iExpect.push([
 ]);
 iExpect.push(["closetag", "a"]);
 
-const parser = require(".").test({
+require(".").test({
+  name: "xml internal entities",
   expect: iExpect,
+  fn(parser) {
+    // eslint-disable-next-line guard-for-in
+    for (const entity in entitiesToTest) {
+      parser.ENTITIES[entity] = ENTITIES[entity];
+    }
+
+    parser.write(xmlStart + xmlEnd).close();
+  },
 });
-
-// eslint-disable-next-line guard-for-in
-for (const entity in entitiesToTest) {
-  parser.ENTITIES[entity] = ENTITIES[entity];
-}
-
-parser.write(xmlStart + xmlEnd).close();

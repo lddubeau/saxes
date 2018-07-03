@@ -1,11 +1,16 @@
 "use strict";
 
-const parser = require("../").parser(true);
-const t = require("tap");
+const { expect } = require("chai");
+const saxes = require("../");
 
-t.plan(1);
-parser.onopentag = function onopentag(node) {
-  t.same(node, { name: "x", attributes: {}, isSelfClosing: false });
-};
-const xml = Buffer.from("<x>y</x>");
-parser.write(xml).close();
+it("parses a buffer", () => {
+  const parser = saxes.parser();
+  let seen = false;
+  parser.onopentag = (node) => {
+    expect(node).to.deep.equal({ name: "x", attributes: {}, isSelfClosing: false });
+    seen = true;
+  };
+  const xml = Buffer.from("<x>y</x>");
+  parser.write(xml).close();
+  expect(seen).to.be.true;
+});

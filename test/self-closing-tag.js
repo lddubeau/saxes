@@ -1,6 +1,7 @@
 "use strict";
 
 require(".").test({
+  name: "self-closing tag",
   xml: "<root>   " +
     "<haha /> " +
     "<haha/>  " +

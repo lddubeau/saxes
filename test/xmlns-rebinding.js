@@ -1,6 +1,7 @@
 "use strict";
 
 require(".").test({
+  name: "xmlns rebinding",
   xml: "<root xmlns:x=\"x1\" xmlns:y=\"y1\" x:a=\"x1\" y:a=\"y1\">" +
     "<rebind xmlns:x=\"x2\">" +
     "<check x:a=\"x2\" y:a=\"y1\"/>" +

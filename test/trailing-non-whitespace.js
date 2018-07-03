@@ -1,6 +1,7 @@
 "use strict";
 
 require(".").test({
+  name: "trailing non-whitespace text",
   xml: "<span>Welcome,</span> to monkey land",
   expect: [
     ["opentagstart", {
@@ -20,8 +21,8 @@ Line: 0\n\
 Column: 23\n\
 Char: t"],
     ["text", "to monkey land"],
-    ["end"],
-    ["ready"],
+    ["end", undefined],
+    ["ready", undefined],
   ],
   opt: {},
 });

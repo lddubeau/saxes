@@ -17,6 +17,7 @@ const attrAttr = {
 };
 
 require(".").test({
+  name: "xmlns set default namespace",
   xml: "<elm xmlns='http://foo' attr='bar'/>",
   expect: [
     [

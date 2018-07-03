@@ -1,6 +1,7 @@
 "use strict";
 
 require(".").test({
+  name: "attribute name",
   xml: "<root length='12345'></root>",
   expect: [
     ["opentagstart", { name: "root", attributes: {}, ns: {} }],

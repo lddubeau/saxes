@@ -1,6 +1,7 @@
 "use strict";
 
 require(".").test({
+  name: "xmlns strict",
   xml: "<root>" +
     "<plain attr=\"normal\" />" +
     "<ns1 xmlns=\"uri:default\">" +

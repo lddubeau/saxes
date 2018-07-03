@@ -1,6 +1,7 @@
 "use strict";
 
 require(".").test({
+  name: "self-closing child",
   xml: "<root>" +
     "<child>" +
     "<haha />" +
@@ -51,8 +52,8 @@ require(".").test({
     ["text", "=(|)"],
     ["closetag", "monkey"],
     ["closetag", "root"],
-    ["end"],
-    ["ready"],
+    ["end", undefined],
+    ["ready", undefined],
   ],
   opt: {},
 });

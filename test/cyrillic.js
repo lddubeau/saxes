@@ -1,6 +1,7 @@
 "use strict";
 
 require(".").test({
+  name: "cyrillic",
   xml: "<Р>тест</Р>",
   expect: [
     ["opentagstart", { name: "Р", attributes: {} }],

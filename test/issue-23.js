@@ -1,6 +1,7 @@
 "use strict";
 
 require(".").test({
+  name: "issue 23",
   xml: "<compileClassesResponse>" +
     "<result>" +
     "<bodyCrc>653724009</bodyCrc>" +

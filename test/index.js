@@ -1,60 +1,68 @@
 "use strict";
 
+const { expect } = require("chai");
 const saxes = require("../lib/saxes");
-
-const t = require("tap");
-
-exports.saxes = saxes;
 
 // handy way to do simple unit tests
 // if the options contains an xml string, it'll be written and the parser closed.
 // otherwise, it's assumed that the test will write and close.
 exports.test = function test(options) {
-  const { xml, expect } = options;
-  const parser = saxes.parser(options.opt);
-  let e = 0;
-  saxes.EVENTS.forEach((ev) => {
-    parser[`on${ev}`] = function handler(n) {
-      if (process.env.DEBUG) {
-        // eslint-disable-next-line no-console
-        console.error({
-          expect: expect[e],
-          actual: [ev, n],
-        });
-      }
-      if (e >= expect.length && (ev === "end" || ev === "ready")) {
-        return;
-      }
-      t.ok(e < expect.length, "no unexpected events");
+  const { xml, name, expect: expected, fn } = options;
+  it(name, () => {
+    const parser = saxes.parser(options.opt);
+    let expectedIx = 0;
+    for (const ev of saxes.EVENTS) {
+      // eslint-disable-next-line no-loop-func
+      parser[`on${ev}`] = (n) => {
+        if (process.env.DEBUG) {
+          // eslint-disable-next-line no-console
+          console.error({
+            expected: expected[expectedIx],
+            actual: [ev, n],
+          });
+        }
+        if (expectedIx >= expected.length && (ev === "end" || ev === "ready")) {
+          return;
+        }
 
-      if (!expect[e]) {
-        t.fail("did not expect this event", {
-          event: ev,
-          expect,
-          data: n,
-        });
-        return;
-      }
+        if (ev === "error") {
+          expect([ev, n.message]).to.deep.equal(expected[expectedIx]);
+          parser.resume();
+        }
+        else {
+          if (ev === "opentagstart" || ev === "opentag") {
+            if (n.ns) {
+              // We have to remove the prototype from n.ns. Otherwise,
+              // the deep equal check fails because the tests were
+              // written to check only the namespaces immediately
+              // defined on the tag whereas deep equal compares
+              // **all** enumerable properties and thus effectively
+              // examines up the chain of namespaces.
 
-      t.equal(ev, expect[e][0]);
-      if (ev === "error") {
-        t.equal(n.message, expect[e][1]);
-      }
-      else {
-        t.deepEqual(n, expect[e][1]);
-      }
-      e++;
-      if (ev === "error") {
-        parser.resume();
-      }
-    };
+              n = Object.assign({}, n);
+
+              // We shallow copy.
+              n.ns = Object.assign(Object.create(null), n.ns);
+            }
+          }
+
+          expect([ev, n]).to.deep.equal(expected[expectedIx]);
+        }
+
+        expectedIx++;
+      };
+    }
+
+    expect(xml || fn, "must use xml or fn").to.not.be.undefined;
+
+    if (xml) {
+      parser.write(xml).close();
+    }
+
+    if (fn) {
+      fn(parser);
+    }
+
+    expect(expectedIx).to.equal(expected.length);
   });
-  if (xml) {
-    parser.write(xml).close();
-  }
-  return parser;
 };
-
-if (module === require.main) {
-  t.pass("common test file");
-}
