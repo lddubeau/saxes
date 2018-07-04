@@ -101,7 +101,7 @@ describe("xml default prefix", () => {
         "error",
         "xml: prefix must be bound to http://www.w3.org/XML/1998/namespace\n" +
           "Actual: ERROR\n" +
-          "Line: 0\nColumn: 27\nChar: '",
+          "Line: 0\nColumn: 29\nChar: >",
       ],
       [
         "attribute",
