@@ -7,6 +7,20 @@ const { Selection } = require("xml-conformance-suite/js/selections/chrome");
 
 const saxes = require("../lib/saxes");
 
+const SKIP = {
+  "rmt-ns10-043": "DTD",
+  "rmt-ns10-044": "DTD",
+  "rmt-e3e-06i": "DTD",
+  "rmt-e3e-12": "DTD",
+};
+
+class SaxesSelection extends Selection {
+  shouldSkipTest(test) {
+    return Promise.resolve()
+      .then(() => SKIP[test.id] || super.shouldSkipTest(test));
+  }
+}
+
 class SaxesDriver extends BaseDriver {
   constructor(resourceLoader) {
     super();
@@ -26,6 +40,10 @@ class SaxesDriver extends BaseDriver {
           xmlns: !test.forbidsNamespaces,
         });
         parser.onerror = (err) => {
+          if (typeof process !== "undefined" && process.env &&
+              process.env.DEBUG) {
+            console.log(err);
+          }
           errors.push(err);
         };
 
@@ -36,4 +54,4 @@ class SaxesDriver extends BaseDriver {
   }
 }
 
-build(new ResourceLoader(), SaxesDriver, Selection).then(run);
+build(new ResourceLoader(), SaxesDriver, SaxesSelection).then(run);
