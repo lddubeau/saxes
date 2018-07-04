@@ -1,9 +1,5 @@
 "use strict";
 
-const iExpect = [];
-const myAttributes = {};
-const ENTITIES = {};
-
 // generates xml like test0="&control;"
 const entitiesToTest = {
   // 'ENTITY_NAME': IS_VALID || [invalidCharPos, invalidChar],
@@ -22,27 +18,20 @@ const entitiesToTest = {
 };
 
 let xmlStart = "<a test=\"&amp;\" ";
-const xmlEnd = "/>";
-
-iExpect.push([
-  "opentagstart",
-  {
-    name: "a",
-    attributes: {},
-  },
-]);
-
-iExpect.push([
+const myAttributes = {};
+const attributeEvents = [[
   "attribute",
   {
     name: "test",
     value: "&",
   },
-]);
+]];
 myAttributes.test = "&";
 
 let entI = 0;
 
+const attributeErrors = [];
+const ENTITIES = {};
 // eslint-disable-next-line guard-for-in
 for (const entity in entitiesToTest) {
   const attribName = `test${entI}`;
@@ -52,13 +41,13 @@ for (const entity in entitiesToTest) {
   xmlStart += `${attribName}="&`;
 
   if (typeof entitiesToTest[entity] === "object") {
-    iExpect.push([
+    attributeErrors.push([
       "error",
       `Invalid character in entity name\nLine: 0\nColumn: ${
       xmlStart.length + entitiesToTest[entity][0] + 1
       }\nChar: ${entitiesToTest[entity][1]}`,
     ]);
-    iExpect.push([
+    attributeEvents.push([
       "attribute",
       { name: attribName, value: `&${entity};` },
     ]);
@@ -66,7 +55,8 @@ for (const entity in entitiesToTest) {
   }
   else {
     ENTITIES[entity] = attribValue;
-    iExpect.push(["attribute", { name: attribName, value: attribValue }]);
+    attributeEvents.push(["attribute",
+                          { name: attribName, value: attribValue }]);
     myAttributes[attribName] = attribValue;
   }
 
@@ -74,25 +64,30 @@ for (const entity in entitiesToTest) {
   entI++;
 }
 
-iExpect.push([
-  "opentag",
-  {
-    name: "a",
-    attributes: myAttributes,
-    isSelfClosing: true,
-  },
-]);
-iExpect.push(["closetag", "a"]);
-
 require(".").test({
   name: "xml internal entities",
-  expect: iExpect,
+  expect: [
+    [
+      "opentagstart",
+      {
+        name: "a",
+        attributes: {},
+      },
+    ],
+    ...attributeErrors,
+    ...attributeEvents,
+    [
+      "opentag",
+      {
+        name: "a",
+        attributes: myAttributes,
+        isSelfClosing: true,
+      },
+    ],
+    ["closetag", "a"],
+  ],
   fn(parser) {
-    // eslint-disable-next-line guard-for-in
-    for (const entity in entitiesToTest) {
-      parser.ENTITIES[entity] = ENTITIES[entity];
-    }
-
-    parser.write(xmlStart + xmlEnd).close();
+    Object.assign(parser.ENTITIES, ENTITIES);
+    parser.write(`${xmlStart}/>`).close();
   },
 });

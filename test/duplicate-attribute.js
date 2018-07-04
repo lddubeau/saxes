@@ -9,9 +9,10 @@ require(".").test({
       attributes: {},
     }],
     ["attribute", { name: "id", value: "hello" }],
+    ["attribute", { name: "id", value: "there" }],
     ["opentag", {
       name: "span",
-      attributes: { id: "hello" },
+      attributes: { id: "there" },
       isSelfClosing: false,
     }],
     ["closetag", "span"],
