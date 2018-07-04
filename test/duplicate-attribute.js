@@ -9,6 +9,7 @@ require(".").test({
       attributes: {},
     }],
     ["attribute", { name: "id", value: "hello" }],
+    ["error", "Duplicate attribute: id.\nLine: 0\nColumn: 28\nChar: >"],
     ["attribute", { name: "id", value: "there" }],
     ["opentag", {
       name: "span",
