@@ -5,7 +5,7 @@ require(".").test({
   name: "issue 84 (unbalanced quotes in pi)",
   xml: "<?has unbalanced \"quotes?><xml>body</xml>",
   expect: [
-    ["processinginstruction", { name: "has", body: "unbalanced \"quotes" }],
+    ["processinginstruction", { target: "has", body: "unbalanced \"quotes" }],
     ["opentagstart", { name: "xml", attributes: {} }],
     ["opentag", { name: "xml", attributes: {}, isSelfClosing: false }],
     ["text", "body"],
