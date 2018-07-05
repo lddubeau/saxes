@@ -37,7 +37,7 @@ require(".").test({
     ],
     [
       "error",
-      "Unexpected end\nLine: 0\nColumn: 20\nChar: ",
+      "Unexpected end\nLine: 0\nColumn: 20\nChar: f",
     ],
   ],
   opt: {},
