@@ -27,5 +27,8 @@
     "eslint-config-lddubeau-base": "^2.1.0",
     "husky": "^0.14.3",
     "mocha": "^5.2.0"
+  },
+  "dependencies": {
+    "xmlchars": "^1.0.0"
   }
 }

@@ -14,7 +14,7 @@ const entitiesToTest = {
   u_score: true,
   "d-ash": true,
   "d.ot": true,
-  "all:_#-.": true,
+  "all:_#-.": [5, "#"],
 };
 
 let xmlStart = "<a test=\"&amp;\" ";
