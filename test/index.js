@@ -27,7 +27,6 @@ exports.test = function test(options) {
 
         if (ev === "error") {
           expect([ev, n.message]).to.deep.equal(expected[expectedIx]);
-          parser.resume();
         }
         else {
           if (ev === "opentagstart" || ev === "opentag") {

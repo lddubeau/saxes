@@ -11,9 +11,6 @@ const parser = saxes.parser();
 function inspector(ev) {
   return function handler(data) {
     console.error("%s %s %j", `${this.line}:${this.column}`, ev, data);
-    if (ev === "error") {
-      parser.resume();
-    }
   };
 }
 
