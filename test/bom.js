@@ -29,7 +29,7 @@ require(".").test({
   name: "BOM outside of root, but not initial",
   xml: " \uFEFF<P></P>",
   expect: [
-    ["error", "Non-whitespace before first tag.\nLine: 0\nColumn: 2\nChar: \uFEFF"],
+    ["error", "Text data outside of root node.\nLine: 0\nColumn: 2\nChar: \uFEFF"],
     ["text", "\uFEFF"],
     ["opentagstart", { name: "P", attributes: {} }],
     ["opentag", { name: "P", attributes: {}, isSelfClosing: false }],
@@ -42,7 +42,7 @@ require(".").test({
   name: "multiple BOMs",
   xml: "\uFEFF\uFEFF<P></P>",
   expect: [
-    ["error", "Non-whitespace before first tag.\nLine: 0\nColumn: 2\nChar: \uFEFF"],
+    ["error", "Text data outside of root node.\nLine: 0\nColumn: 2\nChar: \uFEFF"],
     ["text", "\uFEFF"],
     ["opentagstart", { name: "P", attributes: {} }],
     ["opentag", { name: "P", attributes: {}, isSelfClosing: false }],
