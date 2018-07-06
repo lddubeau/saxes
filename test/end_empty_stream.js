@@ -8,5 +8,5 @@ it("end empty stream", () => {
   // It musn't throw.
   expect(() => saxesStream.end()).to.throw(
     Error,
-      /^undefined:1:0: document must contain a root element.$/);
+    /^undefined:1:0: document must contain a root element.$/);
 });

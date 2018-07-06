@@ -3,11 +3,11 @@
 // https://github.com/isaacs/sax-js/issues/84
 require(".").test({
   name: "issue 84 (unbalanced quotes in pi)",
-  xml: "<?has unbalanced \"quotes?><xml>body</xml>",
+  xml: "<xml><?has unbalanced \"quotes?>body</xml>",
   expect: [
-    ["processinginstruction", { target: "has", body: "unbalanced \"quotes" }],
     ["opentagstart", { name: "xml", attributes: {} }],
     ["opentag", { name: "xml", attributes: {}, isSelfClosing: false }],
+    ["processinginstruction", { target: "has", body: "unbalanced \"quotes" }],
     ["text", "body"],
     ["closetag", "xml"],
   ],
