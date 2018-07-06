@@ -2,31 +2,51 @@
 
 A sax-style non-validating parser for XML.
 
-Saxes is a fork of [sax-js](https://github.com/isaacs/sax-js)
-1.2.4. All references to sax in this project's documentation are
-references to sax 1.2.4.
+Saxes is a fork of [sax](https://github.com/isaacs/sax-js) 1.2.4. All mentions
+of sax in this project's documentation are references to sax 1.2.4.
 
-Designed with [node](http://nodejs.org/) in mind, but should work fine in
-the browser or other CommonJS implementations.
+Designed with [node](http://nodejs.org/) in mind, but should work fine in the
+browser or other CommonJS implementations.
 
-## Notable Differences from sax-js.
+## Notable Differences from sax.
 
-* Saxes aims to be much stricter than sax-js with regards to XML
-  well-formedness. sax-js, even in its so-called "strict mode", is not
-  strict. It silently accepts structures that are not well-formed
-  XML. Projects that need absolute compliance with well-formedness
-  constraints cannot use sax-js as-is.
+* Saxes aims to be much stricter than sax with regards to XML
+  well-formedness. Sax, even in its so-called "strict mode", is not strict. It
+  silently accepts structures that are not well-formed XML. Projects that need
+  absolute compliance with well-formedness constraints cannot use sax as-is.
+
 * Saxes does not support HTML, or anything short of XML.
+
 * Saxes does not aim to support antiquated platforms.
+
+* Saxes handles errors differently: it provides a default onerror handler which
+  throws. You can replace it with your own handler if you want. If your handler
+  does nothing. There is no `resume` method to call.
+
+* There's no `Stream` API. A revamped API may be introduced later. (It is still
+  a "streaming parser" in the general sense that you write a character stream to
+  it.)
+
+## Limitations
+
+This is a non-validating parser so it only verifies whether the document is
+well-formed. We do aim to raise errors for all malformed constructs encountered.
+
+However, this parser does not parse the contents of DTDs. So malformedness
+errors cause by errors in DTDs cannot be reported.
+
+Also, the parser continues to parse even upon encountering errors, and does its
+best to continue reporting errors. However, once an error has been encountered
+**you cannot rely on the data given to you by event reporters.**
 
 ## Regarding `<!DOCTYPE`s and `<!ENTITY`s
 
-The parser will handle the basic XML entities in text nodes and
-attribute values: `&amp; &lt; &gt; &apos; &quot;`. It's possible to
-define additional entities in XML by putting them in the DTD. This
-parser doesn't do anything with that. If you want to listen to the
-`ondoctype` event, and then fetch the doctypes, and read the entities
-and add them to `parser.ENTITIES`, then be my guest.
+The parser will handle the basic XML entities in text nodes and attribute
+values: `&amp; &lt; &gt; &apos; &quot;`. It's possible to define additional
+entities in XML by putting them in the DTD. This parser doesn't do anything with
+that. If you want to listen to the `ondoctype` event, and then fetch the
+doctypes, and read the entities and add them to `parser.ENTITIES`, then be my
+guest.
 
 ## Usage
 
@@ -51,26 +71,6 @@ parser.onend = function () {
 };
 
 parser.write('<xml>Hello, <who name="world">world</who>!</xml>').close();
-
-// stream usage
-// takes the same options as the parser
-var saxesStream = require("saxes").createStream(options)
-saxesStream.on("error", function (e) {
-  // unhandled errors will throw, since this is a proper node
-  // event emitter.
-  console.error("error!", e)
-  // clear the error
-  this._parser.error = null
-  this._parser.resume()
-})
-saxesStream.on("opentag", function (node) {
-  // same object as above
-})
-// pipe is supported, and it's readable/writable
-// same chunks coming in also go out.
-fs.createReadStream("file.xml")
-  .pipe(saxesStream)
-  .pipe(fs.createWriteStream("file-copy.xml"))
 ```
 
 ## Arguments
@@ -84,25 +84,20 @@ Settings supported:
 * `xmlns` - Boolean. If true, then namespaces are supported. Default
   is `false`.
 
-* `position` - Boolean. If false, then don't track
-  line/col/position. Unset is treated as `true`. Default is unset.x
+* `position` - Boolean. If false, then don't track line/col/position. Unset is
+  treated as `true`. Default is unset.x
 
-* `fileName` - String. Set a file name for error reporting. This is
-  useful only when tracking positions. You may leave it unset, in
-  which case the file name in error messages will be `undefined`.
+* `fileName` - String. Set a file name for error reporting. This is useful only
+  when tracking positions. You may leave it unset, in which case the file name
+  in error messages will be `undefined`.
 
 ## Methods
 
 `write` - Write bytes onto the stream. You don't have to do this all at
 once. You can keep writing as much as you want.
 
-`close` - Close the stream. Once closed, no more data may be written until
-it is done processing the buffer, which is signaled by the `end` event.
-
-`resume` - To gracefully handle errors, assign a listener to the `error`
-event. Then, when the error is taken care of, you can call `resume` to
-continue parsing. Otherwise, the parser will not continue while in an error
-state.
+`close` - Close the stream. Once closed, no more data may be written until it is
+done processing the buffer, which is signaled by the `end` event.
 
 ## Members
 
@@ -113,73 +108,75 @@ document where the parser currently is looking.
 
 `startTagPosition` - Indicates the position where the current tag starts.
 
-`closed` - Boolean indicating whether or not the parser can be written to.
-If it's `true`, then wait for the `ready` event to write again.
+`closed` - Boolean indicating whether or not the parser can be written to.  If
+it's `true`, then wait for the `ready` event to write again.
 
 `opt` - Any options passed into the constructor.
 
 `tag` - The current tag being dealt with.
 
-And a bunch of other stuff that you probably shouldn't touch.
+`xmlDecl` - The XML declaration for this document. It contains the fields
+`version`, `encoding` and `standalone`. They are all `undefined` before
+encountering the XML declaration. If they are undefined after the XML
+declaration, the corresponding value was not set by the declaration. There is no
+event associated with the XML declaration. In a well-formed document, the XML
+declaration may be preceded only by an optional BOM. So by the time any event
+generated by the parser happens, the declaration has been processed if present
+at all. Otherwise, you have a malformed document, and as stated above, you
+cannot rely on the parser data!
+
+And a bunch of other stuff that you shouldn't touch.
 
 ## Events
 
-All events emit with a single argument. To listen to an event, assign a
-function to `on<eventname>`. Functions get executed in the this-context of
-the parser object. The list of supported events are also in the exported
-`EVENTS` array.
+All events emit with a single argument. To listen to an event, assign a function
+to `on<eventname>`. Functions get executed in the this-context of the parser
+object. The list of supported events are also in the exported `EVENTS` array.
 
-When using the stream interface, assign handlers using the EventEmitter
-`on` function in the normal fashion.
-
-`error` - Indication that something bad happened. The error will be hanging
-out on `parser.error`, and must be deleted before parsing can continue. By
-listening to this event, you can keep an eye on that kind of stuff.
-Argument: instance of `Error`.
+`error` - Indication that something bad happened. Argument: instance of
+`Error`. Note: the default handler immediately throws. Replace it with a no-op
+handler if you want to let the parser parse after the first error.
 
 `text` - Text node. Argument: string of text.
 
 `doctype` - The `<!DOCTYPE` declaration. Argument: doctype string.
 
-`processinginstruction` - Stuff like `<?xml foo="blerg" ?>`. Argument:
-object with `name` and `body` members. Attributes are not parsed, as
-processing instructions have implementation dependent semantics.
+`processinginstruction` - Stuff like `<?target body?>`. Argument: object with
+`target` and `body` members. The body is not parsed, as processing instructions
+have implementation dependent semantics.
 
-`opentagstart` - Emitted immediately when the tag name is available,
-but before any attributes are encountered.  Argument: object with a
-`name` field and an empty `attributes` set.  Note that this is the
-same object that will later be emitted in the `opentag` event.
+`opentagstart` - Emitted immediately when the tag name is available, but before
+any attributes are encountered.  Argument: object with a `name` field and an
+empty `attributes` set.  Note that this is the same object that will later be
+emitted in the `opentag` event.
 
-`opentag` - An opening tag. Argument: object with `name` and
-`attributes`.  If the `xmlns` option is set, then it will contain
-namespace binding information on the `ns` member, and will have a
-`local`, `prefix`, and `uri` member.
+`opentag` - An opening tag. Argument: object with `name` and `attributes`.  If
+the `xmlns` option is set, then it will contain namespace binding information on
+the `ns` member, and will have a `local`, `prefix`, and `uri` member.
 
-`closetag` - A closing tag. Note that self-closing tags will have
-`closeTag` emitted immediately after `openTag`.  Argument: tag name.
+`closetag` - A closing tag. Note that self-closing tags will have `closeTag`
+emitted immediately after `openTag`.  Argument: tag name.
 
-`attribute` - An attribute node.  Argument: object with `name` and
-`value`.  If the `xmlns` option is set, it will also contains
-namespace information.
+`attribute` - An attribute node.  Argument: object with `name` and `value`.  If
+the `xmlns` option is set, it will also contains namespace information.
 
 `comment` - A comment node.  Argument: the string of the comment.
 
 `opencdata` - The opening tag of a `<![CDATA[` block.
 
 `cdata` - The text of a `<![CDATA[` block. Since `<![CDATA[` blocks can get
-quite large, this event may fire multiple times for a single block, if it
-is broken up into multiple `write()`s. Argument: the string of random
-character data.
+quite large, this event may fire multiple times for a single block, if it is
+broken up into multiple `write()`s. Argument: the string of random character
+data.
 
 `closecdata` - The closing tag (`]]>`) of a `<![CDATA[` block.
 
-`opennamespace` - If the `xmlns` option is set, then this event will
-signal the start of a new namespace binding.
+`opennamespace` - If the `xmlns` option is set, then this event will signal the
+start of a new namespace binding.
 
-`closenamespace` - If the `xmlns` option is set, then this event will
-signal the end of a namespace binding.
+`closenamespace` - If the `xmlns` option is set, then this event will signal the
+end of a namespace binding.
 
 `end` - Indication that the closed stream has ended.
 
-`ready` - Indication that the stream has reset, and is ready to be written
-to.
+`ready` - Indication that the stream has reset, and is ready to be written to.
