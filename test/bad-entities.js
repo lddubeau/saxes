@@ -6,7 +6,7 @@ require(".").test({
   expect: [
     ["opentagstart", { name: "r", attributes: {} }],
     ["opentag", { name: "r", attributes: {}, isSelfClosing: false }],
-    ["error", "Invalid character entity\nLine: 0\nColumn: 5\nChar: ;"],
+    ["error", "undefined:1:5: malformed character entity."],
     ["text", "&;"],
     ["closetag", "r"],
   ],
@@ -18,7 +18,7 @@ require(".").test({
   expect: [
     ["opentagstart", { name: "r", attributes: {} }],
     ["opentag", { name: "r", attributes: {}, isSelfClosing: false }],
-    ["error", "Invalid character entity\nLine: 0\nColumn: 6\nChar: ;"],
+    ["error", "undefined:1:6: malformed character entity."],
     ["text", "&#;"],
     ["closetag", "r"],
   ],
@@ -30,7 +30,7 @@ require(".").test({
   expect: [
     ["opentagstart", { name: "r", attributes: {} }],
     ["opentag", { name: "r", attributes: {}, isSelfClosing: false }],
-    ["error", "Invalid character entity\nLine: 0\nColumn: 7\nChar: ;"],
+    ["error", "undefined:1:7: malformed character entity."],
     ["text", "&#x;"],
     ["closetag", "r"],
   ],

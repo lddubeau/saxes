@@ -16,10 +16,7 @@ require(".").test({
     ["text", "Welcome,"],
     ["closetag", "span"],
     ["text", " "],
-    ["error", "Text data outside of root node.\n\
-Line: 0\n\
-Column: 23\n\
-Char: t"],
+    ["error", "undefined:1:23: text data outside of root node."],
     ["text", "to monkey land"],
     ["end", undefined],
     ["ready", undefined],

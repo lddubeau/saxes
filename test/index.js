@@ -53,13 +53,14 @@ exports.test = function test(options) {
       };
     }
 
-    expect(xml || fn, "must use xml or fn").to.not.be.undefined;
+    expect(xml !== undefined || fn !== undefined,
+           "must use xml or fn").to.be.true;
 
-    if (xml) {
+    if (xml !== undefined) {
       parser.write(xml).close();
     }
 
-    if (fn) {
+    if (fn !== undefined) {
       fn(parser);
     }
 

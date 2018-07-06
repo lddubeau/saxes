@@ -2,6 +2,7 @@
 
 const { expect } = require("chai");
 const saxes = require("../lib/saxes");
+const { test } = require(".");
 
 function testPosition(name, chunks, expectedEvents) {
   it(name, () => {
@@ -38,4 +39,15 @@ describe("parser position", () => {
       ["text", { position: 19, startTagPosition: 14 }],
       ["closetag", { position: 19, startTagPosition: 14 }],
     ]);
+
+  test({
+    name: "pi before root",
+    xml: "",
+    expect: [
+      ["error", "fnord.xml:1:0: document must contain a root element."],
+    ],
+    opt: {
+      fileName: "fnord.xml",
+    },
+  });
 });

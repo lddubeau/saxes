@@ -29,7 +29,7 @@ require(".").test({
     ],
     [
       "error",
-      "Text data outside of root node.\nLine: 0\nColumn: 17\nChar: d",
+      "undefined:1:17: text data outside of root node.",
     ],
     [
       "text",
@@ -37,7 +37,7 @@ require(".").test({
     ],
     [
       "error",
-      "Unexpected end\nLine: 0\nColumn: 20\nChar: f",
+      "undefined:1:20: unexpected end.",
     ],
   ],
   opt: {},

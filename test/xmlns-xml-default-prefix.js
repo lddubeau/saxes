@@ -99,9 +99,8 @@ describe("xml default prefix", () => {
       ],
       [
         "error",
-        "xml: prefix must be bound to http://www.w3.org/XML/1998/namespace\n" +
-          "Actual: ERROR\n" +
-          "Line: 0\nColumn: 29\nChar: >",
+        "undefined:1:29: xml prefix must be bound to \
+http://www.w3.org/XML/1998/namespace.",
       ],
       [
         "attribute",

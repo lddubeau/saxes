@@ -43,9 +43,8 @@ for (const entity in entitiesToTest) {
   if (typeof entitiesToTest[entity] === "object") {
     attributeErrors.push([
       "error",
-      `Invalid character in entity name\nLine: 0\nColumn: ${
-      xmlStart.length + entitiesToTest[entity][0] + 1
-      }\nChar: ${entitiesToTest[entity][1]}`,
+      `undefined:1:${xmlStart.length + entitiesToTest[entity][0] + 1}: disallowed \
+character in entity name.`,
     ]);
     attributeEvents.push([
       "attribute",

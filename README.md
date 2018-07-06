@@ -77,12 +77,19 @@ fs.createReadStream("file.xml")
 
 Pass the following arguments to the parser function.  All are optional.
 
-`opt` - Object bag of settings regarding string formatting.  All default to `false`.
+`opt` - Object bag of settings regarding string formatting.
 
 Settings supported:
 
-* `xmlns` - Boolean. If true, then namespaces are supported.
-* `position` - Boolean. If false, then don't track line/col/position.
+* `xmlns` - Boolean. If true, then namespaces are supported. Default
+  is `false`.
+
+* `position` - Boolean. If false, then don't track
+  line/col/position. Unset is treated as `true`. Default is unset.x
+
+* `fileName` - String. Set a file name for error reporting. This is
+  useful only when tracking positions. You may leave it unset, in
+  which case the file name in error messages will be `undefined`.
 
 ## Methods
 
