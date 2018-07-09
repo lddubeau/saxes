@@ -157,7 +157,7 @@ describe("xml declaration", () => {
   });
 
   it("well-formed", () => {
-    const parser = saxes.parser();
+    const parser = new saxes.SaxesParser();
     let seen = false;
     parser.onopentagstart = () => {
       expect(parser.xmlDecl).to.deep.equal({

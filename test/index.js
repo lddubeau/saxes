@@ -9,7 +9,7 @@ const saxes = require("../lib/saxes");
 exports.test = function test(options) {
   const { xml, name, expect: expected, fn } = options;
   it(name, () => {
-    const parser = saxes.parser(options.opt);
+    const parser = new saxes.SaxesParser(options.opt);
     let expectedIx = 0;
     for (const ev of saxes.EVENTS) {
       // eslint-disable-next-line no-loop-func

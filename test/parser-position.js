@@ -6,7 +6,7 @@ const { test } = require(".");
 
 function testPosition(name, chunks, expectedEvents) {
   it(name, () => {
-    const parser = saxes.parser();
+    const parser = new saxes.SaxesParser();
     for (const expectation of expectedEvents) {
       parser[`on${expectation[0]}`] = function handler() {
         // eslint-disable-next-line guard-for-in

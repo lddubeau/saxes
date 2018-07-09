@@ -4,7 +4,7 @@ const { expect } = require("chai");
 const saxes = require("../");
 
 it("parses a buffer", () => {
-  const parser = saxes.parser();
+  const parser = new saxes.SaxesParser();
   let seen = false;
   parser.onopentag = (node) => {
     expect(node).to.deep.equal({ name: "x", attributes: {}, isSelfClosing: false });

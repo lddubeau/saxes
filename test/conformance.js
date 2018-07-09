@@ -139,7 +139,7 @@ class SaxesDriver extends BaseDriver {
     return this.resourceLoader.loadFile(resolvedURI)
       .then((source) => {
         const errors = [];
-        const parser = saxes.parser({
+        const parser = new saxes.SaxesParser({
           xmlns: !test.forbidsNamespaces,
         });
         parser.onerror = (err) => {

@@ -52,7 +52,7 @@ guest.
 
 ```javascript
 var saxes = require("./lib/saxes"),
-  parser = saxes.parser();
+  parser = new saxes.SaxesParser();
 
 parser.onerror = function (e) {
   // an error happened.

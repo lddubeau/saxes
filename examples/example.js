@@ -6,7 +6,7 @@ const fs = require("fs");
 const path = require("path");
 const saxes = require("../lib/saxes");
 
-const parser = saxes.parser();
+const parser = new saxes.SaxesParser();
 
 function inspector(ev) {
   return function handler(data) {
