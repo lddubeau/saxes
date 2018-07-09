@@ -29,7 +29,7 @@ require(".").test({
     ],
     [
       "error",
-      "undefined:1:17: text data outside of root node.",
+      "undefined:1:19: text data outside of root node.",
     ],
     [
       "text",

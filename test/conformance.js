@@ -150,6 +150,9 @@ class SaxesDriver extends BaseDriver {
           errors.push(err);
         };
 
+        // for (const x of source) {
+        //   parser.write(x);
+        // }
         parser.write(source);
         parser.end();
         this.processResult(test, handling, errors.length === 0);
