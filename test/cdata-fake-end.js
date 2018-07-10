@@ -5,9 +5,7 @@ require(".").test({
   expect: [
     ["opentagstart", { name: "r", attributes: {} }],
     ["opentag", { name: "r", attributes: {}, isSelfClosing: false }],
-    ["opencdata", undefined],
     ["cdata", "[[[[[[[[]]]]]]]]"],
-    ["closecdata", undefined],
     ["closetag", "r"],
   ],
   fn(parser) {
@@ -24,9 +22,7 @@ require(".").test({
   expect: [
     ["opentagstart", { name: "r", attributes: {} }],
     ["opentag", { name: "r", attributes: {}, isSelfClosing: false }],
-    ["opencdata", undefined],
     ["cdata", "[[[[[[[[]]]]]]]]"],
-    ["closecdata", undefined],
     ["closetag", "r"],
   ],
   xml: "<r><![CDATA[[[[[[[[[]]]]]]]]]]></r>",
