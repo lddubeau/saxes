@@ -2,6 +2,7 @@
 
 const { build } = require("xml-conformance-suite/js/frameworks/mocha/builders/basic");
 const { ResourceLoader } = require("xml-conformance-suite/js/lib/resource-loader");
+const { loadTests } = require("xml-conformance-suite/js/lib/test-parser");
 const { BaseDriver } = require("xml-conformance-suite/js/drivers/base");
 const { Selection } = require("xml-conformance-suite/js/selections/chrome");
 
@@ -134,6 +135,12 @@ class SaxesDriver extends BaseDriver {
     this.canValidate = false;
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  writeSource(parser, source) {
+    parser.write(source);
+    parser.end();
+  }
+
   run(test, handling) {
     const { resolvedURI } = test;
     return this.resourceLoader.loadFile(resolvedURI)
@@ -145,19 +152,35 @@ class SaxesDriver extends BaseDriver {
         parser.onerror = (err) => {
           if (typeof process !== "undefined" && process.env &&
               process.env.DEBUG) {
+            // eslint-disable-next-line no-console
             console.log(err);
           }
           errors.push(err);
         };
 
-        // for (const x of source) {
-        //   parser.write(x);
-        // }
-        parser.write(source);
-        parser.end();
+        this.writeSource(parser, source);
         this.processResult(test, handling, errors.length === 0);
       });
   }
 }
 
-build(new ResourceLoader(), SaxesDriver, SaxesSelection).then(run);
+class CharByCharDriver extends SaxesDriver {
+  // eslint-disable-next-line class-methods-use-this
+  writeSource(parser, source) {
+    for (const x of source) {
+      parser.write(x);
+    }
+    parser.end();
+  }
+}
+
+const resourceLoader = new ResourceLoader();
+loadTests(resourceLoader)
+  .then(suite =>
+        Promise.all([
+          build(suite, "conformance (one write)", resourceLoader,
+                SaxesDriver, SaxesSelection),
+          build(suite, "conformance (char-by-char)", resourceLoader,
+                CharByCharDriver, SaxesSelection),
+        ]))
+  .then(run);
