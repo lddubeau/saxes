@@ -19,13 +19,6 @@ const entitiesToTest = {
 
 let xmlStart = "<a test=\"&amp;\" ";
 const myAttributes = {};
-const attributeEvents = [[
-  "attribute",
-  {
-    name: "test",
-    value: "&",
-  },
-]];
 myAttributes.test = "&";
 
 let entI = 0;
@@ -46,16 +39,10 @@ for (const entity in entitiesToTest) {
       `undefined:1:${xmlStart.length + entitiesToTest[entity][0] + 1}: disallowed \
 character in entity name.`,
     ]);
-    attributeEvents.push([
-      "attribute",
-      { name: attribName, value: `&${entity};` },
-    ]);
     myAttributes[attribName] = `&${entity};`;
   }
   else {
     ENTITIES[entity] = attribValue;
-    attributeEvents.push(["attribute",
-                          { name: attribName, value: attribValue }]);
     myAttributes[attribName] = attribValue;
   }
 
@@ -74,7 +61,6 @@ require(".").test({
       },
     ],
     ...attributeErrors,
-    ...attributeEvents,
     [
       "opentag",
       {

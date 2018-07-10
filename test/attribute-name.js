@@ -6,16 +6,6 @@ require(".").test({
   expect: [
     ["opentagstart", { name: "root", attributes: {}, ns: {} }],
     [
-      "attribute",
-      {
-        name: "length",
-        value: "12345",
-        prefix: "",
-        local: "length",
-        uri: "",
-      },
-    ],
-    [
       "opentag",
       {
         name: "root",

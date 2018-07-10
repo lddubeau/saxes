@@ -42,16 +42,6 @@ require(".").test({
       },
     ],
     [
-      "attribute",
-      {
-        name: "attr",
-        value: "normal",
-        prefix: "",
-        local: "attr",
-        uri: "",
-      },
-    ],
-    [
       "opentag",
       {
         name: "plain",
@@ -91,16 +81,6 @@ require(".").test({
       },
     ],
     [
-      "attribute",
-      {
-        name: "xmlns",
-        value: "uri:default",
-        prefix: "xmlns",
-        local: "",
-        uri: "http://www.w3.org/2000/xmlns/",
-      },
-    ],
-    [
       "opentag",
       {
         name: "ns1",
@@ -130,16 +110,6 @@ require(".").test({
           "": "uri:default",
         },
         attributes: {},
-      },
-    ],
-    [
-      "attribute",
-      {
-        name: "attr",
-        value: "normal",
-        prefix: "",
-        local: "attr",
-        uri: "",
       },
     ],
     [
@@ -195,16 +165,6 @@ require(".").test({
       },
     ],
     [
-      "attribute",
-      {
-        name: "xmlns:a",
-        value: "uri:nsa",
-        prefix: "xmlns",
-        local: "a",
-        uri: "http://www.w3.org/2000/xmlns/",
-      },
-    ],
-    [
       "opentag",
       {
         name: "ns2",
@@ -234,16 +194,6 @@ require(".").test({
         ns: {
           a: "uri:nsa",
         },
-      },
-    ],
-    [
-      "attribute",
-      {
-        name: "attr",
-        value: "normal",
-        prefix: "",
-        local: "attr",
-        uri: "",
       },
     ],
     [
@@ -278,16 +228,6 @@ require(".").test({
         name: "a:ns",
         attributes: {},
         ns: { a: "uri:nsa" },
-      },
-    ],
-    [
-      "attribute",
-      {
-        name: "a:attr",
-        value: "namespaced",
-        prefix: "a",
-        local: "attr",
-        uri: "uri:nsa",
       },
     ],
     [

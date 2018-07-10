@@ -63,16 +63,6 @@ describe("xmlns unbound prefixes", () => {
         },
       ],
       [
-        "attribute",
-        {
-          name: "xmlns:unbound",
-          value: "someuri",
-          prefix: "xmlns",
-          local: "unbound",
-          uri: "http://www.w3.org/2000/xmlns/",
-        },
-      ],
-      [
         "opentag",
         {
           name: "unbound:root",
@@ -126,16 +116,6 @@ describe("xmlns unbound prefixes", () => {
       [
         "error",
         "undefined:1:28: unbound namespace prefix: \"unbound\".",
-      ],
-      [
-        "attribute",
-        {
-          name: "unbound:attr",
-          value: "value",
-          uri: "unbound",
-          prefix: "unbound",
-          local: "attr",
-        },
       ],
       [
         "opentag",

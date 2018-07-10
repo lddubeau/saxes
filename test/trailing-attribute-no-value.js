@@ -6,7 +6,6 @@ require(".").test({
   expect: [
     ["opentagstart", { name: "root", attributes: {} }],
     ["error", "undefined:1:13: attribute without value."],
-    ["attribute", { name: "attrib", value: "attrib" }],
     ["opentag", { name: "root", attributes: { attrib: "attrib" }, isSelfClosing: false }],
     ["closetag", "root"],
   ],

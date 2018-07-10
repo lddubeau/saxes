@@ -13,16 +13,6 @@ require(".").test({
       },
     ],
     [
-      "attribute",
-      {
-        name: "length",
-        value: "12345",
-        prefix: "",
-        local: "length",
-        uri: "",
-      },
-    ],
-    [
       "opentag",
       {
         name: "root",
@@ -61,13 +51,6 @@ require(".").test({
       {
         name: "root",
         attributes: {},
-      },
-    ],
-    [
-      "attribute",
-      {
-        name: "length",
-        value: "12345",
       },
     ],
     [

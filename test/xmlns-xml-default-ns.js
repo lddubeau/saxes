@@ -33,14 +33,6 @@ require(".").test({
       { prefix: "", uri: "http://foo" },
     ],
     [
-      "attribute",
-      xmlnsAttr,
-    ],
-    [
-      "attribute",
-      attrAttr,
-    ],
-    [
       "opentag",
       {
         name: "elm",

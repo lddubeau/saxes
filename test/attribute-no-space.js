@@ -7,8 +7,6 @@ require(".").test({
   expect: [
     ["opentagstart", { name: "root", attributes: {} }],
     ["error", "undefined:1:20: no whitespace between attributes."],
-    ["attribute", { name: "attr1", value: "first" }],
-    ["attribute", { name: "attr2", value: "second" }],
     ["opentag", { name: "root", attributes: { attr1: "first", attr2: "second" }, isSelfClosing: true }],
     ["closetag", "root"],
   ],
@@ -21,8 +19,6 @@ require(".").test({
   xml: "<root attr1=\"first\" attr2=\"second\"/>",
   expect: [
     ["opentagstart", { name: "root", attributes: {} }],
-    ["attribute", { name: "attr1", value: "first" }],
-    ["attribute", { name: "attr2", value: "second" }],
     ["opentag", { name: "root", attributes: { attr1: "first", attr2: "second" }, isSelfClosing: true }],
     ["closetag", "root"],
   ],
@@ -35,8 +31,6 @@ require(".").test({
   xml: "<root attr1=\"first\"\nattr2=\"second\"/>",
   expect: [
     ["opentagstart", { name: "root", attributes: {} }],
-    ["attribute", { name: "attr1", value: "first" }],
-    ["attribute", { name: "attr2", value: "second" }],
     ["opentag", { name: "root", attributes: { attr1: "first", attr2: "second" }, isSelfClosing: true }],
     ["closetag", "root"],
   ],
@@ -49,8 +43,6 @@ require(".").test({
   xml: "<root attr1=\"first\"  attr2=\"second\"/>",
   expect: [
     ["opentagstart", { name: "root", attributes: {} }],
-    ["attribute", { name: "attr1", value: "first" }],
-    ["attribute", { name: "attr2", value: "second" }],
     ["opentag", { name: "root", attributes: { attr1: "first", attr2: "second" }, isSelfClosing: true }],
     ["closetag", "root"],
   ],

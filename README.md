@@ -79,9 +79,6 @@ parser.ontext = function (t) {
 parser.onopentag = function (node) {
   // opened a tag.  node has "name" and "attributes"
 };
-parser.onattribute = function (attr) {
-  // an attribute.  attr has "name" and "value"
-};
 parser.onend = function () {
   // parser stream is done, and ready to have more stuff written to it.
 };

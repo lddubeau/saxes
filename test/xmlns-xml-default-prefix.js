@@ -48,16 +48,6 @@ describe("xml default prefix", () => {
         },
       ],
       [
-        "attribute",
-        {
-          name: "xml:lang",
-          local: "lang",
-          prefix: "xml",
-          uri: "http://www.w3.org/XML/1998/namespace",
-          value: "en",
-        },
-      ],
-      [
         "opentag",
         {
           name: "root",
@@ -101,16 +91,6 @@ describe("xml default prefix", () => {
         "error",
         "undefined:1:29: xml prefix must be bound to \
 http://www.w3.org/XML/1998/namespace.",
-      ],
-      [
-        "attribute",
-        {
-          name: "xmlns:xml",
-          local: "xml",
-          prefix: "xmlns",
-          uri: "http://www.w3.org/2000/xmlns/",
-          value: "ERROR",
-        },
       ],
       [
         "opentag",

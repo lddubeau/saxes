@@ -17,7 +17,6 @@ require(".").test({
   xml: "\uFEFF<P BOM=\"\uFEFF\">\uFEFFStarts and ends with BOM\uFEFF</P>",
   expect: [
     ["opentagstart", { name: "P", attributes: {} }],
-    ["attribute", { name: "BOM", value: "\uFEFF" }],
     ["opentag", { name: "P", attributes: { BOM: "\uFEFF" }, isSelfClosing: false }],
     ["text", "\uFEFFStarts and ends with BOM\uFEFF"],
     ["closetag", "P"],

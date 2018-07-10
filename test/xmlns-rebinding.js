@@ -32,46 +32,6 @@ require(".").test({
       },
     ],
     [
-      "attribute",
-      {
-        name: "xmlns:x",
-        value: "x1",
-        uri: "http://www.w3.org/2000/xmlns/",
-        prefix: "xmlns",
-        local: "x",
-      },
-    ],
-    [
-      "attribute",
-      {
-        name: "xmlns:y",
-        value: "y1",
-        uri: "http://www.w3.org/2000/xmlns/",
-        prefix: "xmlns",
-        local: "y",
-      },
-    ],
-    [
-      "attribute",
-      {
-        name: "x:a",
-        value: "x1",
-        uri: "x1",
-        prefix: "x",
-        local: "a",
-      },
-    ],
-    [
-      "attribute",
-      {
-        name: "y:a",
-        value: "y1",
-        uri: "y1",
-        prefix: "y",
-        local: "a",
-      },
-    ],
-    [
       "opentag",
       {
         name: "root",
@@ -134,16 +94,6 @@ require(".").test({
       },
     ],
     [
-      "attribute",
-      {
-        name: "xmlns:x",
-        value: "x2",
-        uri: "http://www.w3.org/2000/xmlns/",
-        prefix: "xmlns",
-        local: "x",
-      },
-    ],
-    [
       "opentag",
       {
         name: "rebind",
@@ -173,26 +123,6 @@ require(".").test({
         ns: {
           x: "x2",
         },
-      },
-    ],
-    [
-      "attribute",
-      {
-        name: "x:a",
-        value: "x2",
-        uri: "x2",
-        prefix: "x",
-        local: "a",
-      },
-    ],
-    [
-      "attribute",
-      {
-        name: "y:a",
-        value: "y1",
-        uri: "y1",
-        prefix: "y",
-        local: "a",
       },
     ],
     [
@@ -248,26 +178,6 @@ require(".").test({
           x: "x1",
           y: "y1",
         },
-      },
-    ],
-    [
-      "attribute",
-      {
-        name: "x:a",
-        value: "x1",
-        uri: "x1",
-        prefix: "x",
-        local: "a",
-      },
-    ],
-    [
-      "attribute",
-      {
-        name: "y:a",
-        value: "y1",
-        uri: "y1",
-        prefix: "y",
-        local: "a",
       },
     ],
     [
