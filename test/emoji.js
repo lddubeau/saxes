@@ -8,7 +8,7 @@ require(".").test({
     ["opentagstart", { name: "a", attributes: {} }],
     ["opentag", { name: "a", attributes: {}, isSelfClosing: false }],
     ["text", "\ud83d\udd25"],
-    ["closetag", "a"],
+    ["closetag", { name: "a", attributes: {}, isSelfClosing: false }],
   ],
   opt: {},
 });

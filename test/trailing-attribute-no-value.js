@@ -7,7 +7,7 @@ require(".").test({
     ["opentagstart", { name: "root", attributes: {} }],
     ["error", "undefined:1:13: attribute without value."],
     ["opentag", { name: "root", attributes: { attrib: "attrib" }, isSelfClosing: false }],
-    ["closetag", "root"],
+    ["closetag", { name: "root", attributes: { attrib: "attrib" }, isSelfClosing: false }],
   ],
   opt: {},
 });

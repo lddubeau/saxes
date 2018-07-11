@@ -26,7 +26,15 @@ require(".").test({
     ],
     [
       "closetag",
-      "xmlns",
+      {
+        name: "xmlns",
+        uri: "",
+        prefix: "",
+        local: "xmlns",
+        attributes: {},
+        ns: {},
+        isSelfClosing: true,
+      },
     ],
   ],
   opt: {

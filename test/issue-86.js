@@ -25,7 +25,11 @@ require(".").test({
     ],
     [
       "closetag",
-      "root",
+      {
+        name: "root",
+        attributes: {},
+        isSelfClosing: false,
+      },
     ],
     [
       "error",

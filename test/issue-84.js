@@ -9,7 +9,7 @@ require(".").test({
     ["opentag", { name: "xml", attributes: {}, isSelfClosing: false }],
     ["processinginstruction", { target: "has", body: "unbalanced \"quotes" }],
     ["text", "body"],
-    ["closetag", "xml"],
+    ["closetag", { name: "xml", attributes: {}, isSelfClosing: false }],
   ],
   opt: {},
 });

@@ -8,6 +8,6 @@ require(".").test({
     ["opentag", { name: "r", attributes: {}, isSelfClosing: false }],
     ["comment", "foo"],
     ["comment", ""],
-    ["closetag", "r"],
+    ["closetag", { name: "r", attributes: {}, isSelfClosing: false }],
   ],
 });

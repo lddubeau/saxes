@@ -6,7 +6,7 @@ require(".").test({
     ["opentagstart", { name: "r", attributes: {} }],
     ["opentag", { name: "r", attributes: {}, isSelfClosing: false }],
     ["cdata", "[[[[[[[[]]]]]]]]"],
-    ["closetag", "r"],
+    ["closetag", { name: "r", attributes: {}, isSelfClosing: false }],
   ],
   fn(parser) {
     const x = "<r><![CDATA[[[[[[[[[]]]]]]]]]]></r>";
@@ -23,7 +23,7 @@ require(".").test({
     ["opentagstart", { name: "r", attributes: {} }],
     ["opentag", { name: "r", attributes: {}, isSelfClosing: false }],
     ["cdata", "[[[[[[[[]]]]]]]]"],
-    ["closetag", "r"],
+    ["closetag", { name: "r", attributes: {}, isSelfClosing: false }],
   ],
   xml: "<r><![CDATA[[[[[[[[[]]]]]]]]]]></r>",
 });

@@ -33,7 +33,15 @@ describe("xmlns unbound prefixes", () => {
       ],
       [
         "closetag",
-        "unbound:root",
+        {
+          name: "unbound:root",
+          uri: "unbound",
+          prefix: "unbound",
+          local: "root",
+          attributes: {},
+          ns: {},
+          isSelfClosing: true,
+        },
       ],
     ],
     fn(parser) {
@@ -79,7 +87,25 @@ describe("xmlns unbound prefixes", () => {
       ],
       [
         "closetag",
-        "unbound:root",
+        {
+          name: "unbound:root",
+          uri: "someuri",
+          prefix: "unbound",
+          local: "root",
+          attributes: {
+            "xmlns:unbound": {
+              name: "xmlns:unbound",
+              value: "someuri",
+              prefix: "xmlns",
+              local: "unbound",
+              uri: "http://www.w3.org/2000/xmlns/",
+            },
+          },
+          ns: {
+            unbound: "someuri",
+          },
+          isSelfClosing: true,
+        },
       ],
     ],
     fn(parser) {
@@ -125,7 +151,23 @@ describe("xmlns unbound prefixes", () => {
       ],
       [
         "closetag",
-        "root",
+        {
+          name: "root",
+          uri: "",
+          prefix: "",
+          local: "root",
+          attributes: {
+            "unbound:attr": {
+              name: "unbound:attr",
+              value: "value",
+              uri: "unbound",
+              prefix: "unbound",
+              local: "attr",
+            },
+          },
+          ns: {},
+          isSelfClosing: true,
+        },
       ],
     ],
     fn(parser) {

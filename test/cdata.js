@@ -8,6 +8,6 @@ require(".").test({
     ["opentag", { name: "r", attributes: {}, isSelfClosing: false }],
     ["cdata", " this is character data  "],
     ["cdata", ""],
-    ["closetag", "r"],
+    ["closetag", { name: "r", attributes: {}, isSelfClosing: false }],
   ],
 });

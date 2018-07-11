@@ -7,6 +7,6 @@ require(".").test({
     ["opentagstart", { name: "Р", attributes: {} }],
     ["opentag", { name: "Р", attributes: {}, isSelfClosing: false }],
     ["text", "тест"],
-    ["closetag", "Р"],
+    ["closetag", { name: "Р", attributes: {}, isSelfClosing: false }],
   ],
 });

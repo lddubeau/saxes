@@ -7,7 +7,7 @@ require(".").test({
     ["opentag", { name: "r", attributes: {}, isSelfClosing: false }],
     ["cdata", " this is "],
     ["cdata", "character data  "],
-    ["closetag", "r"],
+    ["closetag", { name: "r", attributes: {}, isSelfClosing: false }],
   ],
   fn(parser) {
     parser.write("<r><![CDATA[ this is ]]>").write("<![CDA")

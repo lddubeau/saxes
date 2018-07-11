@@ -35,7 +35,32 @@ const expect = [
   ],
   [
     "closetag",
-    "parent",
+    {
+      name: "parent",
+      uri: "",
+      prefix: "",
+      local: "parent",
+      attributes: {
+        "a:attr": {
+          name: "a:attr",
+          local: "attr",
+          prefix: "a",
+          uri: "http://ATTRIBUTE",
+          value: "value",
+        },
+        "xmlns:a": {
+          name: "xmlns:a",
+          local: "a",
+          prefix: "xmlns",
+          uri: "http://www.w3.org/2000/xmlns/",
+          value: "http://ATTRIBUTE",
+        },
+      },
+      ns: {
+        a: "http://ATTRIBUTE",
+      },
+      isSelfClosing: true,
+    },
   ],
 ];
 

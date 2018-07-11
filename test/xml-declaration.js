@@ -23,7 +23,18 @@ describe("xml declaration", () => {
           isSelfClosing: true,
         },
       ],
-      ["closetag", "root"],
+      [
+        "closetag",
+        {
+          name: "root",
+          prefix: "",
+          local: "root",
+          uri: "",
+          attributes: {},
+          ns: {},
+          isSelfClosing: true,
+        },
+      ],
     ],
     opt: {
       xmlns: true,
@@ -48,7 +59,18 @@ describe("xml declaration", () => {
           isSelfClosing: true,
         },
       ],
-      ["closetag", "root"],
+      [
+        "closetag",
+        {
+          name: "root",
+          prefix: "",
+          local: "root",
+          uri: "",
+          attributes: {},
+          ns: {},
+          isSelfClosing: true,
+        },
+      ],
     ],
     opt: {
       xmlns: true,
@@ -73,7 +95,18 @@ describe("xml declaration", () => {
           isSelfClosing: true,
         },
       ],
-      ["closetag", "root"],
+      [
+        "closetag",
+        {
+          name: "root",
+          prefix: "",
+          local: "root",
+          uri: "",
+          attributes: {},
+          ns: {},
+          isSelfClosing: true,
+        },
+      ],
     ],
     opt: {
       xmlns: true,
@@ -99,7 +132,18 @@ describe("xml declaration", () => {
           isSelfClosing: true,
         },
       ],
-      ["closetag", "root"],
+      [
+        "closetag",
+        {
+          name: "root",
+          prefix: "",
+          local: "root",
+          uri: "",
+          attributes: {},
+          ns: {},
+          isSelfClosing: true,
+        },
+      ],
     ],
     opt: {
       xmlns: true,
@@ -124,7 +168,18 @@ describe("xml declaration", () => {
           isSelfClosing: true,
         },
       ],
-      ["closetag", "root"],
+      [
+        "closetag",
+        {
+          name: "root",
+          prefix: "",
+          local: "root",
+          uri: "",
+          attributes: {},
+          ns: {},
+          isSelfClosing: true,
+        },
+      ],
     ],
     opt: {
       xmlns: true,
@@ -149,7 +204,18 @@ describe("xml declaration", () => {
           isSelfClosing: true,
         },
       ],
-      ["closetag", "root"],
+      [
+        "closetag",
+        {
+          name: "root",
+          prefix: "",
+          local: "root",
+          uri: "",
+          attributes: {},
+          ns: {},
+          isSelfClosing: true,
+        },
+      ],
     ],
     opt: {
       xmlns: true,

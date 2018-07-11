@@ -45,7 +45,18 @@ require(".").test({
     ],
     [
       "closetag",
-      "elm",
+      {
+        name: "elm",
+        prefix: "",
+        local: "elm",
+        uri: "http://foo",
+        ns: { "": "http://foo" },
+        attributes: {
+          xmlns: xmlnsAttr,
+          attr: attrAttr,
+        },
+        isSelfClosing: true,
+      },
     ],
   ],
   opt: {

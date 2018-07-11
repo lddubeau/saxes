@@ -69,7 +69,14 @@ require(".").test({
         isSelfClosing: true,
       },
     ],
-    ["closetag", "a"],
+    [
+      "closetag",
+      {
+        name: "a",
+        attributes: myAttributes,
+        isSelfClosing: true,
+      },
+    ],
   ],
   fn(parser) {
     Object.assign(parser.ENTITIES, ENTITIES);

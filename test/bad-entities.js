@@ -8,7 +8,7 @@ require(".").test({
     ["opentag", { name: "r", attributes: {}, isSelfClosing: false }],
     ["error", "undefined:1:5: malformed character entity."],
     ["text", "&;"],
-    ["closetag", "r"],
+    ["closetag", { name: "r", attributes: {}, isSelfClosing: false }],
   ],
 });
 
@@ -20,7 +20,7 @@ require(".").test({
     ["opentag", { name: "r", attributes: {}, isSelfClosing: false }],
     ["error", "undefined:1:6: malformed character entity."],
     ["text", "&#;"],
-    ["closetag", "r"],
+    ["closetag", { name: "r", attributes: {}, isSelfClosing: false }],
   ],
 });
 
@@ -32,6 +32,6 @@ require(".").test({
     ["opentag", { name: "r", attributes: {}, isSelfClosing: false }],
     ["error", "undefined:1:7: malformed character entity."],
     ["text", "&#x;"],
-    ["closetag", "r"],
+    ["closetag", { name: "r", attributes: {}, isSelfClosing: false }],
   ],
 });

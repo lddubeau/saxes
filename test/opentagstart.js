@@ -34,7 +34,23 @@ require(".").test({
     ],
     [
       "closetag",
-      "root",
+      {
+        name: "root",
+        prefix: "",
+        local: "root",
+        uri: "",
+        attributes: {
+          length: {
+            name: "length",
+            value: "12345",
+            prefix: "",
+            local: "length",
+            uri: "",
+          },
+        },
+        ns: {},
+        isSelfClosing: false,
+      },
     ],
   ],
   opt: {
@@ -65,7 +81,13 @@ require(".").test({
     ],
     [
       "closetag",
-      "root",
+      {
+        name: "root",
+        attributes: {
+          length: "12345",
+        },
+        isSelfClosing: false,
+      },
     ],
   ],
 });

@@ -17,9 +17,9 @@ require(".").test({
     ["text", "\n"],
     ["opentagstart", { name: "data", attributes: {} }],
     ["opentag", { name: "data", attributes: {}, isSelfClosing: true }],
-    ["closetag", "data"],
+    ["closetag", { name: "data", attributes: {}, isSelfClosing: true }],
     ["text", "\n"],
-    ["closetag", "xml"],
+    ["closetag", { name: "xml", attributes: {}, isSelfClosing: false }],
   ],
   opt: {},
 });

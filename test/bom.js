@@ -7,7 +7,7 @@ require(".").test({
   expect: [
     ["opentagstart", { name: "P", attributes: {} }],
     ["opentag", { name: "P", attributes: {}, isSelfClosing: false }],
-    ["closetag", "P"],
+    ["closetag", { name: "P", attributes: {}, isSelfClosing: false }],
   ],
 });
 
@@ -19,7 +19,7 @@ require(".").test({
     ["opentagstart", { name: "P", attributes: {} }],
     ["opentag", { name: "P", attributes: { BOM: "\uFEFF" }, isSelfClosing: false }],
     ["text", "\uFEFFStarts and ends with BOM\uFEFF"],
-    ["closetag", "P"],
+    ["closetag", { name: "P", attributes: { BOM: "\uFEFF" }, isSelfClosing: false }],
   ],
 });
 
@@ -32,7 +32,7 @@ require(".").test({
     ["text", "\uFEFF"],
     ["opentagstart", { name: "P", attributes: {} }],
     ["opentag", { name: "P", attributes: {}, isSelfClosing: false }],
-    ["closetag", "P"],
+    ["closetag", { name: "P", attributes: {}, isSelfClosing: false }],
   ],
 });
 
@@ -45,6 +45,6 @@ require(".").test({
     ["text", "\uFEFF"],
     ["opentagstart", { name: "P", attributes: {} }],
     ["opentag", { name: "P", attributes: {}, isSelfClosing: false }],
-    ["closetag", "P"],
+    ["closetag", { name: "P", attributes: {}, isSelfClosing: false }],
   ],
 });

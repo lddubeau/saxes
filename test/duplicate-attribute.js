@@ -14,7 +14,11 @@ require(".").test({
       attributes: { id: "there" },
       isSelfClosing: false,
     }],
-    ["closetag", "span"],
+    ["closetag", {
+      name: "span",
+      attributes: { id: "there" },
+      isSelfClosing: false,
+    }],
   ],
   opt: {},
 });

@@ -8,6 +8,6 @@ require(".").test({
     ["opentag", { name: "r", attributes: {}, isSelfClosing: false }],
     ["error", "undefined:1:9: malformed character entity."],
     ["text", "&#NaN;"],
-    ["closetag", "r"],
+    ["closetag", { name: "r", attributes: {}, isSelfClosing: false }],
   ],
 });

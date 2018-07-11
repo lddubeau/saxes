@@ -8,7 +8,7 @@ require(".").test({
     ["opentagstart", { name: "xml", attributes: {} }],
     ["opentag", { name: "xml", attributes: {}, isSelfClosing: false }],
     ["text", "\r\r\n"],
-    ["closetag", "xml"],
+    ["closetag", { name: "xml", attributes: {}, isSelfClosing: false }],
   ],
   opt: {},
 });

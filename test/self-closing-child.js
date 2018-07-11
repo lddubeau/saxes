@@ -38,8 +38,16 @@ require(".").test({
       attributes: {},
       isSelfClosing: true,
     }],
-    ["closetag", "haha"],
-    ["closetag", "child"],
+    ["closetag", {
+      name: "haha",
+      attributes: {},
+      isSelfClosing: true,
+    }],
+    ["closetag", {
+      name: "child",
+      attributes: {},
+      isSelfClosing: false,
+    }],
     ["opentagstart", {
       name: "monkey",
       attributes: {},
@@ -50,8 +58,16 @@ require(".").test({
       isSelfClosing: false,
     }],
     ["text", "=(|)"],
-    ["closetag", "monkey"],
-    ["closetag", "root"],
+    ["closetag", {
+      name: "monkey",
+      attributes: {},
+      isSelfClosing: false,
+    }],
+    ["closetag", {
+      name: "root",
+      attributes: {},
+      isSelfClosing: false,
+    }],
     ["end", undefined],
     ["ready", undefined],
   ],

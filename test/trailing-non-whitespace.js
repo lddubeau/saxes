@@ -14,7 +14,11 @@ require(".").test({
       isSelfClosing: false,
     }],
     ["text", "Welcome,"],
-    ["closetag", "span"],
+    ["closetag", {
+      name: "span",
+      attributes: {},
+      isSelfClosing: false,
+    }],
     ["error", "undefined:1:36: text data outside of root node."],
     ["text", " to monkey land"],
     ["end", undefined],

@@ -8,7 +8,7 @@ require(".").test({
     ["opentagstart", { name: "root", attributes: {} }],
     ["error", "undefined:1:20: no whitespace between attributes."],
     ["opentag", { name: "root", attributes: { attr1: "first", attr2: "second" }, isSelfClosing: true }],
-    ["closetag", "root"],
+    ["closetag", { name: "root", attributes: { attr1: "first", attr2: "second" }, isSelfClosing: true }],
   ],
   opt: { },
 });
@@ -20,7 +20,7 @@ require(".").test({
   expect: [
     ["opentagstart", { name: "root", attributes: {} }],
     ["opentag", { name: "root", attributes: { attr1: "first", attr2: "second" }, isSelfClosing: true }],
-    ["closetag", "root"],
+    ["closetag", { name: "root", attributes: { attr1: "first", attr2: "second" }, isSelfClosing: true }],
   ],
   opt: { },
 });
@@ -32,7 +32,7 @@ require(".").test({
   expect: [
     ["opentagstart", { name: "root", attributes: {} }],
     ["opentag", { name: "root", attributes: { attr1: "first", attr2: "second" }, isSelfClosing: true }],
-    ["closetag", "root"],
+    ["closetag", { name: "root", attributes: { attr1: "first", attr2: "second" }, isSelfClosing: true }],
   ],
   opt: { },
 });
@@ -44,7 +44,7 @@ require(".").test({
   expect: [
     ["opentagstart", { name: "root", attributes: {} }],
     ["opentag", { name: "root", attributes: { attr1: "first", attr2: "second" }, isSelfClosing: true }],
-    ["closetag", "root"],
+    ["closetag", { name: "root", attributes: { attr1: "first", attr2: "second" }, isSelfClosing: true }],
   ],
   opt: { },
 });

@@ -7,7 +7,7 @@ require(".").test({
   expect: [
     ["opentagstart", { name: "a", attributes: {} }],
     ["opentag", { name: "a", attributes: { href: "query.svc?x=1&y=2&z=3" }, isSelfClosing: true }],
-    ["closetag", "a"],
+    ["closetag", { name: "a", attributes: { href: "query.svc?x=1&y=2&z=3" }, isSelfClosing: true }],
   ],
   opt: {},
 });
