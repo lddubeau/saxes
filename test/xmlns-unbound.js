@@ -56,13 +56,6 @@ describe("xmlns unbound prefixes", () => {
         },
       ],
       [
-        "opennamespace",
-        {
-          prefix: "unbound",
-          uri: "someuri",
-        },
-      ],
-      [
         "opentag",
         {
           name: "unbound:root",
@@ -87,13 +80,6 @@ describe("xmlns unbound prefixes", () => {
       [
         "closetag",
         "unbound:root",
-      ],
-      [
-        "closenamespace",
-        {
-          prefix: "unbound",
-          uri: "someuri",
-        },
       ],
     ],
     fn(parser) {

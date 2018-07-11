@@ -5,13 +5,6 @@ const t = require(".");
 const expect = [
   ["opentagstart", { name: "parent", attributes: {}, ns: {} }],
   [
-    "opennamespace",
-    {
-      prefix: "a",
-      uri: "http://ATTRIBUTE",
-    },
-  ],
-  [
     "opentag",
     {
       name: "parent",
@@ -43,13 +36,6 @@ const expect = [
   [
     "closetag",
     "parent",
-  ],
-  [
-    "closenamespace",
-    {
-      prefix: "a",
-      uri: "http://ATTRIBUTE",
-    },
   ],
 ];
 

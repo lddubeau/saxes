@@ -74,13 +74,6 @@ require(".").test({
       },
     ],
     [
-      "opennamespace",
-      {
-        prefix: "",
-        uri: "uri:default",
-      },
-    ],
-    [
       "opentag",
       {
         name: "ns1",
@@ -106,9 +99,7 @@ require(".").test({
       "opentagstart",
       {
         name: "plain",
-        ns: {
-          "": "uri:default",
-        },
+        ns: {},
         attributes: {},
       },
     ],
@@ -119,9 +110,7 @@ require(".").test({
         prefix: "",
         local: "plain",
         uri: "uri:default",
-        ns: {
-          "": "uri:default",
-        },
+        ns: {},
         attributes: {
           attr: {
             name: "attr",
@@ -143,25 +132,11 @@ require(".").test({
       "ns1",
     ],
     [
-      "closenamespace",
-      {
-        prefix: "",
-        uri: "uri:default",
-      },
-    ],
-    [
       "opentagstart",
       {
         name: "ns2",
         attributes: {},
         ns: {},
-      },
-    ],
-    [
-      "opennamespace",
-      {
-        prefix: "a",
-        uri: "uri:nsa",
       },
     ],
     [
@@ -191,9 +166,7 @@ require(".").test({
       {
         name: "plain",
         attributes: {},
-        ns: {
-          a: "uri:nsa",
-        },
+        ns: {},
       },
     ],
     [
@@ -212,9 +185,7 @@ require(".").test({
             uri: "",
           },
         },
-        ns: {
-          a: "uri:nsa",
-        },
+        ns: {},
         isSelfClosing: true,
       },
     ],
@@ -227,7 +198,7 @@ require(".").test({
       {
         name: "a:ns",
         attributes: {},
-        ns: { a: "uri:nsa" },
+        ns: {},
       },
     ],
     [
@@ -246,7 +217,7 @@ require(".").test({
             uri: "uri:nsa",
           },
         },
-        ns: { a: "uri:nsa" },
+        ns: {},
         isSelfClosing: true,
       },
     ],
@@ -257,13 +228,6 @@ require(".").test({
     [
       "closetag",
       "ns2",
-    ],
-    [
-      "closenamespace",
-      {
-        prefix: "a",
-        uri: "uri:nsa",
-      },
     ],
     [
       "closetag",

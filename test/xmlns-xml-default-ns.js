@@ -29,10 +29,6 @@ require(".").test({
       },
     ],
     [
-      "opennamespace",
-      { prefix: "", uri: "http://foo" },
-    ],
-    [
       "opentag",
       {
         name: "elm",
@@ -50,13 +46,6 @@ require(".").test({
     [
       "closetag",
       "elm",
-    ],
-    [
-      "closenamespace",
-      {
-        prefix: "",
-        uri: "http://foo",
-      },
     ],
   ],
   opt: {

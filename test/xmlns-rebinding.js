@@ -18,20 +18,6 @@ require(".").test({
       },
     ],
     [
-      "opennamespace",
-      {
-        prefix: "x",
-        uri: "x1",
-      },
-    ],
-    [
-      "opennamespace",
-      {
-        prefix: "y",
-        uri: "y1",
-      },
-    ],
-    [
       "opentag",
       {
         name: "root",
@@ -80,17 +66,7 @@ require(".").test({
       {
         name: "rebind",
         attributes: {},
-        ns: {
-          x: "x1",
-          y: "y1",
-        },
-      },
-    ],
-    [
-      "opennamespace",
-      {
-        prefix: "x",
-        uri: "x2",
+        ns: {},
       },
     ],
     [
@@ -120,9 +96,7 @@ require(".").test({
       {
         name: "check",
         attributes: {},
-        ns: {
-          x: "x2",
-        },
+        ns: {},
       },
     ],
     [
@@ -148,9 +122,7 @@ require(".").test({
             local: "a",
           },
         },
-        ns: {
-          x: "x2",
-        },
+        ns: {},
         isSelfClosing: true,
       },
     ],
@@ -163,21 +135,11 @@ require(".").test({
       "rebind",
     ],
     [
-      "closenamespace",
-      {
-        prefix: "x",
-        uri: "x2",
-      },
-    ],
-    [
       "opentagstart",
       {
         name: "check",
         attributes: {},
-        ns: {
-          x: "x1",
-          y: "y1",
-        },
+        ns: {},
       },
     ],
     [
@@ -203,10 +165,7 @@ require(".").test({
             local: "a",
           },
         },
-        ns: {
-          x: "x1",
-          y: "y1",
-        },
+        ns: {},
         isSelfClosing: true,
       },
     ],
@@ -217,20 +176,6 @@ require(".").test({
     [
       "closetag",
       "root",
-    ],
-    [
-      "closenamespace",
-      {
-        prefix: "x",
-        uri: "x1",
-      },
-    ],
-    [
-      "closenamespace",
-      {
-        prefix: "y",
-        uri: "y1",
-      },
     ],
   ],
   opt: {
