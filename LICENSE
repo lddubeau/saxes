@@ -38,8 +38,9 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 ====
 
-`String.fromCodePoint` by Mathias Bynens used according to terms of MIT
-License, as follows:
+`String.fromCodePoint` by Mathias Bynens is no longer used, but it can
+still be found in old commits. It was once used according to terms of
+MIT License, as follows:
 
     Copyright Mathias Bynens <https://mathiasbynens.be/>
 
