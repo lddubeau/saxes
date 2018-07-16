@@ -8,24 +8,40 @@ of sax in this project's documentation are references to sax 1.2.4.
 Designed with [node](http://nodejs.org/) in mind, but should work fine in the
 browser or other CommonJS implementations.
 
-## Notable Differences from sax.
+## Notable Differences from Sax.
 
 * Saxes aims to be much stricter than sax with regards to XML
   well-formedness. Sax, even in its so-called "strict mode", is not strict. It
   silently accepts structures that are not well-formed XML. Projects that need
-  absolute compliance with well-formedness constraints cannot use sax as-is.
+  better compliance with well-formedness constraints cannot use sax as-is.
+  Saxes aims for conformance with [XML 1.0 fifth
+  edition](https://www.w3.org/TR/2008/REC-xml-20081126/) and [XML Namespaces 1.0
+  third edition](http://www.w3.org/TR/2009/REC-xml-names-20091208/).
 
-* Saxes does not support HTML, or anything short of XML.
+  Consequently, saxes does not support HTML, or pseudo-XML, or bad XML.
 
-* Saxes does not aim to support antiquated platforms.
+* Saxes is much much faster than sax, mostly because of a substantial redesign
+  of the internal parsing logic. The speed improvement is not merely due to
+  removing features that were supported by sax. That helped a bit, but saxes
+  adds some expensive checks in its aim for conformance with the XML
+  specification. Redesigning the parsing logic is what accounts for most of the
+  performance improvement.
 
-* Saxes handles errors differently: it provides a default onerror handler which
-  throws. You can replace it with your own handler if you want. If your handler
-  does nothing. There is no `resume` method to call.
+* Saxes does not aim to support antiquated platforms. We will not pollute the
+  source or the default build with support for antiquated platforms. If you want
+  support for IE 11, you are welcome to produce a PR that adds a *new build*
+  transpiled to ES5.
+
+* Saxes handles errors differently from sax: it provides a default onerror
+  handler which throws. You can replace it with your own handler if you want. If
+  your handler does nothing. There is no `resume` method to call.
 
 * There's no `Stream` API. A revamped API may be introduced later. (It is still
   a "streaming parser" in the general sense that you write a character stream to
   it.)
+
+* Saxes does not have facilities for limiting the size the data chunks passed to
+  event handlers. See the FAQ entry for more details.
 
 ## Limitations
 
@@ -36,8 +52,17 @@ However, this parser does not parse the contents of DTDs. So malformedness
 errors caused by errors in DTDs cannot be reported.
 
 Also, the parser continues to parse even upon encountering errors, and does its
-best to continue reporting errors. However, once an error has been encountered
-**you cannot rely on the data given to you by event reporters.**
+best to continue reporting errors. You should heed all errors
+reported.
+
+**HOWEVER, ONCE AN ERROR HAS BEEN ENCOUNTERED YOU CANNOT RELY ON THE DATA
+PROVIDED THROUGH THE OTHER EVENT HANDLERS.**
+
+After an error, saxes tries to make sense of your document, but it may interpret
+it incorrectly. For instance ``<foo a=bc="d"/>`` is invalid XML. Did you mean to
+have ``<foo a="bc=d"/>`` or ``<foo a="b" c="d"/>`` or some other variation?
+Saxes takes an honest stab at figuring out your mangled XML. That's as good as
+it gets.
 
 ## Regarding `<!DOCTYPE`s and `<!ENTITY`s
 
@@ -141,3 +166,47 @@ are also in the exported `EVENTS` array.
 
 See the JSDOC comments in the source code for a description of each supported
 event.
+
+## FAQ
+
+Q. Why has saxes dropped support for limiting the size of data chunks passed to
+event handlers?
+
+A. With sax you could set ``MAX_BUFFER_LENGTH`` to cause the parser to limit the
+size of data chunks passed to event handlers. So if you ran into a span of text
+above the limit, multiple ``text`` events with smaller data chunks were fired
+instead of a single event with a large chunk.
+
+However, that functionality had some problematic characteristics. It had an
+arbitrary default value. It was library-wide so all parsers created from a
+single instance of the ``sax`` library shared it. This could potentially cause
+conflicts among libraries running in the same VM but using sax for different
+purposes.
+
+These issues could have been easily fixed, but there were larger issues. The
+buffer limit arbitrarily applied to some events but not others. It would split
+``text``, ``cdata`` and ``script`` events. However, if a ``comment``,
+``doctype``, ``attribute`` or ``processing instruction`` were more than the
+limit, the parser would generate an error and you were left picking up the
+pieces.
+
+It was not intuitive to use. You'd think setting the limit to 1K would prevent
+chunks bigger than 1K to be passed to event handlers. But that was not the
+case. A comment in the source code told you that you might go over the limit if
+you passed large chunks to ``write``. So if you want a 1K limit, don't pass 64K
+chunks to ``write``. Fair enough. You know what limit you want so you can
+control the size of the data you pass to ``write``. So you limit the chunks to
+``write`` to 1K at a time. Even if you do this, your event handlers may get data
+chunks that are 2K in size. Suppose on the previous ``write`` the parser has
+just finished processing an open tag, so it is ready for text. Your ``write``
+passes 1K of text. You are not above the limit yet, so no event is generated
+yet. The next ``write`` passes another 1K of text. It so happens that sax checks
+buffer limits only once per ``write``, after the chunk of data has been
+processed. Now you've hit the limit and you get a ``text`` event with 2K of
+data. So even if you limit your ``write`` calls to the buffer limit you've set,
+you may still get events with chunks at twice the buffer size limit you've
+specified.
+
+We may consider reinstating an equivalent functionality, provided that it
+addresses the issues above and does not cause a huge performance drop for
+use-case scenarios that don't need it.
