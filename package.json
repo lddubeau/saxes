@@ -12,7 +12,7 @@
     "preversion": "npm test",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
     "postversion": "npm publish",
-    "postpublish": "git push origin --all; git push origin --tags",
+    "postpublish": "git push origin --follow-tags",
     "commitmsg": "commitlint -E GIT_PARAMS"
   },
   "repository": "https://github.com/lddubeau/saxes.git",
