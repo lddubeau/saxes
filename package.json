@@ -4,6 +4,7 @@
   "author": "Louis-Dominique Dubeau <ldd@lddubeau.com>",
   "version": "1.2.4",
   "main": "lib/saxes.js",
+  "types": "lib/saxes.d.ts",
   "license": "ISC",
   "scripts": {
     "test": "mocha --delay",
