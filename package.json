@@ -10,6 +10,7 @@
     "test": "mocha --delay",
     "posttest": "eslint test/*.js lib/*.js",
     "preversion": "npm test",
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
     "postversion": "npm publish",
     "postpublish": "git push origin --all; git push origin --tags",
     "commitmsg": "commitlint -E GIT_PARAMS"
@@ -24,6 +25,7 @@
     "@commitlint/cli": "^7.0.0",
     "@commitlint/config-angular": "^7.0.1",
     "chai": "^4.1.2",
+    "conventional-changelog-cli": "^2.0.1",
     "eslint": "^4.19.1",
     "eslint-config-lddubeau-base": "^2.1.0",
     "husky": "^0.14.3",
