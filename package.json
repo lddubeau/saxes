@@ -15,7 +15,7 @@
     "postpublish": "git push origin --all; git push origin --tags",
     "commitmsg": "commitlint -E GIT_PARAMS"
   },
-  "repository": "git://github.com/lddubeau/saxes.git",
+  "repository": "https://github.com/lddubeau/saxes.git",
   "files": [
     "lib/saxes.js",
     "LICENSE",
