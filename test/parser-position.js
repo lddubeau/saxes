@@ -25,19 +25,19 @@ describe("parser position", () => {
   testPosition(
     "with single chunk",
     ["<div>abcdefgh</div>"], [
-      ["opentagstart", { position: 5, startTagPosition: 1 }],
-      ["opentag", { position: 5, startTagPosition: 1 }],
-      ["text", { position: 19, startTagPosition: 14 }],
-      ["closetag", { position: 19, startTagPosition: 14 }],
+      ["opentagstart", { position: 5 }],
+      ["opentag", { position: 5 }],
+      ["text", { position: 19 }],
+      ["closetag", { position: 19 }],
     ]);
 
   testPosition(
     "with multiple chunks",
     ["<div>abcde", "fgh</div>"], [
-      ["opentagstart", { position: 5, startTagPosition: 1 }],
-      ["opentag", { position: 5, startTagPosition: 1 }],
-      ["text", { position: 19, startTagPosition: 14 }],
-      ["closetag", { position: 19, startTagPosition: 14 }],
+      ["opentagstart", { position: 5 }],
+      ["opentag", { position: 5 }],
+      ["text", { position: 19 }],
+      ["closetag", { position: 19 }],
     ]);
 
   test({
