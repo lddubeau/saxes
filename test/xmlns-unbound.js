@@ -17,7 +17,7 @@ describe("xmlns unbound prefixes", () => {
       ],
       [
         "error",
-        "undefined:1:15: unbound namespace prefix: \"unbound:root\".",
+        "undefined:1:15: unbound namespace prefix: \"unbound\".",
       ],
       [
         "opentag",
