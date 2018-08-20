@@ -178,7 +178,7 @@ event.
 
 The XML specification does not define any method by which to parse XML
 fragments. However, there are usage scenarios in which it is desirable to parse
-fragments. In order to allow this, saxes provides two initialization options.
+fragments. In order to allow this, saxes provides three initialization options.
 
 If you pass the option `fragment: true` to the parser constructor, the parser
 will expect an XML fragment. It essentially starts with a parsing state
@@ -187,8 +187,17 @@ right after initialization. In other words, it expects content which is
 acceptable inside an element. This also turns off well-formedness checks that
 are inappropriate when parsing a fragment.
 
-The other option is `additionalNamespaces`, which allows you to define
-additional prefix-to-URI bindings known before parsing starts.
+The option `additionalNamespaces` allows you to define additional prefix-to-URI
+bindings known before parsing starts. You would use this over `resolvePrefix` if
+you have at the ready a series of namespaces bindings to use.
+
+The option `resolvePrefix` allows you to pass a function which saxes will use if
+it is unable to resolve a namespace prefix by itself. You would use this over
+`additionalNamespaces` in a context where getting a complete list of defined
+namespaces is onerous.
+
+Note that you can use `additionalNamespaces` and `resolvePrefix` together if you
+want. `additionalNamespaces` applies before `resolvePrefix`.
 
 ## FAQ
 

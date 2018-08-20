@@ -185,4 +185,46 @@ describe("fragments", () => {
       },
     },
   });
+
+  test({
+    name: "resolvePrefix",
+    xml: "Something <foo:blah>1</foo:blah> something",
+    expect: [
+      ["text", "Something "],
+      ["opentagstart", {
+        name: "foo:blah",
+        attributes: {},
+        ns: {},
+      }],
+      ["opentag", {
+        name: "foo:blah",
+        local: "blah",
+        prefix: "foo",
+        uri: "foo-uri",
+        attributes: {},
+        ns: {},
+        isSelfClosing: false,
+      }],
+      ["text", "1"],
+      ["closetag", {
+        name: "foo:blah",
+        local: "blah",
+        prefix: "foo",
+        uri: "foo-uri",
+        attributes: {},
+        ns: {},
+        isSelfClosing: false,
+      }],
+      ["text", " something"],
+    ],
+    opt: {
+      xmlns: true,
+      fragment: true,
+      resolvePrefix(prefix) {
+        return {
+          foo: "foo-uri",
+        }[prefix];
+      },
+    },
+  });
 });
