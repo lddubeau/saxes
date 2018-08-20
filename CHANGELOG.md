@@ -1,3 +1,27 @@
+<a name="2.1.0"></a>
+# [2.1.0](https://github.com/lddubeau/saxes/compare/v2.0.0...v2.1.0) (2018-08-20)
+
+
+### Features
+
+* add support for parsing fragments ([1ff2d6a](https://github.com/lddubeau/saxes/commit/1ff2d6a))
+* stronger check on bad cdata closure ([d416760](https://github.com/lddubeau/saxes/commit/d416760))
+
+
+### Performance Improvements
+
+* concatenate openWakaBang just once ([07345bf](https://github.com/lddubeau/saxes/commit/07345bf))
+* improve text node checking speed ([f270e8b](https://github.com/lddubeau/saxes/commit/f270e8b))
+* minor optimizations ([c7e36bf](https://github.com/lddubeau/saxes/commit/c7e36bf))
+* remove an unnecessary variable ([ac03a1c](https://github.com/lddubeau/saxes/commit/ac03a1c))
+* remove handler check ([fbe35ff](https://github.com/lddubeau/saxes/commit/fbe35ff))
+* simplify captureWhile ([bb2085c](https://github.com/lddubeau/saxes/commit/bb2085c))
+* simplify the skip functions ([c7b8c3b](https://github.com/lddubeau/saxes/commit/c7b8c3b))
+* the c field has been unused for a while: remove it ([9ca0246](https://github.com/lddubeau/saxes/commit/9ca0246))
+* use strings for the general states ([3869908](https://github.com/lddubeau/saxes/commit/3869908))
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/lddubeau/saxes/compare/v1.2.4...v2.0.0) (2018-07-23)
 
