@@ -1,3 +1,13 @@
+<a name="2.2.0"></a>
+# [2.2.0](https://github.com/lddubeau/saxes/compare/v2.1.0...v2.2.0) (2018-08-20)
+
+
+### Features
+
+* add the `resolvePrefix` option ([90301fb](https://github.com/lddubeau/saxes/commit/90301fb))
+
+
+
 <a name="2.1.0"></a>
 # [2.1.0](https://github.com/lddubeau/saxes/compare/v2.0.0...v2.1.0) (2018-08-20)
 
