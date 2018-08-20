@@ -84,7 +84,7 @@ with the ``@private`` tag, are private.
 
 If you use anything private, that's at your own peril.
 
-If there's a mistake in the documenation, raise an issue. If you just assume,
+If there's a mistake in the documentation, raise an issue. If you just assume,
 you may assume incorrectly.
 
 ## Summary Usage Information
@@ -119,15 +119,22 @@ Pass the following arguments to the parser function. All are optional.
 
 Settings supported:
 
-* `xmlns` - Boolean. If true, then namespaces are supported. Default
+* `xmlns` - Boolean. If `true`, then namespaces are supported. Default
   is `false`.
 
-* `position` - Boolean. If false, then don't track line/col/position. Unset is
+* `position` - Boolean. If `false`, then don't track line/col/position. Unset is
   treated as `true`. Default is unset.
 
 * `fileName` - String. Set a file name for error reporting. This is useful only
   when tracking positions. You may leave it unset, in which case the file name
   in error messages will be `undefined`.
+
+* `fragment` - Boolean. If `true`, parse the XML as an XML fragment. Default is
+  `false`.
+
+* `additionalNamespaces` - A plain object whose key, value pairs define
+   namespaces known before parsing the XML file. It is not legal to pass
+   bindings for the namespaces `"xml"` or `"xmlns"`.
 
 ### Methods
 
@@ -166,6 +173,22 @@ are also in the exported `EVENTS` array.
 
 See the JSDOC comments in the source code for a description of each supported
 event.
+
+### Parsing XML Fragments
+
+The XML specification does not define any method by which to parse XML
+fragments. However, there are usage scenarios in which it is desirable to parse
+fragments. In order to allow this, saxes provides two initialization options.
+
+If you pass the option `fragment: true` to the parser constructor, the parser
+will expect an XML fragment. It essentially starts with a parsing state
+equivalent to the one it would be in if `parser.write("<foo">)` had been called
+right after initialization. In other words, it expects content which is
+acceptable inside an element. This also turns off well-formedness checks that
+are inappropriate when parsing a fragment.
+
+The other option is `additionalNamespaces`, which allows you to define
+additional prefix-to-URI bindings known before parsing starts.
 
 ## FAQ
 
