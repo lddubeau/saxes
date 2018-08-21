@@ -100,8 +100,8 @@ require(".").test({
           xmlns: {
             name: "xmlns",
             value: "uri:default",
-            prefix: "xmlns",
-            local: "",
+            prefix: "",
+            local: "xmlns",
             uri: "http://www.w3.org/2000/xmlns/",
           },
         },
@@ -170,8 +170,8 @@ require(".").test({
           xmlns: {
             name: "xmlns",
             value: "uri:default",
-            prefix: "xmlns",
-            local: "",
+            prefix: "",
+            local: "xmlns",
             uri: "http://www.w3.org/2000/xmlns/",
           },
         },

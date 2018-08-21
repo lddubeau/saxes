@@ -3,8 +3,8 @@
 const xmlnsAttr = {
   name: "xmlns",
   value: "http://foo",
-  prefix: "xmlns",
-  local: "",
+  prefix: "",
+  local: "xmlns",
   uri: "http://www.w3.org/2000/xmlns/",
 };
 
