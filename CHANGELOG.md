@@ -1,3 +1,29 @@
+<a name="3.0.0"></a>
+# [3.0.0](https://github.com/lddubeau/saxes/compare/v2.2.1...v3.0.0) (2018-08-21)
+
+
+### Features
+
+* process the xmlns attribute the customary way ([2c9672a](https://github.com/lddubeau/saxes/commit/2c9672a))
+
+
+### BREAKING CHANGES
+
+* In previous versions the attribute `xmlns` (as in `<foo xmlns="some-uri">` would
+be reported as having the prefix `"xmlns"` and the local name `""`.  This
+behavior was inherited from sax. There was some logic to it, but this behavior
+was surprising to users of the library. The principle of least surprise favors
+eliminating that surprising behavior in favor of something less surprising.
+
+This commit makes it so that `xmlns` is not reported as having a prefix of `""`
+and a local name of `"xmlns"`. This accords with how people interpret attribute
+names like `foo`, `bar`, `moo` which all have no prefix and a local name.
+
+Code that deals with namespace bindings or cares about `xmlns` probably needs to
+be changed.
+
+
+
 <a name="2.2.1"></a>
 ## [2.2.1](https://github.com/lddubeau/saxes/compare/v2.2.0...v2.2.1) (2018-08-20)
 
