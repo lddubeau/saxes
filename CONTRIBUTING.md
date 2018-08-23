@@ -31,6 +31,31 @@ continually check whether it may emit non-error events and this would have a
 measurable cost even when parsing well-formed documents. We decided always emit
 the events anyway and diverge a bit from the XML specifications.
 
+## Optimize for "Clean" XML
+
+This is well-formed XML:
+
+```xml
+<foo a="1" b="2" c="3">something</foo>
+```
+
+This is also well-formed and represents the same document as the previous
+example:
+
+```xml
+              <foo            a                =     "1"
+
+
+b = "2"
+
+c = "3"            >something</foo             >
+
+
+```
+
+We want both documents to be parsed without error by saxes but, when writing
+code, optimize for the former rather than the later.
+
 ## Pay Attention to Performance
 
 The more a PR harms performance,
