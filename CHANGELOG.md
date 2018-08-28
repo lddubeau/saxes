@@ -1,3 +1,24 @@
+<a name="3.1.0"></a>
+# [3.1.0](https://github.com/lddubeau/saxes/compare/v3.0.0...v3.1.0) (2018-08-28)
+
+
+### Bug Fixes
+
+* correct typo ([97bc5da](https://github.com/lddubeau/saxes/commit/97bc5da))
+
+
+### Performance Improvements
+
+* add emitNodes to skip checking text buffer more than needed ([9d5e357](https://github.com/lddubeau/saxes/commit/9d5e357))
+* capture names in the ``name`` field ([c7dffd5](https://github.com/lddubeau/saxes/commit/c7dffd5))
+* introduce a specialized version of captureWhile ([04855d6](https://github.com/lddubeau/saxes/commit/04855d6))
+* introduce captureTo and captureToChar ([76eb95a](https://github.com/lddubeau/saxes/commit/76eb95a))
+* remove skipWhitespace ([c8b7ae2](https://github.com/lddubeau/saxes/commit/c8b7ae2))
+* remove some redundant buffer resets ([5ded326](https://github.com/lddubeau/saxes/commit/5ded326))
+* use charCodeAt and handle surrogates ourselves ([b8ec232](https://github.com/lddubeau/saxes/commit/b8ec232))
+
+
+
 <a name="3.0.0"></a>
 # [3.0.0](https://github.com/lddubeau/saxes/compare/v2.2.1...v3.0.0) (2018-08-21)
 
