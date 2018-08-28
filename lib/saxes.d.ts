@@ -57,6 +57,8 @@ declare namespace saxes {
     fail(er: Error): this;
     write(chunk: string | null): this;
     close(): this;
+
+    resolve(prefix: string): string | undefined;
   }
 }
 
