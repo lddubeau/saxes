@@ -1,3 +1,13 @@
+<a name="3.1.1"></a>
+## [3.1.1](https://github.com/lddubeau/saxes/compare/v3.1.0...v3.1.1) (2018-08-29)
+
+
+### Bug Fixes
+
+* resolve is now part of the public API ([bb4bed5](https://github.com/lddubeau/saxes/commit/bb4bed5))
+
+
+
 <a name="3.1.0"></a>
 # [3.1.0](https://github.com/lddubeau/saxes/compare/v3.0.0...v3.1.0) (2018-08-28)
 
