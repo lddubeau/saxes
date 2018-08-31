@@ -1,3 +1,14 @@
+<a name="3.1.2"></a>
+## [3.1.2](https://github.com/lddubeau/saxes/compare/v3.1.1...v3.1.2) (2018-08-31)
+
+
+### Bug Fixes
+
+* CDATA end in attributes must not cause an error ([a7495ac](https://github.com/lddubeau/saxes/commit/a7495ac))
+* normalize \r\n and \r followed by something else to \n ([d7b1abe](https://github.com/lddubeau/saxes/commit/d7b1abe)), closes [#2](https://github.com/lddubeau/saxes/issues/2)
+
+
+
 <a name="3.1.1"></a>
 ## [3.1.1](https://github.com/lddubeau/saxes/compare/v3.1.0...v3.1.1) (2018-08-29)
 
