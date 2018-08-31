@@ -1,6 +1,8 @@
 "use strict";
 
-require(".").test({
+const { test } = require(".");
+
+test({
   name: "cdata fake end",
   expect: [
     ["opentagstart", { name: "r", attributes: {} }],
@@ -17,7 +19,7 @@ require(".").test({
   },
 });
 
-require(".").test({
+test({
   name: "cdata fake end 2",
   expect: [
     ["opentagstart", { name: "r", attributes: {} }],
