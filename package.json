@@ -35,6 +35,6 @@
     "xml-conformance-suite": "^1.0.0"
   },
   "dependencies": {
-    "xmlchars": "^1.1.0"
+    "xmlchars": "^1.2.0"
   }
 }

@@ -34,10 +34,13 @@ for (const entity in entitiesToTest) {
   xmlStart += `${attribName}="&`;
 
   if (typeof entitiesToTest[entity] === "object") {
+    const pos = entitiesToTest[entity][0];
+    const first = pos === 0 ? "first " : "";
+
     attributeErrors.push([
       "error",
-      `undefined:1:${xmlStart.length + entitiesToTest[entity][0] + 1}: disallowed \
-character in entity name.`,
+      `undefined:1:${xmlStart.length + pos + 1}: disallowed ${first}character \
+in entity name.`,
     ]);
     myAttributes[attribName] = `&${entity};`;
   }

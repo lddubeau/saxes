@@ -6,7 +6,7 @@ require(".").test({
   expect: [
     ["opentagstart", { name: "r", attributes: {} }],
     ["opentag", { name: "r", attributes: {}, isSelfClosing: false }],
-    ["error", "undefined:1:5: malformed character entity."],
+    ["error", "undefined:1:5: empty entity name."],
     ["text", "&;"],
     ["closetag", { name: "r", attributes: {}, isSelfClosing: false }],
   ],
