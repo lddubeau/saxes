@@ -1,3 +1,19 @@
+<a name="3.1.3"></a>
+## [3.1.3](https://github.com/lddubeau/saxes/compare/v3.1.2...v3.1.3) (2018-10-01)
+
+
+### Bug Fixes
+
+* use the latest xmlchars ([b30a714](https://github.com/lddubeau/saxes/commit/b30a714))
+
+
+### Performance Improvements
+
+* don't check twice if this.textNode is set ([00536cc](https://github.com/lddubeau/saxes/commit/00536cc))
+* reduce the frequency at which we clear attribValue ([1570615](https://github.com/lddubeau/saxes/commit/1570615))
+
+
+
 <a name="3.1.2"></a>
 ## [3.1.2](https://github.com/lddubeau/saxes/compare/v3.1.1...v3.1.2) (2018-08-31)
 
