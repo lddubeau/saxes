@@ -4,7 +4,9 @@ declare namespace saxes {
   export interface SaxesOptions {
     xmlns?: boolean;
     position?: boolean;
+    fragment?: boolean;
     fileName?: string;
+    additionalNamespaces?: Record<string, string>;
   }
 
   export interface XMLDecl {
