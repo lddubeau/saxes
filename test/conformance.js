@@ -176,11 +176,10 @@ class CharByCharDriver extends SaxesDriver {
 
 const resourceLoader = new ResourceLoader();
 loadTests(resourceLoader)
-  .then(suite =>
-        Promise.all([
-          build(suite, "conformance (one write)", resourceLoader,
-                SaxesDriver, SaxesSelection),
-          build(suite, "conformance (char-by-char)", resourceLoader,
-                CharByCharDriver, SaxesSelection),
-        ]))
+  .then(suite => Promise.all([
+    build(suite, "conformance (one write)", resourceLoader,
+          SaxesDriver, SaxesSelection),
+    build(suite, "conformance (char-by-char)", resourceLoader,
+          CharByCharDriver, SaxesSelection),
+  ]))
   .then(run);
