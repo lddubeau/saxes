@@ -1,3 +1,13 @@
+<a name="3.1.4"></a>
+## [3.1.4](https://github.com/lddubeau/saxes/compare/v3.1.3...v3.1.4) (2018-12-03)
+
+
+### Bug Fixes
+
+* add fragment and additionalNamespaces to SaxesOption typing ([02d8275](https://github.com/lddubeau/saxes/commit/02d8275))
+
+
+
 <a name="3.1.3"></a>
 ## [3.1.3](https://github.com/lddubeau/saxes/compare/v3.1.2...v3.1.3) (2018-10-01)
 
