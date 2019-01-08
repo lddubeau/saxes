@@ -4,7 +4,7 @@ const { build } = require("xml-conformance-suite/js/frameworks/mocha/builders/ba
 const { ResourceLoader } = require("xml-conformance-suite/js/lib/resource-loader");
 const { loadTests } = require("xml-conformance-suite/js/lib/test-parser");
 const { BaseDriver } = require("xml-conformance-suite/js/drivers/base");
-const { Selection } = require("xml-conformance-suite/js/selections/chrome");
+const { Selection } = require("xml-conformance-suite/js/selections/whatwg");
 
 const saxes = require("../lib/saxes");
 
@@ -84,6 +84,7 @@ const SKIP = {
   "ibm-not-wf-P69-ibm69n05.xml": "DTD",
   "ibm-not-wf-P69-ibm69n06.xml": "DTD",
   "ibm-not-wf-P69-ibm69n07.xml": "DTD",
+  "ibm-not-wf-P82-ibm82n03.xml": "DTD",
   "ibm-not-wf-P85-ibm85n01.xml": "DTD",
   "ibm-not-wf-P85-ibm85n02.xml": "DTD",
   "ibm-not-wf-P88-ibm88n01.xml": "DTD",
@@ -112,10 +113,60 @@ const SKIP = {
   "rmt-e3e-12": "DTD",
 };
 
+//
+// This table was adapted from the chrome.js selection in xml-conformance-suite
+//
+// Most likely platform issues (i.e. issues outside the XML parser itself but
+// with the JavaScript runtime, either due to the ES standard or the runtime's
+// own quirks):
+//
+// - surrogate encoding:
+//
+//   V8 goes off the rails when it encounters a surrogate outside a pair. There
+//   does not appear to be a workaround.
+//
+// - unicode garbage-in garbage-out:
+//
+//   V8 passes garbage upon encountering bad unicode instead of throwing a
+//   runtime error. (Python throws.)
+//
+// - xml declaration encoding:
+//
+//   By the time the parser sees the document, it cannot know what the original
+//   encoding was. It may have been UTF16, which was converted correctly to an
+//   internal format.
+//
+// These are genuine parser errors:
+//
+// - ignores wf errors in DOCTYPE:
+//
+//   Even non-validating parsers must report wellformedness errors in DOCTYPE.
+//
+
+const PLATFORM_ISSUES = {
+  "not-wf-sa-168": "surrogate encoding",
+  "not-wf-sa-169": "surrogate encoding",
+  "not-wf-sa-170": "unicode garbage-in garbage-out",
+  "ibm-not-wf-P02-ibm02n30.xml": "surrogate encoding",
+  "ibm-not-wf-P02-ibm02n31.xml": "surrogate encoding",
+  "rmt-e2e-27": "surrogate encoding",
+  "rmt-e2e-61": "xml declaration encoding",
+  "x-ibm-1-0.5-not-wf-P04-ibm04n21.xml": "surrogate encoding",
+  "x-ibm-1-0.5-not-wf-P04-ibm04n22.xml": "surrogate encoding",
+  "x-ibm-1-0.5-not-wf-P04-ibm04n23.xml": "surrogate encoding",
+  "x-ibm-1-0.5-not-wf-P04-ibm04n24.xml": "surrogate encoding",
+  "x-ibm-1-0.5-not-wf-P04a-ibm04an21.xml": "surrogate encoding",
+  "x-ibm-1-0.5-not-wf-P04a-ibm04an22.xml": "surrogate encoding",
+  "x-ibm-1-0.5-not-wf-P04a-ibm04an23.xml": "surrogate encoding",
+  "x-ibm-1-0.5-not-wf-P04a-ibm04an24.xml": "surrogate encoding",
+  "hst-lhs-007": "xml declaration encoding",
+};
+
+
 class SaxesSelection extends Selection {
   shouldSkipTest(test) {
     return Promise.resolve()
-      .then(() => SKIP[test.id] ||
+      .then(() => SKIP[test.id] || PLATFORM_ISSUES[test.id] ||
             // These sections are excluded because they require
             // parsing DTDs.
             test.includesSections(
