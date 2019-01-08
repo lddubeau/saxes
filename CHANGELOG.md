@@ -1,3 +1,13 @@
+<a name="3.1.5"></a>
+## [3.1.5](https://github.com/lddubeau/saxes/compare/v3.1.4...v3.1.5) (2019-01-08)
+
+
+### Bug Fixes
+
+* generate an error on prefix with empty local name ([89a3b86](https://github.com/lddubeau/saxes/commit/89a3b86)), closes [#5](https://github.com/lddubeau/saxes/issues/5)
+
+
+
 <a name="3.1.4"></a>
 ## [3.1.4](https://github.com/lddubeau/saxes/compare/v3.1.3...v3.1.4) (2018-12-03)
 
