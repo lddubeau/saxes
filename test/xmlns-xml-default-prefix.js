@@ -113,7 +113,7 @@ describe("xml default prefix", () => {
       ],
       [
         "error",
-        "undefined:1:29: xml prefix must be bound to \
+        "undefined:1:27: xml prefix must be bound to \
 http://www.w3.org/XML/1998/namespace.",
       ],
       [
