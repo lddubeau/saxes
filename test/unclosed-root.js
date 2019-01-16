@@ -21,7 +21,7 @@ require(".").test({
     ],
     [
       "error",
-      "undefined:1:6: unclosed root tag.",
+      "undefined:1:6: unclosed tag: root",
     ],
   ],
   opt: {},

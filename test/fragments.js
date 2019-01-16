@@ -146,6 +146,60 @@ describe("fragments", () => {
     },
   });
 
+  // This case was added to check for a bug in the parsing logic that prevented
+  // detecting if an element was not closed.
+  test({
+    name: "unclosed tag",
+    xml: "Something <blah>1</blah><more>2",
+    expect: [
+      ["text", "Something "],
+      ["opentagstart", {
+        name: "blah",
+        attributes: {},
+        ns: {},
+      }],
+      ["opentag", {
+        name: "blah",
+        local: "blah",
+        prefix: "",
+        uri: "",
+        attributes: {},
+        ns: {},
+        isSelfClosing: false,
+      }],
+      ["text", "1"],
+      ["closetag", {
+        name: "blah",
+        local: "blah",
+        prefix: "",
+        uri: "",
+        attributes: {},
+        ns: {},
+        isSelfClosing: false,
+      }],
+      ["opentagstart", {
+        name: "more",
+        attributes: {},
+        ns: {},
+      }],
+      ["opentag", {
+        name: "more",
+        local: "more",
+        prefix: "",
+        uri: "",
+        attributes: {},
+        ns: {},
+        isSelfClosing: false,
+      }],
+      ["error", "undefined:1:31: unclosed tag: more"],
+      ["text", "2"],
+    ],
+    opt: {
+      xmlns: true,
+      fragment: true,
+    },
+  });
+
   test({
     name: "namespaces",
     xml: "Something <foo:blah>1</foo:blah> something",
