@@ -34,7 +34,7 @@ browser or other CommonJS implementations.
 
 * Saxes handles errors differently from sax: it provides a default onerror
   handler which throws. You can replace it with your own handler if you want. If
-  your handler does nothing. There is no `resume` method to call.
+  your handler does nothing, there is no `resume` method to call.
 
 * There's no `Stream` API. A revamped API may be introduced later. (It is still
   a "streaming parser" in the general sense that you write a character stream to
