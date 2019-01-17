@@ -1,3 +1,13 @@
+<a name="3.1.6"></a>
+## [3.1.6](https://github.com/lddubeau/saxes/compare/v3.1.5...v3.1.6) (2019-01-17)
+
+
+### Bug Fixes
+
+* detect unclosed tags in fragments ([5642f36](https://github.com/lddubeau/saxes/commit/5642f36))
+
+
+
 <a name="3.1.5"></a>
 ## [3.1.5](https://github.com/lddubeau/saxes/compare/v3.1.4...v3.1.5) (2019-01-08)
 
