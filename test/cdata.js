@@ -35,3 +35,26 @@ test({
   ],
   xml: "<r foo=']]>'/>",
 });
+
+test({
+  name: "surrounded by whitespace",
+  expect: [
+    ["opentagstart", { name: "content:encoded", attributes: {} }],
+    ["opentag", {
+      name: "content:encoded",
+      attributes: {},
+      isSelfClosing: false,
+    }],
+    ["text", "\n          "],
+    ["cdata", "spacetime is four dimensional"],
+    ["text", "\n  "],
+    ["closetag", {
+      name: "content:encoded",
+      attributes: {},
+      isSelfClosing: false,
+    }],
+  ],
+  xml: `<content:encoded>
+          <![CDATA[spacetime is four dimensional]]>
+  </content:encoded>`,
+});
