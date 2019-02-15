@@ -26,7 +26,7 @@
     "CHANGELOG.md"
   ],
   "devDependencies": {
-    "@commitlint/cli": "^7.5.1",
+    "@commitlint/cli": "^7.5.2",
     "@commitlint/config-angular": "^7.5.0",
     "chai": "^4.2.0",
     "conventional-changelog-cli": "^2.0.11",
