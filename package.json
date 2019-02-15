@@ -6,6 +6,9 @@
   "main": "lib/saxes.js",
   "types": "lib/saxes.d.ts",
   "license": "ISC",
+  "engines": {
+    "node": ">=8"
+  },
   "scripts": {
     "test": "mocha --delay",
     "posttest": "eslint test/*.js lib/*.js",

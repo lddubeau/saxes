@@ -8,6 +8,8 @@ of sax in this project's documentation are references to sax 1.2.4.
 Designed with [node](http://nodejs.org/) in mind, but should work fine in the
 browser or other CommonJS implementations.
 
+Saxes does not support Node versions older than 8.
+
 ## Notable Differences from Sax.
 
 * Saxes aims to be much stricter than sax with regards to XML
