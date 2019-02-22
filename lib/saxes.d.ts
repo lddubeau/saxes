@@ -30,7 +30,7 @@ declare namespace saxes {
     uri: string;
     attributes: Record<string, SaxesAttribute> | Record<string, string>;
     ns: Record<string, string>;
-    selfClosing: boolean;
+    isSelfClosing: boolean;
   }
 
   export class SaxesParser {
