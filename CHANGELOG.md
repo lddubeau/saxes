@@ -1,3 +1,14 @@
+<a name="3.1.7"></a>
+## [3.1.7](https://github.com/lddubeau/saxes/compare/v3.1.6...v3.1.7) (2019-02-22)
+
+
+### Bug Fixes
+
+* npm audit warning ([a6c9ba8](https://github.com/lddubeau/saxes/commit/a6c9ba8))
+* **typings:** "selfClosing" => "isSelfClosing" ([d96a2bd](https://github.com/lddubeau/saxes/commit/d96a2bd))
+
+
+
 <a name="3.1.6"></a>
 ## [3.1.6](https://github.com/lddubeau/saxes/compare/v3.1.5...v3.1.6) (2019-01-17)
 
