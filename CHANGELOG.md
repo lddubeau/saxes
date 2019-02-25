@@ -1,3 +1,8 @@
+<a name="3.1.8"></a>
+## [3.1.8](https://github.com/lddubeau/saxes/compare/v3.1.7...v3.1.8) (2019-02-25)
+
+
+
 <a name="3.1.7"></a>
 ## [3.1.7](https://github.com/lddubeau/saxes/compare/v3.1.6...v3.1.7) (2019-02-22)
 
