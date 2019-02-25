@@ -1,3 +1,13 @@
+<a name="3.1.9"></a>
+## [3.1.9](https://github.com/lddubeau/saxes/compare/v3.1.7...v3.1.9) (2019-02-25)
+
+
+### Bug Fixes
+
+* move eslint to devDependencies ([d747538](https://github.com/lddubeau/saxes/commit/d747538))
+
+
+
 <a name="3.1.8"></a>
 ## [3.1.8](https://github.com/lddubeau/saxes/compare/v3.1.7...v3.1.8) (2019-02-25)
 
