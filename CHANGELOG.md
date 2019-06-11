@@ -1,3 +1,13 @@
+<a name="3.1.10"></a>
+## [3.1.10](https://github.com/lddubeau/saxes/compare/v3.1.9...v3.1.10) (2019-06-11)
+
+
+### Performance Improvements
+
+* improve the check for ]]> in character data ([21df9b5](https://github.com/lddubeau/saxes/commit/21df9b5))
+
+
+
 <a name="3.1.9"></a>
 ## [3.1.9](https://github.com/lddubeau/saxes/compare/v3.1.7...v3.1.9) (2019-02-25)
 
