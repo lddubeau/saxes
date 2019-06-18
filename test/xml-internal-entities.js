@@ -2,19 +2,19 @@
 
 // generates xml like test0="&control;"
 const entitiesToTest = {
-  // 'ENTITY_NAME': IS_VALID || [invalidCharPos, invalidChar],
+  // 'ENTITY_NAME': IS_VALID || invalidCharPos,
   control0: true, // This is a vanilla control.
   // entityStart
   _uscore: true,
-  "#hash": true,
+  "#hash": false,
   ":colon": true,
-  "-bad": [0, "-"],
-  ".bad": [0, "."],
+  "-bad": false,
+  ".bad": false,
   // general entity
   u_score: true,
   "d-ash": true,
   "d.ot": true,
-  "all:_#-.": [5, "#"],
+  "all:_#-.": false,
 };
 
 let xmlStart = "<a test=\"&amp;\" ";
@@ -33,14 +33,13 @@ for (const entity in entitiesToTest) {
   // add the first part to use in calculation below
   xmlStart += `${attribName}="&`;
 
-  if (typeof entitiesToTest[entity] === "object") {
-    const pos = entitiesToTest[entity][0];
-    const first = pos === 0 ? "first " : "";
+  if (!entitiesToTest[entity]) {
+    const pos = xmlStart.length + entity.length + 1;
 
     attributeErrors.push([
       "error",
-      `undefined:1:${xmlStart.length + pos + 1}: disallowed ${first}character \
-in entity name.`,
+      `undefined:1:${pos}: ${entity[0] === "#" ? "malformed character entity." :
+"disallowed character in entity name."}`,
     ]);
     myAttributes[attribName] = `&${entity};`;
   }
