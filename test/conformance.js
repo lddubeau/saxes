@@ -4,7 +4,7 @@ const { build } = require("xml-conformance-suite/js/frameworks/mocha/builders/ba
 const { ResourceLoader } = require("xml-conformance-suite/js/lib/resource-loader");
 const { loadTests } = require("xml-conformance-suite/js/lib/test-parser");
 const { BaseDriver } = require("xml-conformance-suite/js/drivers/base");
-const { Selection } = require("xml-conformance-suite/js/selections/whatwg");
+const { BaseSelection } = require("xml-conformance-suite/js/selections/base");
 
 const saxes = require("../lib/saxes");
 
@@ -105,6 +105,11 @@ const SKIP = {
   "ibm-valid-P29-ibm29v01.xml": "ENTITIES",
   "ibm-valid-P43-ibm43v01.xml": "ENTITIES",
   "ibm-valid-P67-ibm67v01.xml": "ENTITIES",
+  "ibm-1-1-not-wf-P77-ibm77n14.xml": "DTD",
+  "ibm-1-1-valid-P02-ibm02v04.xml": "ENTITIES",
+  "ibm-1-1-valid-P03-ibm03v05.xml": "ENTITIES",
+  "ibm-1-1-valid-P03-ibm03v06.xml": "ENTITIES",
+  "ibm-1-1-valid-P03-ibm03v07.xml": "ENTITIES",
   "rmt-e2e-15e": "ENTITIES",
   "rmt-e2e-15f": "ENTITIES",
   "rmt-ns10-043": "DTD",
@@ -150,7 +155,15 @@ const PLATFORM_ISSUES = {
   "ibm-not-wf-P02-ibm02n30.xml": "surrogate encoding",
   "ibm-not-wf-P02-ibm02n31.xml": "surrogate encoding",
   "rmt-e2e-27": "surrogate encoding",
+  "rmt-e2e-50": "xml declaration encoding",
   "rmt-e2e-61": "xml declaration encoding",
+  "rmt-011": "xml declarations encoding",
+  "rmt-034": "xml declarations encoding",
+  "rmt-035": "xml declarations encoding",
+  "rmt-041": "xml declarations encoding",
+  "rmt-050": "xml declarations encoding",
+  "rmt-051": "xml declarations encoding",
+  "rmt-054": "xml declarations encoding",
   "x-ibm-1-0.5-not-wf-P04-ibm04n21.xml": "surrogate encoding",
   "x-ibm-1-0.5-not-wf-P04-ibm04n22.xml": "surrogate encoding",
   "x-ibm-1-0.5-not-wf-P04-ibm04n23.xml": "surrogate encoding",
@@ -159,11 +172,37 @@ const PLATFORM_ISSUES = {
   "x-ibm-1-0.5-not-wf-P04a-ibm04an22.xml": "surrogate encoding",
   "x-ibm-1-0.5-not-wf-P04a-ibm04an23.xml": "surrogate encoding",
   "x-ibm-1-0.5-not-wf-P04a-ibm04an24.xml": "surrogate encoding",
+  "ibm-1-1-not-wf-P02-ibm02n67.xml": "surrogate encoding",
+  "ibm-1-1-not-wf-P04-ibm04n21.xml": "surrogate encoding",
+  "ibm-1-1-not-wf-P04-ibm04n22.xml": "surrogate encoding",
+  "ibm-1-1-not-wf-P04-ibm04n23.xml": "surrogate encoding",
+  "ibm-1-1-not-wf-P04-ibm04n24.xml": "surrogate encoding",
+  "ibm-1-1-not-wf-P04a-ibm04an21.xml": "surrogate encoding",
+  "ibm-1-1-not-wf-P04a-ibm04an22.xml": "surrogate encoding",
+  "ibm-1-1-not-wf-P04a-ibm04an23.xml": "surrogate encoding",
+  "ibm-1-1-not-wf-P04a-ibm04an24.xml": "surrogate encoding",
   "hst-lhs-007": "xml declaration encoding",
 };
 
 
-class SaxesSelection extends Selection {
+class SaxesSelection extends BaseSelection {
+  // eslint-disable-next-line class-methods-use-this
+  getHandlingByType(test) {
+    const { testType } = test;
+    switch (testType) {
+    case "not-wf":
+      return "fails";
+    case "valid":
+      return "succeeds";
+    case "invalid":
+    case "error":
+      return "skip";
+    default:
+      throw new Error(`unexpected test type: ${testType}`);
+    }
+  }
+
+  // eslint-disable-next-line class-methods-use-this
   shouldSkipTest(test) {
     return Promise.resolve()
       .then(() => SKIP[test.id] || PLATFORM_ISSUES[test.id] ||
@@ -172,7 +211,12 @@ class SaxesSelection extends Selection {
             test.includesSections(
               ["[12]", "[13]", "[69]", "3.2", "3.2.1", "3.2.2", "3.3",
                "3.3.1", "3.3.2", "4.2", "4.2.2", "4.5", "4.7"]) ||
-            super.shouldSkipTest(test));
+            !((test.includesVersion("1.0") && test.includesEdition("5")) ||
+              test.includesEdition("1.1")) ||
+            // The tests that use BOM rely on the parser being able to look at
+            // the *raw* data, without decoding. There does not seem to be a way
+            // to do this.
+            test.getHasBOM());
   }
 }
 

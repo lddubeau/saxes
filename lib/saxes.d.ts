@@ -7,6 +7,7 @@ declare namespace saxes {
     fragment?: boolean;
     fileName?: string;
     additionalNamespaces?: Record<string, string>;
+    defaultXMLVersion?: "1.0" | "1.1";
   }
 
   export interface XMLDecl {
