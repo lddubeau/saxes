@@ -1,3 +1,22 @@
+<a name="3.1.11"></a>
+## [3.1.11](https://github.com/lddubeau/saxes/compare/v3.1.10...v3.1.11) (2019-06-25)
+
+
+### Bug Fixes
+
+* pay attention to comments and processing instructions in DTDs ([52ffd90](https://github.com/lddubeau/saxes/commit/52ffd90)), closes [#19](https://github.com/lddubeau/saxes/issues/19)
+
+
+### Performance Improvements
+
+* check the most common case first ([40a34d5](https://github.com/lddubeau/saxes/commit/40a34d5))
+* improve some more the speed of ]]> detection ([a0216cd](https://github.com/lddubeau/saxes/commit/a0216cd))
+* move more common/valid cases first ([a65586e](https://github.com/lddubeau/saxes/commit/a65586e))
+* split sText into two specialized loops ([732325e](https://github.com/lddubeau/saxes/commit/732325e))
+* use specialized code for sAttribValueQuoted ([6c484f3](https://github.com/lddubeau/saxes/commit/6c484f3))
+
+
+
 <a name="3.1.10"></a>
 ## [3.1.10](https://github.com/lddubeau/saxes/compare/v3.1.9...v3.1.10) (2019-06-11)
 
