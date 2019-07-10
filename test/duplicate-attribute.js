@@ -8,7 +8,7 @@ require(".").test({
       name: "span",
       attributes: {},
     }],
-    ["error", "undefined:1:28: duplicate attribute: id."],
+    ["error", "1:28: duplicate attribute: id."],
     ["opentag", {
       name: "span",
       attributes: { id: "there" },

@@ -19,7 +19,7 @@ describe("wrong cdata closure", () => {
         isSelfClosing: false,
       }],
       ["error",
-       "undefined:1:19: the string \"]]>\" is disallowed in char data."],
+       "1:19: the string \"]]>\" is disallowed in char data."],
       ["text", "somethingx]]>moo"],
       ["closetag", {
         name: "span",
@@ -51,7 +51,7 @@ describe("wrong cdata closure", () => {
         isSelfClosing: false,
       }],
       ["error",
-       "undefined:1:19: the string \"]]>\" is disallowed in char data."],
+       "1:19: the string \"]]>\" is disallowed in char data."],
       ["text", "somethingx]]>moo"],
       ["closetag", {
         name: "span",
@@ -83,7 +83,7 @@ describe("wrong cdata closure", () => {
         isSelfClosing: false,
       }],
       ["error",
-       "undefined:1:19: the string \"]]>\" is disallowed in char data."],
+       "1:19: the string \"]]>\" is disallowed in char data."],
       ["text", "somethingx]]>moo"],
       ["closetag", {
         name: "span",

@@ -191,7 +191,7 @@ describe("fragments", () => {
         ns: {},
         isSelfClosing: false,
       }],
-      ["error", "undefined:1:31: unclosed tag: more"],
+      ["error", "1:31: unclosed tag: more"],
       ["text", "2"],
     ],
     opt: {

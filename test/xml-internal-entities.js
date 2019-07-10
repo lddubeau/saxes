@@ -38,7 +38,7 @@ for (const entity in entitiesToTest) {
 
     attributeErrors.push([
       "error",
-      `undefined:1:${pos}: ${entity[0] === "#" ? "malformed character entity." :
+      `1:${pos}: ${entity[0] === "#" ? "malformed character entity." :
 "disallowed character in entity name."}`,
     ]);
     myAttributes[attribName] = `&${entity};`;

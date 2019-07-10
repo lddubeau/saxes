@@ -17,7 +17,7 @@ describe("xmlns unbound prefixes", () => {
       ],
       [
         "error",
-        "undefined:1:15: unbound namespace prefix: \"unbound\".",
+        "1:15: unbound namespace prefix: \"unbound\".",
       ],
       [
         "opentag",
@@ -127,7 +127,7 @@ describe("xmlns unbound prefixes", () => {
       ],
       [
         "error",
-        "undefined:1:28: unbound namespace prefix: \"unbound\".",
+        "1:28: unbound namespace prefix: \"unbound\".",
       ],
       [
         "opentag",

@@ -9,7 +9,7 @@ describe("xml declaration", () => {
     name: "empty declaration",
     xml: "<?xml?><root/>",
     expect: [
-      ["error", "undefined:1:7: XML declaration must contain a version."],
+      ["error", "1:7: XML declaration must contain a version."],
       ["opentagstart", { name: "root", attributes: {}, ns: {} }],
       [
         "opentag",
@@ -45,7 +45,7 @@ describe("xml declaration", () => {
     name: "version without value",
     xml: "<?xml version?><root/>",
     expect: [
-      ["error", "undefined:1:15: XML declaration is incomplete."],
+      ["error", "1:15: XML declaration is incomplete."],
       ["opentagstart", { name: "root", attributes: {}, ns: {} }],
       [
         "opentag",
@@ -81,7 +81,7 @@ describe("xml declaration", () => {
     name: "version without value",
     xml: "<?xml version=?><root/>",
     expect: [
-      ["error", "undefined:1:16: XML declaration is incomplete."],
+      ["error", "1:16: XML declaration is incomplete."],
       ["opentagstart", { name: "root", attributes: {}, ns: {} }],
       [
         "opentag",
@@ -117,8 +117,8 @@ describe("xml declaration", () => {
     name: "unquoted value",
     xml: "<?xml version=a?><root/>",
     expect: [
-      ["error", "undefined:1:15: value must be quoted."],
-      ["error", "undefined:1:17: XML declaration is incomplete."],
+      ["error", "1:15: value must be quoted."],
+      ["error", "1:17: XML declaration is incomplete."],
       ["opentagstart", { name: "root", attributes: {}, ns: {} }],
       [
         "opentag",
@@ -154,7 +154,7 @@ describe("xml declaration", () => {
     name: "unterminated value",
     xml: "<?xml version=\"a?><root/>",
     expect: [
-      ["error", "undefined:1:18: XML declaration is incomplete."],
+      ["error", "1:18: XML declaration is incomplete."],
       ["opentagstart", { name: "root", attributes: {}, ns: {} }],
       [
         "opentag",
@@ -190,7 +190,7 @@ describe("xml declaration", () => {
     name: "bad version",
     xml: "<?xml version=\"a\"?><root/>",
     expect: [
-      ["error", "undefined:1:17: version number must match /^1\\.[0-9]+$/."],
+      ["error", "1:17: version number must match /^1\\.[0-9]+$/."],
       ["opentagstart", { name: "root", attributes: {}, ns: {} }],
       [
         "opentag",

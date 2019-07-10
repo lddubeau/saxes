@@ -33,11 +33,11 @@ require(".").test({
     ],
     [
       "error",
-      "undefined:1:19: text data outside of root node.",
+      "1:19: text data outside of root node.",
     ],
     [
       "error",
-      "undefined:1:20: unexpected end.",
+      "1:20: unexpected end.",
     ],
     [
       "text",
