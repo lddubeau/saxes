@@ -4,7 +4,7 @@ require(".").test({
   name: "attribute unquoted",
   expect: [
     ["opentagstart", { name: "root", attributes: {}, ns: {} }],
-    ["error", "undefined:1:14: unquoted attribute value."],
+    ["error", "1:14: unquoted attribute value."],
     ["opentag", {
       name: "root",
       attributes: {

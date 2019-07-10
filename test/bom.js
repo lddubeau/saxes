@@ -28,7 +28,7 @@ require(".").test({
   name: "BOM outside of root, but not initial",
   xml: " \uFEFF<P></P>",
   expect: [
-    ["error", "undefined:1:2: text data outside of root node."],
+    ["error", "1:2: text data outside of root node."],
     ["text", "\uFEFF"],
     ["opentagstart", { name: "P", attributes: {} }],
     ["opentag", { name: "P", attributes: {}, isSelfClosing: false }],
@@ -41,7 +41,7 @@ require(".").test({
   name: "multiple BOMs",
   xml: "\uFEFF\uFEFF<P></P>",
   expect: [
-    ["error", "undefined:1:2: text data outside of root node."],
+    ["error", "1:2: text data outside of root node."],
     ["text", "\uFEFF"],
     ["opentagstart", { name: "P", attributes: {} }],
     ["opentag", { name: "P", attributes: {}, isSelfClosing: false }],

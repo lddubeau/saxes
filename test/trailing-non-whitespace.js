@@ -19,7 +19,7 @@ require(".").test({
       attributes: {},
       isSelfClosing: false,
     }],
-    ["error", "undefined:1:36: text data outside of root node."],
+    ["error", "1:36: text data outside of root node."],
     ["text", " to monkey land"],
     ["end", undefined],
     ["ready", undefined],
