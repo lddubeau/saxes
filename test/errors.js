@@ -12,6 +12,19 @@ require(".").test({
 });
 
 require(".").test({
+  name: "without fileName, when not tracking position position",
+  xml: "<doc>",
+  expect: [
+    ["opentagstart", { name: "doc", attributes: {} }],
+    ["opentag", { name: "doc", isSelfClosing: false, attributes: {} }],
+    ["error", "unclosed tag: doc"],
+  ],
+  opt: {
+    position: false,
+  },
+});
+
+require(".").test({
   name: "with fileName",
   xml: "<doc>",
   expect: [
