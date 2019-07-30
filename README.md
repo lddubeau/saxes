@@ -137,6 +137,22 @@ Settings supported:
   declaration, then this setting is ignored. Must be `"1.0"` or `"1.1"`. The
   default is `"1.0"`.
 
+* `forceXMLVersion` - Boolean. A flag indicating whether to force the XML
+  version used for parsing to the value of ``defaultXMLVersion``. When this flag
+  is ``true``, ``defaultXMLVersion`` must be specified. If unspecified, the
+  default value of this flag is ``false``.
+
+  Example: suppose you are parsing a document that has an XML declaration
+  specifying XML version 1.1.
+
+  If you set ``defaultXMLVersion`` to ``"1.0"`` without setting
+  ``forceXMLVersion`` then the XML declaration will override the value of
+  ``defaultXMLVersion`` and the document will be parsed according to XML 1.1.
+
+  If you set ``defaultXMLVersion`` to ``"1.0"`` and set ``forceXMLVersion`` to
+  ``true``, then the XML declaration will be ignored and the document will be
+  parsed according to XML 1.0.
+
 ### Methods
 
 `write` - Write bytes onto the stream. You don't have to pass the whole document

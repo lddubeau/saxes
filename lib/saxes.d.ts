@@ -1,7 +1,7 @@
 declare namespace saxes {
   export const EVENTS: ReadonlyArray<string>;
 
-  export interface SaxesOptions {
+  export interface CommonSaxesOptions {
     xmlns?: boolean;
     position?: boolean;
     fragment?: boolean;
@@ -9,6 +9,17 @@ declare namespace saxes {
     additionalNamespaces?: Record<string, string>;
     defaultXMLVersion?: "1.0" | "1.1";
   }
+
+  export interface NotForced extends CommonSaxesOptions {
+    forceXMLVersion?: false;
+  }
+
+  export interface Forced extends CommonSaxesOptions {
+    defaultXMLVersion: CommonSaxesOptions["defaultXMLVersion"];
+    forceXMLVersion: true;
+  }
+
+  export type SaxesOptions = NotForced | Forced;
 
   export interface XMLDecl {
     version?: string;

@@ -245,107 +245,159 @@ describe("xml declaration", () => {
     expect(seen).to.be.true;
   });
 
-  function makeTests(groupName, xmlDeclaration, document, expectedResults) {
+  function parse(source, options) {
+    const parser = new saxes.SaxesParser(options);
+    let error = false;
+    parser.onerror = () => {
+      error = true;
+    };
+    parser.write(source);
+    parser.close();
+    return error;
+  }
+
+  function makeDefaultXMLVersionTests(groupName, xmlDeclaration, document,
+                                      expecteUnforcedResults,
+                                      expectedForcedResults) {
     describe(groupName, () => {
-      for (const { version, expectError } of expectedResults) {
+      for (const { version, expectError } of expecteUnforcedResults) {
         const errorLabel = expectError ? "errors" : "no errors";
         const title = version === undefined ?
               `and without defaultXMLVersion: ${errorLabel}` :
               `and with defaultXMLVersion === ${version}: ${errorLabel}`;
 
         it(title, () => {
-          const parser =
-                new saxes.SaxesParser(version === undefined ? undefined :
-                                      { defaultXMLVersion: version });
-          let error = false;
-          parser.onerror = () => {
-            error = true;
-          };
-          parser.write(xmlDeclaration + document);
-          parser.close();
-          expect(error).to.equal(expectError);
+          expect(parse(xmlDeclaration + document,
+                       version === undefined ? undefined :
+                       { defaultXMLVersion: version })).to.equal(expectError);
         });
+      }
+
+      if (xmlDeclaration !== "") {
+        for (const { version, expectError } of expectedForcedResults) {
+          const errorLabel = expectError ? "errors" : "no errors";
+          it(`and with forced xml version ${version}: ${errorLabel}`, () => {
+            expect(parse(xmlDeclaration + document, {
+              defaultXMLVersion: version,
+              forceXMLVersion: true,
+            })).to.equal(expectError);
+          });
+        }
       }
     });
   }
 
-  describe("well-formed for 1.0, not 1.1", () => {
-    makeTests("without XML declaration", "", WELL_FORMED_1_0_NOT_1_1, [{
-      version: undefined,
-      expectError: false,
-    }, {
-      version: "1.0",
-      expectError: false,
-    }, {
-      version: "1.1",
-      expectError: true,
-    }]);
+  describe("document well-formed for 1.0, not 1.1", () => {
+    makeDefaultXMLVersionTests("without XML declaration", "",
+                               WELL_FORMED_1_0_NOT_1_1, [{
+                                 version: undefined,
+                                 expectError: false,
+                               }, {
+                                 version: "1.0",
+                                 expectError: false,
+                               }, {
+                                 version: "1.1",
+                                 expectError: true,
+                               }]);
 
-    makeTests("with XML 1.0 declaration", XML_1_0_DECLARATION,
-              WELL_FORMED_1_0_NOT_1_1, [{
-                version: undefined,
-                expectError: false,
-              }, {
-                version: "1.0",
-                expectError: false,
-              }, {
-                version: "1.1",
-                // The XML declaration overrides defaultXMLVersion.
-                expectError: false,
-              }]);
+    makeDefaultXMLVersionTests("with XML 1.0 declaration", XML_1_0_DECLARATION,
+                               WELL_FORMED_1_0_NOT_1_1, [{
+                                 version: undefined,
+                                 expectError: false,
+                               }, {
+                                 version: "1.0",
+                                 expectError: false,
+                               }, {
+                                 version: "1.1",
+                                 // The XML declaration overrides
+                                 // defaultXMLVersion.
+                                 expectError: false,
+                               }], [{
+                                 version: "1.0",
+                                 expectError: false,
+                               }, {
+                                 version: "1.1",
+                                 expectError: true,
+                               }]);
 
-    makeTests("with XML 1.1 declaration", XML_1_1_DECLARATION,
-              WELL_FORMED_1_0_NOT_1_1, [{
-                version: undefined,
-                // The XML declaration overrides defaultXMLVersion.
-                expectError: true,
-              }, {
-                version: "1.0",
-                // The XML declaration overrides defaultXMLVersion.
-                expectError: true,
-              }, {
-                version: "1.1",
-                expectError: true,
-              }]);
+    makeDefaultXMLVersionTests("with XML 1.1 declaration", XML_1_1_DECLARATION,
+                               WELL_FORMED_1_0_NOT_1_1, [{
+                                 version: undefined,
+                                 // The XML declaration overrides
+                                 // defaultXMLVersion.
+                                 expectError: true,
+                               }, {
+                                 version: "1.0",
+                                 // The XML declaration overrides
+                                 // defaultXMLVersion.
+                                 expectError: true,
+                               }, {
+                                 version: "1.1",
+                                 expectError: true,
+                               }], [{
+                                 version: "1.0",
+                                 expectError: false,
+                               }, {
+                                 version: "1.1",
+                                 expectError: true,
+                               }]);
   });
 
-  describe("well-formed for 1.1, not 1.0", () => {
-    makeTests("without XML declaration", "", WELL_FORMED_1_1_NOT_1_0, [{
-      version: undefined,
-      expectError: true,
-    }, {
-      version: "1.0",
-      expectError: true,
-    }, {
-      version: "1.1",
-      expectError: false,
-    }]);
+  describe("document well-formed for 1.1, not 1.0", () => {
+    makeDefaultXMLVersionTests("without XML declaration", "",
+                               WELL_FORMED_1_1_NOT_1_0, [{
+                                 version: undefined,
+                                 expectError: true,
+                               }, {
+                                 version: "1.0",
+                                 expectError: true,
+                               }, {
+                                 version: "1.1",
+                                 expectError: false,
+                               }]);
 
-    makeTests("with XML 1.0 declaration", XML_1_0_DECLARATION,
-              WELL_FORMED_1_1_NOT_1_0, [{
-                version: undefined,
-                expectError: true,
-              }, {
-                version: "1.0",
-                expectError: true,
-              }, {
-                version: "1.1",
-                // The XML declaration overrides defaultXMLVersion.
-                expectError: true,
-              }]);
+    makeDefaultXMLVersionTests("with XML 1.0 declaration",
+                               XML_1_0_DECLARATION,
+                               WELL_FORMED_1_1_NOT_1_0, [{
+                                 version: undefined,
+                                 expectError: true,
+                               }, {
+                                 version: "1.0",
+                                 expectError: true,
+                               }, {
+                                 version: "1.1",
+                                 // The XML declaration overrides
+                                 // defaultXMLVersion.
+                                 expectError: true,
+                               }], [{
+                                 version: "1.0",
+                                 expectError: true,
+                               }, {
+                                 version: "1.1",
+                                 expectError: false,
+                               }]);
 
-    makeTests("with XML 1.1 declaration", XML_1_1_DECLARATION,
-              WELL_FORMED_1_1_NOT_1_0, [{
-                version: undefined,
-                // The XML declaration overrides defaultXMLVersion.
-                expectError: false,
-              }, {
-                version: "1.0",
-                // The XML declaration overrides defaultXMLVersion.
-                expectError: false,
-              }, {
-                version: "1.1",
-                expectError: false,
-              }]);
+    makeDefaultXMLVersionTests("with XML 1.1 declaration",
+                               XML_1_1_DECLARATION,
+                               WELL_FORMED_1_1_NOT_1_0, [{
+                                 version: undefined,
+                                 // The XML declaration overrides
+                                 // defaultXMLVersion.
+                                 expectError: false,
+                               }, {
+                                 version: "1.0",
+                                 // The XML declaration overrides
+                                 // defaultXMLVersion.
+                                 expectError: false,
+                               }, {
+                                 version: "1.1",
+                                 expectError: false,
+                               }], [{
+                                 version: "1.0",
+                                 expectError: true,
+                               }, {
+                                 version: "1.1",
+                                 expectError: false,
+                               }]);
   });
 });
