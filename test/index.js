@@ -25,29 +25,8 @@ exports.test = function test(options) {
           return;
         }
 
-        if (ev === "error") {
-          expect([ev, n.message]).to.deep.equal(expected[expectedIx]);
-        }
-        else {
-          if (ev === "opentagstart" || ev === "opentag") {
-            if (n.ns) {
-              // We have to remove the prototype from n.ns. Otherwise,
-              // the deep equal check fails because the tests were
-              // written to check only the namespaces immediately
-              // defined on the tag whereas deep equal compares
-              // **all** enumerable properties and thus effectively
-              // examines up the chain of namespaces.
-
-              n = Object.assign({}, n);
-
-              // We shallow copy.
-              n.ns = Object.assign(Object.create(null), n.ns);
-            }
-          }
-
-          expect([ev, n]).to.deep.equal(expected[expectedIx]);
-        }
-
+        expect([ev, ev === "error" ? n.message : n]).to.deep
+          .equal(expected[expectedIx]);
         expectedIx++;
       };
     }
