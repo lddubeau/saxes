@@ -32,7 +32,7 @@
     "conventional-changelog-cli": "^2.0.23",
     "eslint": "^6.1.0",
     "eslint-config-lddubeau-base": "^4.0.1",
-    "husky": "^3.0.3",
+    "husky": "^3.0.4",
     "mocha": "^6.2.0",
     "renovate-config-lddubeau": "^1.0.0",
     "xml-conformance-suite": "^1.2.0"
