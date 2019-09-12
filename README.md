@@ -238,6 +238,15 @@ namespaces is onerous.
 Note that you can use `additionalNamespaces` and `resolvePrefix` together if you
 want. `additionalNamespaces` applies before `resolvePrefix`.
 
+### Performance Tips
+
+* saxes works faster on files that use newlines (``\u000A``) as end of line
+  markers than files that use other end of line markers (like ``\r`` or
+  ``\r\n``). The XML specification requires that conformant applications behave
+  as if all characters that are to be treated as end of line characters are
+  converted to ``\u000A`` prior to parsing. The optimal code path for saxes is a
+  file in which all end of line characters are already ``\u000A``.
+
 ## FAQ
 
 Q. Why has saxes dropped support for limiting the size of data chunks passed to
