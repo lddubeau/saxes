@@ -1,3 +1,50 @@
+<a name="4.0.0-rc.1"></a>
+# [4.0.0-rc.1](https://github.com/lddubeau/saxes/compare/v3.1.11...v4.0.0-rc.1) (2019-10-02)
+
+
+### Bug Fixes
+
+* don't serialize the fileName as undefined: when not present ([4ff2365](https://github.com/lddubeau/saxes/commit/4ff2365))
+* fix bug with initial eol characters ([7b3db75](https://github.com/lddubeau/saxes/commit/7b3db75))
+* handling of end of line characters ([f13247a](https://github.com/lddubeau/saxes/commit/f13247a))
+
+
+### Features
+
+* add forceXMLVersion ([1eedbf8](https://github.com/lddubeau/saxes/commit/1eedbf8))
+* saxes handles chunks that "break" unicode ([1272448](https://github.com/lddubeau/saxes/commit/1272448))
+* support for XML 1.1 ([36704fb](https://github.com/lddubeau/saxes/commit/36704fb))
+
+
+### Performance Improvements
+
+* don't depend on limit to know when we hit the end of buffer ([ad4ab53](https://github.com/lddubeau/saxes/commit/ad4ab53))
+* don't increment a column number ([490fc24](https://github.com/lddubeau/saxes/commit/490fc24))
+* don't repeatedly read this.i in the getCode methods ([d3f196c](https://github.com/lddubeau/saxes/commit/d3f196c))
+* improve performance of text handling ([9c13099](https://github.com/lddubeau/saxes/commit/9c13099))
+* make the most common path of getCode functions the shortest ([4d66bbb](https://github.com/lddubeau/saxes/commit/4d66bbb))
+* minimine concatenation by adding the capability to unget codes ([27fa8b9](https://github.com/lddubeau/saxes/commit/27fa8b9))
+* use isCharAndNotRestricted rather than call two functions ([f0b67a4](https://github.com/lddubeau/saxes/commit/f0b67a4))
+* use slice rather than substring ([c1fed89](https://github.com/lddubeau/saxes/commit/c1fed89))
+
+
+### BREAKING CHANGES
+
+* previous versions of saxes did not consistently convert end of
+line characters to NL (0xA) in the data reported by event handlers. This has
+been fixed. If your code relied on the old (incorrect) behavior then you'll have
+to update it.
+* previous versions of saxes would parse files with an XML
+declaration set to 1.1 as 1.0 documents. The support for 1.1 entails that if a
+document has an XML declaration that specifies version 1.1 it is parsed as a 1.1
+document.
+* when ``fileName`` is undefined in the parser options saxes does
+not show a file name in error messages. Previously it was showing the name
+``undefined``. To get the previous behavior, in all cases where you'd leave
+``fileName`` undefined, you must set it to the string ``"undefined"`` instead.
+
+
+
 <a name="3.1.11"></a>
 ## [3.1.11](https://github.com/lddubeau/saxes/compare/v3.1.10...v3.1.11) (2019-06-25)
 
