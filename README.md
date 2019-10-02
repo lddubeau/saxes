@@ -247,6 +247,18 @@ want. `additionalNamespaces` applies before `resolvePrefix`.
   converted to ``\u000A`` prior to parsing. The optimal code path for saxes is a
   file in which all end of line characters are already ``\u000A``.
 
+* Don't split Unicode strings you feed to saxes across surrogates. When you
+  naively split a string in JavaScript, you run the risk of splitting a Unicode
+  character into two surrogates. e.g.  In the following example ``a`` and ``b``
+  each contain half of a single Unicode character: ``const a = "\u{1F4A9}"[0];
+  const b = "\u{1F4A9}"[1]`` If you feed such split surrogates to versions of
+  saxes prior to 4, you'd get errors. Saxes version 4 and over are able to
+  detect when a chunk of data ends with a surrogate and carry over the surrogate
+  to the next chunk. However this operation entails slicing and concatenating
+  strings. If you can feed your data in a way that does not split surrogates,
+  you should do it. (Obviously, feeding all the data at once with a single write
+  is fastest.)
+
 ## FAQ
 
 Q. Why has saxes dropped support for limiting the size of data chunks passed to
