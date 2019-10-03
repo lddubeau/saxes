@@ -32,16 +32,16 @@ require(".").test({
       },
     ],
     [
+      "text",
+      "de",
+    ],
+    [
       "error",
       "1:19: text data outside of root node.",
     ],
     [
       "error",
       "1:20: unexpected end.",
-    ],
-    [
-      "text",
-      "de",
     ],
   ],
   opt: {},

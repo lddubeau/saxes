@@ -38,7 +38,7 @@ describe("parser position", () => {
     ["<div>abcdefgh</div>"], [
       ["opentagstart", { position: 5 }],
       ["opentag", { position: 5 }],
-      ["text", { position: 19 }],
+      ["text", { position: 14 }],
       ["closetag", { position: 19 }],
     ]);
 
@@ -47,7 +47,7 @@ describe("parser position", () => {
     ["<div>abcde", "fgh</div>"], [
       ["opentagstart", { position: 5 }],
       ["opentag", { position: 5 }],
-      ["text", { position: 19 }],
+      ["text", { position: 14 }],
       ["closetag", { position: 19 }],
     ]);
 
@@ -62,11 +62,11 @@ describe("parser position", () => {
     const expected = [
       ["opentagstart", { position: 5, line: 1, column: 5 }],
       ["opentag", { position: 5, line: 1, column: 5 }],
-      ["text", { position: 17, line: 2, column: 5 }, "abcde\n"],
+      ["text", { position: 13, line: 2, column: 1 }, "abcde\n"],
       ["opentagstart", { position: 17, line: 2, column: 5 }],
       ["opentag", { position: 18, line: 2, column: 6 }],
       ["closetag", { position: 18, line: 2, column: 6 }],
-      ["text", { position: 35, line: 5, column: 11 }, "f\ngh\n\ni\u0085j\u2028k"],
+      ["text", { position: 30, line: 5, column: 6 }, "f\ngh\n\ni\u0085j\u2028k"],
       ["closetag", { position: 35, line: 5, column: 11 }],
     ];
 
@@ -79,11 +79,11 @@ describe("parser position", () => {
     const expected = [
       ["opentagstart", { position: 5, line: 1, column: 5 }],
       ["opentag", { position: 5, line: 1, column: 5 }],
-      ["text", { position: 17, line: 2, column: 5 }, "abcde\n"],
+      ["text", { position: 13, line: 2, column: 1 }, "abcde\n"],
       ["opentagstart", { position: 17, line: 2, column: 5 }],
       ["opentag", { position: 18, line: 2, column: 6 }],
       ["closetag", { position: 18, line: 2, column: 6 }],
-      ["text", { position: 35, line: 7, column: 7 }, "f\ngh\n\ni\nj\nk"],
+      ["text", { position: 30, line: 7, column: 2 }, "f\ngh\n\ni\nj\nk"],
       ["closetag", { position: 35, line: 7, column: 7 }],
     ];
 
