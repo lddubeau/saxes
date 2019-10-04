@@ -1,3 +1,18 @@
+<a name="4.0.0-rc.2"></a>
+# [4.0.0-rc.2](https://github.com/lddubeau/saxes/compare/v4.0.0-rc.1...v4.0.0-rc.2) (2019-10-04)
+
+
+### Performance Improvements
+
+* drop the originalNL flag in favor of a NL_LIKE fake character ([f690725](https://github.com/lddubeau/saxes/commit/f690725))
+* dump isNaN; it is very costly ([7d97e1a](https://github.com/lddubeau/saxes/commit/7d97e1a))
+* eliminate extra buffers ([3412fcb](https://github.com/lddubeau/saxes/commit/3412fcb))
+* reduce the number of calls to closeText ([3e68df5](https://github.com/lddubeau/saxes/commit/3e68df5))
+* remove more extra buffers ([b5ee774](https://github.com/lddubeau/saxes/commit/b5ee774))
+* use -1 to mean EOC (end-of-chunk) ([55c0b1b](https://github.com/lddubeau/saxes/commit/55c0b1b))
+
+
+
 <a name="4.0.0-rc.1"></a>
 # [4.0.0-rc.1](https://github.com/lddubeau/saxes/compare/v3.1.11...v4.0.0-rc.1) (2019-10-02)
 
