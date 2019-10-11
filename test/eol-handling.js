@@ -25,7 +25,7 @@ describe("eol handling", () => {
       ["opentag", {
         name: "moo",
         attributes: {
-          a: "12\n        3",
+          a: "12         3",
         },
         isSelfClosing: false,
       }],
@@ -33,7 +33,7 @@ describe("eol handling", () => {
       ["closetag", {
         name: "moo",
         attributes: {
-          a: "12\n        3",
+          a: "12         3",
         },
         isSelfClosing: false,
       }],
@@ -145,8 +145,8 @@ SYSTEM
       ["opentag", {
         name: "moo",
         attributes: {
-          a: "12\n        3",
-          b: "\nz\n",
+          a: "12         3",
+          b: " z ",
         },
         isSelfClosing: false,
       }],
@@ -178,8 +178,8 @@ abc
       ["closetag", {
         name: "moo",
         attributes: {
-          a: "12\n        3",
-          b: "\nz\n",
+          a: "12         3",
+          b: " z ",
         },
         isSelfClosing: false,
       }],
