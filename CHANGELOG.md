@@ -1,3 +1,19 @@
+<a name="4.0.0-rc.4"></a>
+# [4.0.0-rc.4](https://github.com/lddubeau/saxes/compare/v4.0.0-rc.2...v4.0.0-rc.4) (2019-10-11)
+
+
+### Bug Fixes
+
+* fix a bug in EOL handling ([bed38a8](https://github.com/lddubeau/saxes/commit/bed38a8))
+* implement attribute normalization ([be51114](https://github.com/lddubeau/saxes/commit/be51114)), closes [#24](https://github.com/lddubeau/saxes/issues/24)
+
+
+### Performance Improvements
+
+* inline closeText ([07a3b51](https://github.com/lddubeau/saxes/commit/07a3b51))
+
+
+
 <a name="4.0.0-rc.3"></a>
 # [4.0.0-rc.3](https://github.com/lddubeau/saxes/compare/v4.0.0-rc.2...v4.0.0-rc.3) (2019-10-11)
 
