@@ -1,3 +1,8 @@
+<a name="4.0.0"></a>
+# [4.0.0](https://github.com/lddubeau/saxes/compare/v4.0.0-rc.4...v4.0.0) (2019-10-14)
+
+
+
 <a name="4.0.0-rc.4"></a>
 # [4.0.0-rc.4](https://github.com/lddubeau/saxes/compare/v4.0.0-rc.2...v4.0.0-rc.4) (2019-10-11)
 
