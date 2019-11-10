@@ -29,7 +29,7 @@
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-angular": "^8.2.0",
     "chai": "^4.2.0",
-    "conventional-changelog-cli": "^2.0.25",
+    "conventional-changelog-cli": "^2.0.27",
     "eslint": "^6.6.0",
     "eslint-config-lddubeau-base": "^4.0.2",
     "husky": "^3.0.9",
