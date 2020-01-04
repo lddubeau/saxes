@@ -33,7 +33,7 @@
     "eslint": "^6.8.0",
     "eslint-config-lddubeau-base": "^4.0.2",
     "husky": "^3.1.0",
-    "mocha": "^6.2.2",
+    "mocha": "^7.0.0",
     "renovate-config-lddubeau": "^1.0.0",
     "xml-conformance-suite": "^1.2.0"
   },
