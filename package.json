@@ -11,7 +11,8 @@
   },
   "scripts": {
     "test": "mocha --delay",
-    "posttest": "eslint test/*.js lib/*.js",
+    "lint": "eslint '**/*.js'",
+    "posttest": "npm run lint",
     "preversion": "npm test",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
     "postversion": "npm publish",
