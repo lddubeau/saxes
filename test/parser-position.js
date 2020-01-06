@@ -1,7 +1,7 @@
 "use strict";
 
 const { expect } = require("chai");
-const saxes = require("../lib/saxes");
+const saxes = require("../build/dist/saxes");
 const { test } = require(".");
 
 function testPosition(name, chunks, expectedEvents, options) {

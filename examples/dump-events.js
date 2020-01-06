@@ -3,7 +3,7 @@
 /* eslint-disable no-console */
 
 const fs = require("fs");
-const saxes = require("../lib/saxes");
+const saxes = require("../build/dist/saxes");
 
 const xml = fs.readFileSync(process.argv[2]);
 const start = Date.now();

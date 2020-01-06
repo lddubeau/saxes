@@ -1,7 +1,7 @@
 "use strict";
 
 const { expect } = require("chai");
-const saxes = require("../lib/saxes");
+const saxes = require("../build/dist/saxes");
 
 // handy way to do simple unit tests
 // if the options contains an xml string, it'll be written and the parser closed.

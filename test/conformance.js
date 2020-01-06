@@ -6,7 +6,7 @@ const { loadTests } = require("@xml-conformance-suite/js/test-parser");
 const { BaseDriver } = require("@xml-conformance-suite/js/drivers/base");
 const { BaseSelection } = require("@xml-conformance-suite/js/selections/base");
 
-const saxes = require("../lib/saxes");
+const saxes = require("../build/dist/saxes");
 
 //
 // ENTITIES: this test requires parsing ENTITY declrations in DTDs,

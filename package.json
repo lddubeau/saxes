@@ -3,15 +3,17 @@
   "description": "An evented streaming XML parser in JavaScript",
   "author": "Louis-Dominique Dubeau <ldd@lddubeau.com>",
   "version": "4.0.2",
-  "main": "lib/saxes.js",
-  "types": "lib/saxes.d.ts",
+  "main": "build/dist/saxes.js",
+  "types": "build/dist/saxes.d.ts",
   "license": "ISC",
   "engines": {
     "node": ">=8"
   },
   "scripts": {
+    "tsc": "tsc",
+    "build": "npm run tsc",
     "test": "mocha --delay",
-    "lint": "eslint '**/*.js'",
+    "lint": "eslint --ignore-path .gitignore '**/*.ts' '**/*.js'",
     "posttest": "npm run lint",
     "preversion": "npm test",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
@@ -29,6 +31,9 @@
   "devDependencies": {
     "@commitlint/cli": "^8.3.4",
     "@commitlint/config-angular": "^8.3.4",
+    "@typescript-eslint/eslint-plugin": "^2.15.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^2.15.0",
+    "@typescript-eslint/parser": "^2.15.0",
     "@xml-conformance-suite/js": "^2.0.0",
     "@xml-conformance-suite/mocha": "^2.0.0",
     "@xml-conformance-suite/test-data": "^2.0.0",
@@ -36,9 +41,15 @@
     "conventional-changelog-cli": "^2.0.31",
     "eslint": "^6.8.0",
     "eslint-config-lddubeau-base": "^4.0.2",
+    "eslint-config-lddubeau-ts": "file:../eslint-config-lddubeau-ts",
+    "eslint-plugin-prefer-arrow": "^1.1.7",
+    "eslint-plugin-react": "^7.17.0",
     "husky": "^3.1.0",
     "mocha": "^7.0.0",
-    "renovate-config-lddubeau": "^1.0.0"
+    "renovate-config-lddubeau": "^1.0.0",
+    "tslint": "^5.20.1",
+    "tslint-microsoft-contrib": "^6.2.0",
+    "typescript": "^3.7.4"
   },
   "dependencies": {
     "xmlchars": "^2.2.0"
