@@ -28,14 +28,16 @@
   "devDependencies": {
     "@commitlint/cli": "^8.3.4",
     "@commitlint/config-angular": "^8.3.4",
+    "@xml-conformance-suite/js": "^2.0.0",
+    "@xml-conformance-suite/mocha": "^2.0.0",
+    "@xml-conformance-suite/test-data": "^2.0.0",
     "chai": "^4.2.0",
     "conventional-changelog-cli": "^2.0.31",
     "eslint": "^6.8.0",
     "eslint-config-lddubeau-base": "^4.0.2",
     "husky": "^3.1.0",
     "mocha": "^7.0.0",
-    "renovate-config-lddubeau": "^1.0.0",
-    "xml-conformance-suite": "^1.2.0"
+    "renovate-config-lddubeau": "^1.0.0"
   },
   "dependencies": {
     "xmlchars": "^2.2.0"

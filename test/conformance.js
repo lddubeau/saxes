@@ -1,10 +1,10 @@
 "use strict";
 
-const { build } = require("xml-conformance-suite/js/frameworks/mocha/builders/basic");
-const { ResourceLoader } = require("xml-conformance-suite/js/lib/resource-loader");
-const { loadTests } = require("xml-conformance-suite/js/lib/test-parser");
-const { BaseDriver } = require("xml-conformance-suite/js/drivers/base");
-const { BaseSelection } = require("xml-conformance-suite/js/selections/base");
+const { build } = require("@xml-conformance-suite/mocha/builders/basic");
+const { ResourceLoader } = require("@xml-conformance-suite/js/resource-loader");
+const { loadTests } = require("@xml-conformance-suite/js/test-parser");
+const { BaseDriver } = require("@xml-conformance-suite/js/drivers/base");
+const { BaseSelection } = require("@xml-conformance-suite/js/selections/base");
 
 const saxes = require("../lib/saxes");
 
@@ -208,9 +208,9 @@ class SaxesSelection extends BaseSelection {
       .then(() => SKIP[test.id] || PLATFORM_ISSUES[test.id] ||
             // These sections are excluded because they require
             // parsing DTDs.
-            test.includesSections(
-              ["[12]", "[13]", "[69]", "3.2", "3.2.1", "3.2.2", "3.3",
-               "3.3.1", "3.3.2", "4.2", "4.2.2", "4.5", "4.7"]) ||
+            test.includesSections(["3.2", "3.2.1", "3.2.2", "3.3", "3.3.1",
+                                   "3.3.2", "4.2", "4.2.2", "4.5", "4.7"]) ||
+            test.includesProductions(["[12]", "[13]", "[69]"]) ||
             !((test.includesVersion("1.0") && test.includesEdition("5")) ||
               test.includesEdition("1.1")) ||
             // The tests that use BOM rely on the parser being able to look at
