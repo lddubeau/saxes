@@ -433,6 +433,10 @@ export type SaxesOptions = CommonOptions &
   (NoForcedXMLVersion | ForcedXMLVersion);
 
 class SaxesParserImpl {
+  private readonly fragmentOpt: boolean;
+  private readonly xmlnsOpt: boolean;
+  private readonly trackPosition: boolean;
+  private readonly fileName?: string;
   private openWakaBang!: string;
   private text!: string;
   private name!: string;
@@ -459,7 +463,6 @@ class SaxesParserImpl {
   private carriedFromPrevious?: string;
   private forbiddenState!: number;
   private attribList!: (SaxesAttributeNS | SaxesAttributePlain)[];
-  private fragmentOpt!: boolean;
   private state!: string;
   private reportedTextBeforeRoot!: boolean;
   private reportedTextAfterRoot!: boolean;
@@ -471,15 +474,12 @@ class SaxesParserImpl {
   private xmlDeclExpects!: string[];
   private requiredSeparator!: boolean;
   private entityReturnState?: string;
-  private xmlnsOpt!: boolean;
   private nameStartCheck!: (c: number) => boolean;
   private nameCheck!: (c: number) => boolean;
   private isName!: (name: string) => boolean;
   private processAttribs!: (this: this) => void;
   private ns!: Record<string, string>;
-  private trackPosition!: boolean;
   private positionAtNewLine!: number;
-  private fileName?: string;
   private doctype!: boolean;
   private getCode!: (this: this) => number;
   private isChar!: (c: number) => boolean;
@@ -511,6 +511,10 @@ class SaxesParserImpl {
    * @param opt The parser options.
    */
   constructor(readonly opt: SaxesOptions = {}) {
+    this.fragmentOpt = !!this.opt.fragment;
+    this.xmlnsOpt = !!this.opt.xmlns;
+    this.trackPosition = this.opt.position !== false;
+    this.fileName = this.opt.fileName;
     this._init();
   }
 
@@ -528,15 +532,6 @@ class SaxesParserImpl {
     this.chunk = "";
     this.chunkPosition = 0;
     this.i = 0;
-    //
-    // We use prevI to allow "ungetting" the previously read code point. Note
-    // however, that it is not safe to unget everything and anything. In
-    // particular ungetting EOL characters will screw positioning up.
-    //
-    // Practically, you must not unget a code which has any side effect beyond
-    // updating ``this.i`` and ``this.prevI``. Only EOL codes have such side
-    // effects.
-    //
     this.prevI = 0;
     this.carriedFromPrevious = undefined;
     this.forbiddenState = FORBIDDEN_START;
@@ -545,7 +540,7 @@ class SaxesParserImpl {
     // The logic is organized so as to minimize the need to check
     // this.opt.fragment while parsing.
 
-    const fragmentOpt = this.fragmentOpt = !!this.opt.fragment;
+    const { fragmentOpt, xmlnsOpt } = this;
     this.state = fragmentOpt ? S_TEXT : S_BEGIN_WHITESPACE;
     // We want these to be all true if we are dealing with a fragment.
     this.reportedTextBeforeRoot = this.reportedTextAfterRoot = this.closedRoot =
@@ -559,7 +554,6 @@ class SaxesParserImpl {
     this.xmlDeclExpects = ["version"];
     this.requiredSeparator = false;
     this.entityReturnState = undefined;
-    const xmlnsOpt = this.xmlnsOpt = !!this.opt.xmlns;
 
     if (xmlnsOpt) {
       // This is the function we use to perform name checks on PIs and entities.
@@ -592,19 +586,16 @@ class SaxesParserImpl {
     }
 
     let { defaultXMLVersion } = this.opt;
-    const { forceXMLVersion } = this.opt;
     if (defaultXMLVersion === undefined) {
-      if (forceXMLVersion) {
+      if (this.opt.forceXMLVersion) {
         throw new Error("forceXMLVersion set but defaultXMLVersion is not set");
       }
       defaultXMLVersion = "1.0";
     }
     this.setXMLVersion(defaultXMLVersion);
 
-    this.trackPosition = this.opt.position !== false;
     this.positionAtNewLine = 0;
 
-    this.fileName = this.opt.fileName;
     this.doctype = false;
     this._closed = false;
 
