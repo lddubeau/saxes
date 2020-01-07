@@ -129,9 +129,7 @@ const CLOSE_BRACKET = 0x5D;
 const NEL = 0x85;
 const LS = 0x2028; // Line Separator
 
-function isQuote(c: number): boolean {
-  return c === DQUOTE || c === SQUOTE;
-}
+const isQuote = (c: number): boolean => c === DQUOTE || c === SQUOTE;
 
 const QUOTES = [DQUOTE, SQUOTE];
 
@@ -186,13 +184,9 @@ function nsMappingCheck(parser: SaxesParser,
   }
 }
 
-function isNCName(name: string): boolean {
-  return NC_NAME_RE.test(name);
-}
+const isNCName = (name: string): boolean => NC_NAME_RE.test(name);
 
-function isName(name: string): boolean {
-  return NAME_RE.test(name);
-}
+const isName = (name: string): boolean => NAME_RE.test(name);
 
 const FORBIDDEN_START = 0;
 const FORBIDDEN_BRACKET = 1;
@@ -2505,6 +2499,9 @@ class SaxesParserImpl {
    * @returns The parsed entity.
    */
   private parseEntity(entity: string): string {
+    // startsWith would be significantly slower for this test.
+    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @typescript-eslint/prefer-string-starts-ends-with
     if (entity[0] !== "#") {
       const defined = this.ENTITIES[entity];
       if (defined) {
