@@ -48,10 +48,10 @@ describe("xml declaration", () => {
   });
 
   test({
-    name: "version without value",
+    name: "version without equal",
     xml: "<?xml version?><root/>",
     expect: [
-      ["error", "1:15: XML declaration is incomplete."],
+      ["error", "1:14: XML declaration is incomplete."],
       ["opentagstart", { name: "root", attributes: {}, ns: {} }],
       [
         "opentag",
@@ -87,7 +87,7 @@ describe("xml declaration", () => {
     name: "version without value",
     xml: "<?xml version=?><root/>",
     expect: [
-      ["error", "1:16: XML declaration is incomplete."],
+      ["error", "1:15: XML declaration is incomplete."],
       ["opentagstart", { name: "root", attributes: {}, ns: {} }],
       [
         "opentag",
@@ -124,7 +124,7 @@ describe("xml declaration", () => {
     xml: "<?xml version=a?><root/>",
     expect: [
       ["error", "1:15: value must be quoted."],
-      ["error", "1:17: XML declaration is incomplete."],
+      ["error", "1:16: XML declaration is incomplete."],
       ["opentagstart", { name: "root", attributes: {}, ns: {} }],
       [
         "opentag",
@@ -160,7 +160,7 @@ describe("xml declaration", () => {
     name: "unterminated value",
     xml: "<?xml version=\"a?><root/>",
     expect: [
-      ["error", "1:18: XML declaration is incomplete."],
+      ["error", "1:17: XML declaration is incomplete."],
       ["opentagstart", { name: "root", attributes: {}, ns: {} }],
       [
         "opentag",

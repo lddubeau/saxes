@@ -73,6 +73,12 @@ const S_PI_FIRST_CHAR = "sPIFirstChar"; // <?hi, first char
 const S_PI_REST = "sPIRest"; // <?hi, rest of the name
 const S_PI_BODY = "sPIBody"; // <?hi there
 const S_PI_ENDING = "sPIEnding"; // <?hi "there" ?
+const S_XML_DECL_NAME_START = "sXMLDeclNameStart"; // <?xml
+const S_XML_DECL_NAME = "sXMLDeclName"; // <?xml foo
+const S_XML_DECL_EQ = "sXMLDeclEq"; // <?xml foo=
+const S_XML_DECL_VALUE_START = "sXMLDeclValueStart"; // <?xml foo=
+const S_XML_DECL_VALUE = "sXMLDeclValue"; // <?xml foo="bar"
+const S_XML_DECL_ENDING = "sXMLDeclEnding"; // <?xml ... ?
 const S_OPEN_TAG = "sOpenTag"; // <strong
 const S_OPEN_TAG_SLASH = "sOpenTagSlash"; // <strong /
 const S_ATTRIB = "sAttrib"; // <a
@@ -85,12 +91,6 @@ const S_ATTRIB_VALUE_UNQUOTED = "sAttribValueUnquoted"; // <a foo=bar
 const S_CLOSE_TAG = "sCloseTag"; // </a
 const S_CLOSE_TAG_SAW_WHITE = "sCloseTagSawWhite"; // </a   >
 
-// These states are internal to sPIBody
-const S_XML_DECL_NAME_START = 1; // <?xml
-const S_XML_DECL_NAME = 2; // <?xml foo
-const S_XML_DECL_EQ = 3; // <?xml foo=
-const S_XML_DECL_VALUE_START = 4; // <?xml foo=
-const S_XML_DECL_VALUE = 5; // <?xml foo="bar"
 
 /**
  * The list of supported events.
@@ -470,8 +470,6 @@ class SaxesParserImpl {
   private closedRoot!: boolean;
   private sawRoot!: boolean;
   private xmlDeclPossible!: boolean;
-  private piIsXMLDecl!: boolean;
-  private xmlDeclState!: number;
   private xmlDeclExpects!: string[];
   private requiredSeparator!: boolean;
   private entityReturnState?: string;
@@ -550,8 +548,6 @@ class SaxesParserImpl {
     // documents.
     this.xmlDeclPossible = !fragmentOpt;
 
-    this.piIsXMLDecl = false;
-    this.xmlDeclState = S_XML_DECL_NAME_START;
     this.xmlDeclExpects = ["version"];
     this.requiredSeparator = false;
     this.entityReturnState = undefined;
@@ -1673,11 +1669,16 @@ class SaxesParserImpl {
   private sPIRest(): void {
     const c = this.captureWhileNameCheck("piTarget");
     if (c === QUESTION || isS(c)) {
-      this.piIsXMLDecl = this.piTarget === "xml";
-      if (this.piIsXMLDecl && !this.xmlDeclPossible) {
-        this.fail("an XML declaration must be at the start of the document.");
+      if (this.piTarget === "xml") {
+        if (!this.xmlDeclPossible) {
+          this.fail("an XML declaration must be at the start of the document.");
+        }
+
+        this.state = c === QUESTION ? S_XML_DECL_ENDING : S_XML_DECL_NAME_START;
       }
-      this.state = c === QUESTION ? S_PI_ENDING : S_PI_BODY;
+      else {
+        this.state = c === QUESTION ? S_PI_ENDING : S_PI_BODY;
+      }
     }
     else if (c !== EOC) {
       this.fail("disallowed character in processing instruction name.");
@@ -1687,159 +1688,8 @@ class SaxesParserImpl {
 
   // @ts-ignore
   private sPIBody(): void {
-    let c;
-    if (this.piIsXMLDecl) {
-      switch (this.xmlDeclState) {
-        case S_XML_DECL_NAME_START: {
-          c = this.getCodeNorm();
-          if (isS(c)) {
-            c = this.skipSpaces();
-          }
-          else if (this.requiredSeparator && c !== QUESTION) {
-            this.fail("whitespace required.");
-          }
-          this.requiredSeparator = false;
-
-          // The question mark character is not valid inside any of the XML
-          // declaration name/value pairs.
-          if (c === QUESTION) {
-            this.state = S_PI_ENDING;
-            return;
-          }
-
-          if (c !== EOC) {
-            this.xmlDeclState = S_XML_DECL_NAME;
-            this.xmlDeclName = String.fromCodePoint(c);
-          }
-          break;
-        }
-        case S_XML_DECL_NAME:
-          c = this.captureTo(XML_DECL_NAME_TERMINATOR);
-          // The question mark character is not valid inside any of the XML
-          // declaration name/value pairs.
-          if (c === QUESTION) {
-            this.state = S_PI_ENDING;
-            this.text = "";
-            return;
-          }
-          if (isS(c) || c === EQUAL) {
-            this.xmlDeclName += this.text;
-            this.text = "";
-            if (!this.xmlDeclExpects.includes(this.xmlDeclName)) {
-              switch (this.xmlDeclName.length) {
-                case 0:
-                  this.fail("did not expect any more name/value pairs.");
-                  break;
-                case 1:
-                  this.fail(`expected the name ${this.xmlDeclExpects[0]}.`);
-                  break;
-                default:
-                  this.fail(
-                    `expected one of ${this.xmlDeclExpects.join(", ")}`);
-              }
-            }
-
-            this.xmlDeclState = (c === EQUAL) ? S_XML_DECL_VALUE_START :
-              S_XML_DECL_EQ;
-          }
-          break;
-        case S_XML_DECL_EQ:
-          c = this.getCodeNorm();
-          // The question mark character is not valid inside any of the XML
-          // declaration name/value pairs.
-          if (c === QUESTION) {
-            this.state = S_PI_ENDING;
-            return;
-          }
-
-          if (!isS(c)) {
-            if (c !== EQUAL) {
-              this.fail("value required.");
-            }
-            this.xmlDeclState = S_XML_DECL_VALUE_START;
-          }
-          break;
-        case S_XML_DECL_VALUE_START:
-          c = this.getCodeNorm();
-          // The question mark character is not valid inside any of the XML
-          // declaration name/value pairs.
-          if (c === QUESTION) {
-            this.state = S_PI_ENDING;
-            return;
-          }
-
-          if (!isS(c)) {
-            if (!isQuote(c)) {
-              this.fail("value must be quoted.");
-              this.q = SPACE;
-            }
-            else {
-              this.q = c;
-            }
-            this.xmlDeclState = S_XML_DECL_VALUE;
-          }
-          break;
-        case S_XML_DECL_VALUE:
-          c = this.captureTo([this.q!, QUESTION]);
-
-          // The question mark character is not valid inside any of the XML
-          // declaration name/value pairs.
-          if (c === QUESTION) {
-            this.state = S_PI_ENDING;
-            this.text = "";
-            return;
-          }
-
-          if (c !== EOC) {
-            const value = this.text;
-            this.text = "";
-            switch (this.xmlDeclName) {
-              case "version": {
-                this.xmlDeclExpects = ["encoding", "standalone"];
-                const version = value;
-                this.xmlDecl.version = version;
-                // This is the test specified by XML 1.0 but it is fine for XML
-                // 1.1.
-                if (!/^1\.[0-9]+$/.test(version)) {
-                  this.fail("version number must match /^1\\.[0-9]+$/.");
-                }
-                // When forceXMLVersion is set, the XML declaration is ignored.
-                else if (!this.opt.forceXMLVersion) {
-                  this.setXMLVersion(version);
-                }
-                break;
-              }
-              case "encoding":
-                if (!/^[A-Za-z][A-Za-z0-9._-]*$/.test(value)) {
-                  this.fail("encoding value must match \
-/^[A-Za-z0-9][A-Za-z0-9._-]*$/.");
-                }
-                this.xmlDeclExpects = ["standalone"];
-                this.xmlDecl.encoding = value;
-                break;
-              case "standalone":
-                if (value !== "yes" && value !== "no") {
-                  this.fail("standalone value must match \"yes\" or \"no\".");
-                }
-                this.xmlDeclExpects = [];
-                this.xmlDecl.standalone = value;
-                break;
-              default:
-                // We don't need to raise an error here since we've already
-                // raised one when checking what name was expected.
-            }
-            this.xmlDeclName = "";
-            this.xmlDeclState = S_XML_DECL_NAME_START;
-            this.requiredSeparator = true;
-          }
-          break;
-        default:
-          throw new Error(
-            `Unknown XML declaration state: ${this.xmlDeclState}`);
-      }
-    }
-    else if (this.text.length === 0) {
-      c = this.getCodeNorm();
+    if (this.text.length === 0) {
+      const c = this.getCodeNorm();
       if (c === QUESTION) {
         this.state = S_PI_ENDING;
       }
@@ -1855,33 +1705,176 @@ class SaxesParserImpl {
   }
 
   // @ts-ignore
-  private sPIEnding(): void {
-    const c = this.getCodeNorm();
-    if (this.piIsXMLDecl) {
-      if (c === GREATER) {
-        if (this.piTarget !== "xml") {
-          this.fail("processing instructions are not allowed before root.");
-        }
-        else if (this.xmlDeclState !== S_XML_DECL_NAME_START) {
-          this.fail("XML declaration is incomplete.");
-        }
-        else if (this.xmlDeclExpects.includes("version")) {
-          this.fail("XML declaration must contain a version.");
-        }
-        this.xmlDeclName = "";
-        this.requiredSeparator = false;
-        this.piTarget = this.text = "";
-        this.state = S_TEXT;
-      }
-      else {
-        // We got here because the previous character was a ?, but the
-        // question mark character is not valid inside any of the XML
-        // declaration name/value pairs.
-        this.fail(
-          "The character ? is disallowed anywhere in XML declarations.");
+  private sXMLDeclNameStart(): void {
+    let c = this.getCodeNorm();
+    if (isS(c)) {
+      c = this.skipSpaces();
+    }
+    else if (this.requiredSeparator && c !== QUESTION) {
+      this.fail("whitespace required.");
+    }
+    this.requiredSeparator = false;
+
+    // The question mark character is not valid inside any of the XML
+    // declaration name/value pairs.
+    if (c === QUESTION) {
+      // This is the only state from which it is valid to go to
+      // S_XML_DECL_ENDING.
+      this.state = S_XML_DECL_ENDING;
+      return;
+    }
+
+    if (c !== EOC) {
+      this.state = S_XML_DECL_NAME;
+      this.xmlDeclName = String.fromCodePoint(c);
+    }
+  }
+
+  // @ts-ignore
+  private sXMLDeclName(): void {
+    const c = this.captureTo(XML_DECL_NAME_TERMINATOR);
+    // The question mark character is not valid inside any of the XML
+    // declaration name/value pairs.
+    if (c === QUESTION) {
+      this.state = S_XML_DECL_ENDING;
+      this.xmlDeclName += this.text;
+      this.text = "";
+      this.fail("XML declaration is incomplete.");
+      return;
+    }
+
+    if (!(isS(c) || c === EQUAL)) {
+      return;
+    }
+
+    this.xmlDeclName += this.text;
+    this.text = "";
+    if (!this.xmlDeclExpects.includes(this.xmlDeclName)) {
+      switch (this.xmlDeclName.length) {
+        case 0:
+          this.fail("did not expect any more name/value pairs.");
+          break;
+        case 1:
+          this.fail(`expected the name ${this.xmlDeclExpects[0]}.`);
+          break;
+        default:
+          this.fail(`expected one of ${this.xmlDeclExpects.join(", ")}`);
       }
     }
-    else if (c === GREATER) {
+
+    this.state = c === EQUAL ? S_XML_DECL_VALUE_START : S_XML_DECL_EQ;
+  }
+
+  // @ts-ignore
+  private sXMLDeclEq(): void {
+    const c = this.getCodeNorm();
+    // The question mark character is not valid inside any of the XML
+    // declaration name/value pairs.
+    if (c === QUESTION) {
+      this.state = S_XML_DECL_ENDING;
+      this.fail("XML declaration is incomplete.");
+      return;
+    }
+
+    if (isS(c)) {
+      return;
+    }
+
+    if (c !== EQUAL) {
+      this.fail("value required.");
+    }
+
+    this.state = S_XML_DECL_VALUE_START;
+  }
+
+  // @ts-ignore
+  private sXMLDeclValueStart(): void {
+    const c = this.getCodeNorm();
+    // The question mark character is not valid inside any of the XML
+    // declaration name/value pairs.
+    if (c === QUESTION) {
+      this.state = S_XML_DECL_ENDING;
+      this.fail("XML declaration is incomplete.");
+      return;
+    }
+
+    if (isS(c)) {
+      return;
+    }
+
+    if (!isQuote(c)) {
+      this.fail("value must be quoted.");
+      this.q = SPACE;
+    }
+    else {
+      this.q = c;
+    }
+
+    this.state = S_XML_DECL_VALUE;
+  }
+
+  // @ts-ignore
+  private sXMLDeclValue(): void {
+    const c = this.captureTo([this.q!, QUESTION]);
+
+    // The question mark character is not valid inside any of the XML
+    // declaration name/value pairs.
+    if (c === QUESTION) {
+      this.state = S_XML_DECL_ENDING;
+      this.text = "";
+      this.fail("XML declaration is incomplete.");
+      return;
+    }
+
+    if (c === EOC) {
+      return;
+    }
+
+    const value = this.text;
+    this.text = "";
+    switch (this.xmlDeclName) {
+      case "version": {
+        this.xmlDeclExpects = ["encoding", "standalone"];
+        const version = value;
+        this.xmlDecl.version = version;
+        // This is the test specified by XML 1.0 but it is fine for XML 1.1.
+        if (!/^1\.[0-9]+$/.test(version)) {
+          this.fail("version number must match /^1\\.[0-9]+$/.");
+        }
+        // When forceXMLVersion is set, the XML declaration is ignored.
+        else if (!this.opt.forceXMLVersion) {
+          this.setXMLVersion(version);
+        }
+        break;
+      }
+      case "encoding":
+        if (!/^[A-Za-z][A-Za-z0-9._-]*$/.test(value)) {
+          this.fail("encoding value must match \
+/^[A-Za-z0-9][A-Za-z0-9._-]*$/.");
+        }
+        this.xmlDeclExpects = ["standalone"];
+        this.xmlDecl.encoding = value;
+        break;
+      case "standalone":
+        if (value !== "yes" && value !== "no") {
+          this.fail("standalone value must match \"yes\" or \"no\".");
+        }
+        this.xmlDeclExpects = [];
+        this.xmlDecl.standalone = value;
+        break;
+      default:
+        // We don't need to raise an error here since we've already raised one
+        // when checking what name was expected.
+    }
+    this.xmlDeclName = "";
+    this.state = S_XML_DECL_NAME_START;
+    this.requiredSeparator = true;
+  }
+
+  // @ts-ignore
+  private sPIEnding(): void {
+    const c = this.getCodeNorm();
+    if (c === GREATER) {
       if (this.piTarget.trim().toLowerCase() === "xml") {
         this.fail(
           "the XML declaration must appear at the start of the document.");
@@ -1903,6 +1896,31 @@ class SaxesParserImpl {
     else {
       this.text += `?${String.fromCodePoint(c)}`;
       this.state = S_PI_BODY;
+    }
+    this.xmlDeclPossible = false;
+  }
+
+  // @ts-ignore
+  private sXMLDeclEnding(): void {
+    const c = this.getCodeNorm();
+    if (c === GREATER) {
+      if (this.piTarget !== "xml") {
+        this.fail("processing instructions are not allowed before root.");
+      }
+      else if (this.xmlDeclName !== "version" &&
+               this.xmlDeclExpects.includes("version")) {
+        this.fail("XML declaration must contain a version.");
+      }
+      this.xmlDeclName = "";
+      this.requiredSeparator = false;
+      this.piTarget = this.text = "";
+      this.state = S_TEXT;
+    }
+    else {
+      // We got here because the previous character was a ?, but the question
+      // mark character is not valid inside any of the XML declaration
+      // name/value pairs.
+      this.fail("The character ? is disallowed anywhere in XML declarations.");
     }
     this.xmlDeclPossible = false;
   }
