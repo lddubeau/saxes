@@ -428,7 +428,8 @@ export interface ForcedXMLVersion extends XMLVersionOptions {
   undefined>;
 }
 
-export type SaxesOptions = CommonOptions &
+export type SaxesOptions =
+  CommonOptions &
   (NSOptionsWithNamespaces | NSOptionsWithoutNamespaces) &
   (NoForcedXMLVersion | ForcedXMLVersion);
 
@@ -640,7 +641,7 @@ class SaxesParserImpl {
    * @param data The target and body of the processing instruction.
    */
   // @ts-ignore
-  onprocessinginstruction(data: { target: string; body: string}): void {}
+  onprocessinginstruction(data: { target: string; body: string }): void {}
 
   /**
    * Event handler for doctype. The default implementation is a no-op.
