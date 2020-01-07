@@ -7,7 +7,6 @@ import * as NSed3 from "xmlchars/xmlns/1.0/ed3";
 // names), short of using @ts-ignore all over the place. So...
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 
-
 import isS = ed5.isS;
 import isChar10 = ed5.isChar;
 import isNameStartChar = ed5.isNameStartChar;
@@ -432,6 +431,11 @@ class SaxesParserImpl {
   private readonly xmlnsOpt: boolean;
   private readonly trackPosition: boolean;
   private readonly fileName?: string;
+  private readonly nameStartCheck: (c: number) => boolean;
+  private readonly nameCheck: (c: number) => boolean;
+  private readonly isName: (name: string) => boolean;
+  private readonly ns!: Record<string, string>;
+
   private openWakaBang!: string;
   private text!: string;
   private name!: string;
@@ -467,11 +471,7 @@ class SaxesParserImpl {
   private xmlDeclExpects!: string[];
   private requiredSeparator!: boolean;
   private entityReturnState?: string;
-  private nameStartCheck!: (c: number) => boolean;
-  private nameCheck!: (c: number) => boolean;
-  private isName!: (name: string) => boolean;
   private processAttribs!: (this: this) => void;
-  private ns!: Record<string, string>;
   private positionAtNewLine!: number;
   private doctype!: boolean;
   private getCode!: (this: this) => number;
@@ -505,46 +505,9 @@ class SaxesParserImpl {
    */
   constructor(readonly opt: SaxesOptions = {}) {
     this.fragmentOpt = !!this.opt.fragment;
-    this.xmlnsOpt = !!this.opt.xmlns;
+    const xmlnsOpt = this.xmlnsOpt = !!this.opt.xmlns;
     this.trackPosition = this.opt.position !== false;
     this.fileName = this.opt.fileName;
-    this._init();
-  }
-
-  _init(): void {
-    this.openWakaBang = "";
-    this.text = "";
-    this.name = "";
-    this.piTarget = "";
-    this.entity = "";
-    this.xmlDeclName = "";
-
-    this.q = null;
-    this.tags = [];
-    this.tag = null;
-    this.chunk = "";
-    this.chunkPosition = 0;
-    this.i = 0;
-    this.prevI = 0;
-    this.carriedFromPrevious = undefined;
-    this.forbiddenState = FORBIDDEN_START;
-    this.attribList = [];
-
-    // The logic is organized so as to minimize the need to check
-    // this.opt.fragment while parsing.
-
-    const { fragmentOpt, xmlnsOpt } = this;
-    this.state = fragmentOpt ? S_TEXT : S_BEGIN_WHITESPACE;
-    // We want these to be all true if we are dealing with a fragment.
-    this.reportedTextBeforeRoot = this.reportedTextAfterRoot = this.closedRoot =
-      this.sawRoot = fragmentOpt;
-    // An XML declaration is intially possible only when parsing whole
-    // documents.
-    this.xmlDeclPossible = !fragmentOpt;
-
-    this.xmlDeclExpects = ["version"];
-    this.requiredSeparator = false;
-    this.entityReturnState = undefined;
 
     if (xmlnsOpt) {
       // This is the function we use to perform name checks on PIs and entities.
@@ -575,6 +538,44 @@ class SaxesParserImpl {
       // eslint-disable-next-line @typescript-eslint/unbound-method
       this.processAttribs = this.processAttribsPlain;
     }
+
+    this._init();
+  }
+
+  _init(): void {
+    this.openWakaBang = "";
+    this.text = "";
+    this.name = "";
+    this.piTarget = "";
+    this.entity = "";
+    this.xmlDeclName = "";
+
+    this.q = null;
+    this.tags = [];
+    this.tag = null;
+    this.chunk = "";
+    this.chunkPosition = 0;
+    this.i = 0;
+    this.prevI = 0;
+    this.carriedFromPrevious = undefined;
+    this.forbiddenState = FORBIDDEN_START;
+    this.attribList = [];
+
+    // The logic is organized so as to minimize the need to check
+    // this.opt.fragment while parsing.
+
+    const { fragmentOpt } = this;
+    this.state = fragmentOpt ? S_TEXT : S_BEGIN_WHITESPACE;
+    // We want these to be all true if we are dealing with a fragment.
+    this.reportedTextBeforeRoot = this.reportedTextAfterRoot = this.closedRoot =
+      this.sawRoot = fragmentOpt;
+    // An XML declaration is intially possible only when parsing whole
+    // documents.
+    this.xmlDeclPossible = !fragmentOpt;
+
+    this.xmlDeclExpects = ["version"];
+    this.requiredSeparator = false;
+    this.entityReturnState = undefined;
 
     let { defaultXMLVersion } = this.opt;
     if (defaultXMLVersion === undefined) {
