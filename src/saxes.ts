@@ -1629,12 +1629,13 @@ class SaxesParserImpl {
   private sPIEnding(): void {
     const c = this.getCodeNorm();
     if (c === GREATER) {
-      if (this.piTarget.trim().toLowerCase() === "xml") {
+      const { piTarget } = this;
+      if (piTarget.toLowerCase() === "xml") {
         this.fail(
           "the XML declaration must appear at the start of the document.");
       }
       this.onprocessinginstruction({
-        target: this.piTarget,
+        target: piTarget,
         body: this.text,
       });
       this.piTarget = this.text = "";
