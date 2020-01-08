@@ -447,8 +447,6 @@ class SaxesParserImpl {
   // @ts-ignore
   private entity!: string;
   // @ts-ignore
-  private xmlDeclName!: string;
-  // @ts-ignore
   private q!: null | number;
   private tags!: SaxesTagIncomplete[];
   private tag!: SaxesTagIncomplete | null;
@@ -559,7 +557,6 @@ class SaxesParserImpl {
     this.name = "";
     this.piTarget = "";
     this.entity = "";
-    this.xmlDeclName = "";
 
     this.q = null;
     this.tags = [];
@@ -1678,7 +1675,6 @@ type StateTableThis =
     name: SaxesParserImpl["name"];
     piTarget: SaxesParserImpl["piTarget"];
     entity: SaxesParserImpl["entity"];
-    xmlDeclName: SaxesParserImpl["xmlDeclName"];
     q: SaxesParserImpl["q"];
     tags: SaxesParserImpl["tags"];
     tag: SaxesParserImpl["tag"];
@@ -2189,7 +2185,7 @@ const stateTable: ((parser: StateTableThis) => void)[] = [
 
     if (c !== EOC) {
       parser.state = S_XML_DECL_NAME;
-      parser.xmlDeclName = String.fromCodePoint(c);
+      parser.name = String.fromCodePoint(c);
     }
   },
 
@@ -2199,7 +2195,7 @@ const stateTable: ((parser: StateTableThis) => void)[] = [
     // declaration name/value pairs.
     if (c === QUESTION) {
       parser.state = S_XML_DECL_ENDING;
-      parser.xmlDeclName += parser.text;
+      parser.name += parser.text;
       parser.text = "";
       parser.fail("XML declaration is incomplete.");
       return;
@@ -2209,10 +2205,10 @@ const stateTable: ((parser: StateTableThis) => void)[] = [
       return;
     }
 
-    parser.xmlDeclName += parser.text;
+    parser.name += parser.text;
     parser.text = "";
-    if (!parser.xmlDeclExpects.includes(parser.xmlDeclName)) {
-      switch (parser.xmlDeclName.length) {
+    if (!parser.xmlDeclExpects.includes(parser.name)) {
+      switch (parser.name.length) {
         case 0:
           parser.fail("did not expect any more name/value pairs.");
           break;
@@ -2291,7 +2287,7 @@ const stateTable: ((parser: StateTableThis) => void)[] = [
 
     const value = parser.text;
     parser.text = "";
-    switch (parser.xmlDeclName) {
+    switch (parser.name) {
       case "version": {
         parser.xmlDeclExpects = ["encoding", "standalone"];
         const version = value;
@@ -2325,7 +2321,7 @@ const stateTable: ((parser: StateTableThis) => void)[] = [
         // We don't need to raise an error here since we've already raised one
         // when checking what name was expected.
     }
-    parser.xmlDeclName = "";
+    parser.name = "";
     parser.state = S_XML_DECL_SEPARATOR;
   },
 
@@ -2354,11 +2350,11 @@ const stateTable: ((parser: StateTableThis) => void)[] = [
       if (parser.piTarget !== "xml") {
         parser.fail("processing instructions are not allowed before root.");
       }
-      else if (parser.xmlDeclName !== "version" &&
+      else if (parser.name !== "version" &&
                parser.xmlDeclExpects.includes("version")) {
         parser.fail("XML declaration must contain a version.");
       }
-      parser.xmlDeclName = "";
+      parser.name = "";
       parser.piTarget = parser.text = "";
       parser.state = S_TEXT;
     }
