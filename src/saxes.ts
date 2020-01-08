@@ -1566,8 +1566,12 @@ class SaxesParserImpl {
     }
   }
 
+  // We need this separate state to check the first character fo the pi target
+  // with this.nameStartCheck which allows less characters than this.nameCheck.
   private sPIFirstChar(): void {
     const c = this.getCodeNorm();
+    // This is first because in the case where the file is well-formed this is
+    // the branch taken. We optimize for well-formedness.
     if (this.nameStartCheck(c)) {
       this.piTarget += String.fromCodePoint(c);
       this.state = S_PI_REST;
@@ -1637,10 +1641,10 @@ class SaxesParserImpl {
       this.state = S_TEXT;
     }
     else if (c === QUESTION) {
-      // We ran into ?? as part of a processing instruction. We initially
-      // took the first ? as a sign that the PI was ending, but it is
-      // not. So we have to add it to the body but we take the new ? as a
-      // sign that the PI is ending.
+      // We ran into ?? as part of a processing instruction. We initially took
+      // the first ? as a sign that the PI was ending, but it is not. So we have
+      // to add it to the body but we take the new ? as a sign that the PI is
+      // ending.
       this.text += "?";
     }
     else {
