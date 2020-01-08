@@ -504,8 +504,8 @@ class SaxesParserImpl {
    * @param opt The parser options.
    */
   constructor(readonly opt: SaxesOptions = {}) {
-    this.fragmentOpt = !!this.opt.fragment;
-    const xmlnsOpt = this.xmlnsOpt = !!this.opt.xmlns;
+    this.fragmentOpt = !!(this.opt.fragment as boolean);
+    const xmlnsOpt = this.xmlnsOpt = !!(this.opt.xmlns as boolean);
     this.trackPosition = this.opt.position !== false;
     this.fileName = this.opt.fileName;
 
@@ -526,7 +526,7 @@ class SaxesParserImpl {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       this.ns = { __proto__: null as any, ...rootNS };
       const additional = this.opt.additionalNamespaces;
-      if (additional) {
+      if (additional != null) {
         nsMappingCheck(this, additional);
         Object.assign(this.ns, additional);
       }
@@ -579,7 +579,7 @@ class SaxesParserImpl {
 
     let { defaultXMLVersion } = this.opt;
     if (defaultXMLVersion === undefined) {
-      if (this.opt.forceXMLVersion) {
+      if (this.opt.forceXMLVersion === true) {
         throw new Error("forceXMLVersion set but defaultXMLVersion is not set");
       }
       defaultXMLVersion = "1.0";
@@ -723,7 +723,7 @@ class SaxesParserImpl {
    * @returns this
    */
   fail(er: string): this {
-    let message = this.fileName || "";
+    let message = this.fileName ?? "";
     if (this.trackPosition) {
       if (message.length > 0) {
         message += ":";
@@ -1837,7 +1837,7 @@ class SaxesParserImpl {
           this.fail("version number must match /^1\\.[0-9]+$/.");
         }
         // When forceXMLVersion is set, the XML declaration is ignored.
-        else if (!this.opt.forceXMLVersion) {
+        else if (!(this.opt.forceXMLVersion as boolean)) {
           this.setXMLVersion(version);
         }
         break;
@@ -1960,8 +1960,7 @@ class SaxesParserImpl {
 
   // @ts-ignore
   private sOpenTagSlash(): void {
-    const c = this.getCode();
-    if (c === GREATER) {
+    if (this.getCode() === GREATER) {
       this.openSelfClosingTag();
     }
     else {
@@ -2303,12 +2302,11 @@ class SaxesParserImpl {
     }
 
     uri = this.ns[prefix];
-    if (uri) {
+    if (uri !== undefined) {
       return uri;
     }
 
-    const { resolvePrefix } = this.opt;
-    return resolvePrefix ? resolvePrefix(prefix) : undefined;
+    return this.opt.resolvePrefix?.(prefix);
   }
 
   /**
@@ -2343,14 +2341,14 @@ class SaxesParserImpl {
       const { prefix, local } = this.qname(tag.name);
       tag.prefix = prefix;
       tag.local = local;
-      const uri = tag.uri = this.resolve(prefix) || "";
+      const uri = tag.uri = this.resolve(prefix) ?? "";
 
-      if (prefix) {
+      if (prefix !== "") {
         if (prefix === "xmlns") {
           this.fail("tags may not have \"xmlns\" as prefix.");
         }
 
-        if (!uri) {
+        if (uri === "") {
           this.fail(`unbound namespace prefix: ${JSON.stringify(prefix)}.`);
           tag.uri = prefix;
         }
@@ -2377,7 +2375,7 @@ class SaxesParserImpl {
         uri = this.resolve(prefix);
         // if there's any attributes with an undefined namespace,
         // then fail on them now.
-        if (!uri) {
+        if (uri === undefined) {
           this.fail(`unbound namespace prefix: ${JSON.stringify(prefix)}.`);
           uri = prefix;
         }
@@ -2401,7 +2399,7 @@ class SaxesParserImpl {
     // eslint-disable-next-line prefer-destructuring
     const attributes = this.tag!.attributes;
     for (const { name, value } of attribList) {
-      if (attributes[name]) {
+      if (attributes[name] !== undefined) {
         this.fail(`duplicate attribute: ${name}.`);
       }
       attributes[name] = value;
@@ -2446,8 +2444,8 @@ class SaxesParserImpl {
     // necessarily emitted before we get here. So we do not check text.
     this.onopentag(tag);
     this.onclosetag(tag);
-    const top = this.tag = tags[tags.length - 1];
-    if (!top) {
+    const top = this.tag = tags[tags.length - 1] ?? null;
+    if (top === null) {
       this.closedRoot = true;
     }
     this.state = S_TEXT;
@@ -2467,7 +2465,7 @@ class SaxesParserImpl {
     this.state = S_TEXT;
     this.name = "";
 
-    if (!name) {
+    if (name === "") {
       this.fail("weird empty close tag.");
       this.text += "</>";
       return;
@@ -2505,7 +2503,7 @@ class SaxesParserImpl {
     // eslint-disable-next-line @typescript-eslint/prefer-string-starts-ends-with
     if (entity[0] !== "#") {
       const defined = this.ENTITIES[entity];
-      if (defined) {
+      if (defined !== undefined) {
         return defined;
       }
 
