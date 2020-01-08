@@ -1408,18 +1408,19 @@ class SaxesParserImpl {
           this.entity += `${chunk.slice(start, this.prevI)}\n`;
           start = this.i;
           break;
-        case SEMICOLON:
-          this.entity += chunk.slice(start, this.prevI);
+        case SEMICOLON: {
+          const entity = this.entity + chunk.slice(start, this.prevI);
           this.state = this.entityReturnState!;
-          if (this.entity === "") {
+          if (entity === "") {
             this.fail("empty entity name.");
             this.text += "&;";
             return;
           }
-          this.text += this.parseEntity(this.entity);
+          this.text += this.parseEntity(entity);
           this.entity = "";
           // eslint-disable-next-line no-labels
           break loop;
+        }
         case EOC:
           this.entity += chunk.slice(start);
           // eslint-disable-next-line no-labels
