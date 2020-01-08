@@ -77,18 +77,19 @@ const S_XML_DECL_NAME = 27; // <?xml foo
 const S_XML_DECL_EQ = 28; // <?xml foo=
 const S_XML_DECL_VALUE_START = 29; // <?xml foo=
 const S_XML_DECL_VALUE = 30; // <?xml foo="bar"
-const S_XML_DECL_ENDING = 31; // <?xml ... ?
-const S_OPEN_TAG = 32; // <strong
-const S_OPEN_TAG_SLASH = 33; // <strong /
-const S_ATTRIB = 34; // <a
-const S_ATTRIB_NAME = 35; // <a foo
-const S_ATTRIB_NAME_SAW_WHITE = 36; // <a foo _
-const S_ATTRIB_VALUE = 37; // <a foo=
-const S_ATTRIB_VALUE_QUOTED = 38; // <a foo="bar
-const S_ATTRIB_VALUE_CLOSED = 39; // <a foo="bar"
-const S_ATTRIB_VALUE_UNQUOTED = 40; // <a foo=bar
-const S_CLOSE_TAG = 41; // </a
-const S_CLOSE_TAG_SAW_WHITE = 42; // </a   >
+const S_XML_DECL_SEPARATOR = 31; // <?xml foo="bar"
+const S_XML_DECL_ENDING = 32; // <?xml ... ?
+const S_OPEN_TAG = 33; // <strong
+const S_OPEN_TAG_SLASH = 34; // <strong /
+const S_ATTRIB = 35; // <a
+const S_ATTRIB_NAME = 36; // <a foo
+const S_ATTRIB_NAME_SAW_WHITE = 37; // <a foo _
+const S_ATTRIB_VALUE = 38; // <a foo=
+const S_ATTRIB_VALUE_QUOTED = 39; // <a foo="bar
+const S_ATTRIB_VALUE_CLOSED = 40; // <a foo="bar"
+const S_ATTRIB_VALUE_UNQUOTED = 41; // <a foo=bar
+const S_CLOSE_TAG = 42; // </a
+const S_CLOSE_TAG_SAW_WHITE = 43; // </a   >
 
 
 /**
@@ -478,8 +479,6 @@ class SaxesParserImpl {
   // @ts-ignore
   private xmlDeclExpects!: string[];
   // @ts-ignore
-  private requiredSeparator!: boolean;
-  // @ts-ignore
   private entityReturnState?: number;
   private processAttribs!: (this: this) => void;
   private positionAtNewLine!: number;
@@ -586,7 +585,6 @@ class SaxesParserImpl {
     this.xmlDeclPossible = !fragmentOpt;
 
     this.xmlDeclExpects = ["version"];
-    this.requiredSeparator = false;
     this.entityReturnState = undefined;
 
     let { defaultXMLVersion } = this.opt;
@@ -1694,7 +1692,6 @@ type StateTableThis =
     sawRoot: SaxesParserImpl["sawRoot"];
     xmlDeclPossible: SaxesParserImpl["xmlDeclPossible"];
     xmlDeclExpects: SaxesParserImpl["xmlDeclExpects"];
-    requiredSeparator: SaxesParserImpl["requiredSeparator"];
     entityReturnState: SaxesParserImpl["entityReturnState"];
     doctype: SaxesParserImpl["doctype"];
 
@@ -2180,20 +2177,12 @@ const stateTable: ((parser: StateTableThis) => void)[] = [
   },
 
   function sXMLDeclNameStart(parser: StateTableThis): void {
-    let c = parser.getCodeNorm();
-    if (isS(c)) {
-      c = parser.skipSpaces();
-    }
-    else if (parser.requiredSeparator && c !== QUESTION) {
-      parser.fail("whitespace required.");
-    }
-    parser.requiredSeparator = false;
+    const c = parser.skipSpaces();
 
     // The question mark character is not valid inside any of the XML
     // declaration name/value pairs.
     if (c === QUESTION) {
-      // This is the only state from which it is valid to go to
-      // S_XML_DECL_ENDING.
+      // It is valid to go to S_XML_DECL_ENDING from this state.
       parser.state = S_XML_DECL_ENDING;
       return;
     }
@@ -2337,8 +2326,26 @@ const stateTable: ((parser: StateTableThis) => void)[] = [
         // when checking what name was expected.
     }
     parser.xmlDeclName = "";
+    parser.state = S_XML_DECL_SEPARATOR;
+  },
+
+  function sXMLDeclSeparator(parser: StateTableThis): void {
+    const c = parser.getCodeNorm();
+
+    // The question mark character is not valid inside any of the XML
+    // declaration name/value pairs.
+    if (c === QUESTION) {
+      // It is valid to go to S_XML_DECL_ENDING from this state.
+      parser.state = S_XML_DECL_ENDING;
+      return;
+    }
+
+    if (!isS(c)) {
+      parser.fail("whitespace required.");
+      parser.i = parser.prevI;
+    }
+
     parser.state = S_XML_DECL_NAME_START;
-    parser.requiredSeparator = true;
   },
 
   function sXMLDeclEnding(parser: StateTableThis): void {
@@ -2352,7 +2359,6 @@ const stateTable: ((parser: StateTableThis) => void)[] = [
         parser.fail("XML declaration must contain a version.");
       }
       parser.xmlDeclName = "";
-      parser.requiredSeparator = false;
       parser.piTarget = parser.text = "";
       parser.state = S_TEXT;
     }
