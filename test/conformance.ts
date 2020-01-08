@@ -230,7 +230,7 @@ class SaxesDriver extends BaseDriver {
   // eslint-disable-next-line class-methods-use-this
   writeSource(parser: SaxesParser, source: string): void {
     parser.write(source);
-    parser.end();
+    parser.close();
   }
 
   async run(test: Test, handling: TestHandling): Promise<void> {
@@ -259,7 +259,7 @@ class CharByCharDriver extends SaxesDriver {
     for (const x of source) {
       parser.write(x);
     }
-    parser.end();
+    parser.close();
   }
 }
 

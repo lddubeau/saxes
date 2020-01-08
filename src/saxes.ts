@@ -138,7 +138,8 @@ const DTD_TERMINATOR = [...QUOTES, LESS, CLOSE_BRACKET];
 const XML_DECL_NAME_TERMINATOR = [EQUAL, QUESTION, ...S_LIST];
 const ATTRIB_VALUE_UNQUOTED_TERMINATOR = [...S_LIST, GREATER, AMP, LESS];
 
-function nsPairCheck(parser: SaxesParser, prefix: string, uri: string): void {
+function nsPairCheck(parser: SaxesParser<{}>, prefix: string,
+                     uri: string): void {
   switch (prefix) {
     case "xml":
       if (uri !== XML_NAMESPACE) {
@@ -177,7 +178,7 @@ ${XMLNS_NAMESPACE}.`);
 }
 
 
-function nsMappingCheck(parser: SaxesParser,
+function nsMappingCheck(parser: SaxesParser<{}>,
                         mapping: Record<string, string>): void {
   for (const local of Object.keys(mapping)) {
     nsPairCheck(parser, local, mapping[local]);
@@ -260,7 +261,7 @@ export interface SaxesTag {
    * A map of attribute name to attributes. If namespaces are tracked, the
    * values in the map are attribute objects. Otherwise, they are strings.
    */
-  attributes: Record<string, SaxesAttributeNS | string>;
+  attributes: Record<string, SaxesAttributeNS> | Record<string, string>;
 
   /**
    * The namespace bindings in effect.
@@ -422,9 +423,22 @@ export interface ForcedXMLVersion extends XMLVersionOptions {
   undefined>;
 }
 
+/**
+ * The entire set of options supported by saxes.
+ */
 export type SaxesOptions = CommonOptions & NSOptions & XMLVersionOptions;
 
-class SaxesParserImpl {
+export type TagForOptions<O extends SaxesOptions> =
+  O extends { xmlns: true } ? SaxesTagNS :
+    O extends { xmlns: false | undefined } ? SaxesTagPlain :
+      SaxesTag;
+
+export type StartTagForOptions<O extends SaxesOptions> =
+  O extends { xmlns: true } ? SaxesStartTagNS :
+    O extends { xmlns: false | undefined } ? SaxesStartTagPlain :
+      SaxesStartTag;
+
+export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
   private readonly fragmentOpt: boolean;
   private readonly xmlnsOpt: boolean;
   private readonly trackPosition: boolean;
@@ -474,7 +488,7 @@ class SaxesParserImpl {
   private isChar!: (c: number) => boolean;
   private pushAttrib!: (name: string, value: string) => void;
   private _closed!: boolean;
-  private readonly stateTable: ((this: SaxesParserImpl) => void)[];
+  private readonly stateTable: ((this: SaxesParser<O>) => void)[];
 
   /**
    * Indicates whether or not the parser is closed. If ``true``, wait for
@@ -483,6 +497,8 @@ class SaxesParserImpl {
   get closed(): boolean {
     return this._closed;
   }
+
+  readonly opt: SaxesOptions;
 
   /**
    * The XML declaration for this document.
@@ -500,7 +516,8 @@ class SaxesParserImpl {
   /**
    * @param opt The parser options.
    */
-  constructor(readonly opt: SaxesOptions = {}) {
+  constructor(opt?: O) {
+    this.opt = opt ?? {};
     this.fragmentOpt = !!(this.opt.fragment as boolean);
     const xmlnsOpt = this.xmlnsOpt = !!(this.opt.xmlns as boolean);
     this.trackPosition = this.opt.position !== false;
@@ -706,7 +723,7 @@ class SaxesParserImpl {
    * @param tag The tag.
    */
   // @ts-ignore
-  onopentagstart(tag: SaxesStartTag): void {}
+  onopentagstart(tag: StartTagForOptions<O>): void {}
 
   /**
    * Event handler for an open tag. This is called when the open tag is
@@ -716,7 +733,7 @@ class SaxesParserImpl {
    * @param tag The tag.
    */
   // @ts-ignore
-  onopentag(tag: SaxesTag): void {}
+  onopentag(tag: TagForOptions<O>): void {}
 
   /**
    * Event handler for a close tag. Note that for self-closing tags, this is
@@ -725,7 +742,7 @@ class SaxesParserImpl {
    * @param tag The tag.
    */
   // @ts-ignore
-  onclosetag(tag: SaxesTag): void {}
+  onclosetag(tag: TagForOptions<O>): void {}
 
   /**
    * Event handler for a CDATA section. This is called when ending the
@@ -1851,7 +1868,7 @@ class SaxesParserImpl {
       tag.ns = Object.create(null);
     }
 
-    this.onopentagstart(tag);
+    this.onopentagstart(tag as TagForOptions<O>);
     this.sawRoot = true;
     if (!this.fragmentOpt && this.closedRoot) {
       this.fail("documents may contain only one root.");
@@ -2222,6 +2239,7 @@ class SaxesParserImpl {
       this.reportedTextAfterRoot = true;
     }
   }
+
   private pushAttribNS10(name: string, value: string): void {
     const { prefix, local } = this.qname(name);
     this.attribList.push({ name, prefix, local, value, uri: undefined });
@@ -2240,7 +2258,7 @@ class SaxesParserImpl {
     }
   }
 
-  pushAttribNS11(name: string, value: string): void {
+  private pushAttribNS11(name: string, value: string): void {
     const { prefix, local } = this.qname(name);
     this.attribList.push({ name, prefix, local, value, uri: undefined });
     if (prefix === "xmlns") {
@@ -2265,7 +2283,7 @@ class SaxesParserImpl {
    *
    * @returns this
    */
-  end(): this {
+  private end(): this {
     if (!this.sawRoot) {
       this.fail("document must contain a root element.");
     }
@@ -2431,7 +2449,7 @@ class SaxesParserImpl {
 
     // There cannot be any pending text here due to the onopentagstart that was
     // necessarily emitted before we get here. So we do not check text.
-    this.onopentag(tag);
+    this.onopentag(tag as TagForOptions<O>);
     tags.push(tag);
     this.state = S_TEXT;
     this.name = "";
@@ -2451,8 +2469,8 @@ class SaxesParserImpl {
 
     // There cannot be any pending text here due to the onopentagstart that was
     // necessarily emitted before we get here. So we do not check text.
-    this.onopentag(tag);
-    this.onclosetag(tag);
+    this.onopentag(tag as TagForOptions<O>);
+    this.onclosetag(tag as TagForOptions<O>);
     const top = this.tag = tags[tags.length - 1] ?? null;
     if (top === null) {
       this.closedRoot = true;
@@ -2483,7 +2501,7 @@ class SaxesParserImpl {
     let l = tags.length;
     while (l-- > 0) {
       const tag = this.tag = tags.pop() as SaxesTag;
-      this.onclosetag(tag);
+      this.onclosetag(tag as TagForOptions<O>);
       if (tag.name === name) {
         break;
       }
@@ -2537,31 +2555,3 @@ class SaxesParserImpl {
     return String.fromCodePoint(num);
   }
 }
-
-/**
- * This is the interface of a parser that has been created with ``xmlns: true``.
- */
-export interface SaxesParserNS extends SaxesParserImpl {
-  onopentagstart(tag: SaxesStartTagNS): void;
-  onopentag(tag: SaxesTagNS): void;
-  onclosetag(tag: SaxesTagNS): void;
-}
-
-/**
- * This is the interface of a parser that has been created with ``xmlns:
- * false``.
- */
-export interface SaxesParserPlain extends SaxesParserImpl {
-  onopentagstart(tag: SaxesStartTagPlain): void;
-  onopentag(tag: SaxesTagPlain): void;
-  onclosetag(tag: SaxesTagPlain): void;
-}
-
-export interface SaxesParserConstructor {
-  new (opt?: SaxesOptions & { xmlns?: false }): SaxesParserPlain;
-  new (opt: SaxesOptions & { xmlns: true }): SaxesParserNS;
-  new (opt?: SaxesOptions): SaxesParser;
-}
-
-export const SaxesParser: SaxesParserConstructor = SaxesParserImpl;
-export type SaxesParser = SaxesParserImpl;

@@ -8,7 +8,7 @@ of sax in this project's documentation are references to sax 1.2.4.
 Designed with [node](http://nodejs.org/) in mind, but should work fine in the
 browser or other CommonJS implementations.
 
-Saxes does not support Node versions older than 8.
+Saxes does not support Node versions older than 10.
 
 ## Notable Differences from Sax.
 
@@ -58,7 +58,8 @@ Saxes supports:
 This is a non-validating parser so it only verifies whether the document is
 well-formed. We do aim to raise errors for all malformed constructs
 encountered. However, this parser does not thorougly parse the contents of
-DTDs. So most malformedness errors caused by errors in DTDs cannot be reported.
+DTDs. So most malformedness errors caused by errors **in DTDs** cannot be
+reported.
 
 ## Regarding `<!DOCTYPE` and `<!ENTITY`
 
@@ -71,14 +72,15 @@ guest.
 
 ## Documentation
 
-The source code contains JSDOC comments. Use them.
+The source code contains JSDOC comments. Use them. What follows is a brief
+summary of what is available. The final authority is the source code.
 
 **PAY CLOSE ATTENTION TO WHAT IS PUBLIC AND WHAT IS PRIVATE.**
 
-The elements of code that do not have JSDOC documentation, or have documentation
-with the ``@private`` tag, are private.
+The move to TypeScript makes it so that everything is now formally private,
+protected, or public.
 
-If you use anything private, that's at your own peril.
+If you use anything not public, that's at your own peril.
 
 If there's a mistake in the documentation, raise an issue. If you just assume,
 you may assume incorrectly.
@@ -108,10 +110,6 @@ parser.write('<xml>Hello, <who name="world">world</who>!</xml>').close();
 ```
 
 ### Constructor Arguments
-
-Pass the following arguments to the parser function. All are optional.
-
-`opt` - Object bag of settings regarding string formatting.
 
 Settings supported:
 
@@ -237,6 +235,16 @@ namespaces is onerous.
 
 Note that you can use `additionalNamespaces` and `resolvePrefix` together if you
 want. `additionalNamespaces` applies before `resolvePrefix`.
+
+The options `additionalNamespaces` and `resolvePrefix` are really meant to be
+used for parsing fragments. However, saxes won't prevent you from using them
+with `fragment: false`. Note that if you do this, your document may parse
+without errors and yet be malformed because the document can refer to namespaces
+which are not defined *in* the document.
+
+Of course, `additionalNamespaces` and `resolvePrefix` are used only if `xmlns`
+is `true`. If you are parsing a fragment that does not use namespaces, there's
+no point in setting these options.
 
 ### Performance Tips
 

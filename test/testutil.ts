@@ -6,7 +6,7 @@ export interface TestOptions {
   name: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   expect: any[];
-  fn?: (parser: SaxesParser) => void;
+  fn?: (parser: SaxesParser<{}>) => void;
   opt?: SaxesOptions;
 }
 
