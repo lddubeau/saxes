@@ -1123,37 +1123,6 @@ class SaxesParserImpl {
   }
 
   /**
-   * Capture characters into a buffer while ``this.nameCheck`` run on the
-   * character read returns true.
-   *
-   * @param buffer The name of the buffer to save into.
-   *
-   * @return The character code that made the test fail, or ``EOC`` if we hit
-   * the end of the chunk.  The return value cannot be NL_LIKE: NL is returned
-   * instead.
-   */
-  private captureWhileNameCheck(buffer: string): number {
-    const { chunk, i: start } = this;
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      const c = this.getCode();
-      if (c === EOC) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (this as any)[buffer] += chunk.slice(start);
-        return EOC;
-      }
-
-      // NL cannot satisfy this.nameCheck so we don't have to test
-      // specifically for it.
-      if (!this.nameCheck(c)) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (this as any)[buffer] += chunk.slice(start, this.prevI);
-        return c === NL_LIKE ? NL : c;
-      }
-    }
-  }
-
-  /**
    * Skip white spaces.
    *
    * @return The character that ended the skip, or ``EOC`` if we hit
@@ -1589,24 +1558,41 @@ class SaxesParserImpl {
   }
 
   private sPIRest(): void {
-    const c = this.captureWhileNameCheck("piTarget");
-    if (c === QUESTION || isS(c)) {
-      if (this.piTarget === "xml") {
-        if (!this.xmlDeclPossible) {
-          this.fail(
-            "an XML declaration must be at the start of the document.");
-        }
+    // Capture characters into a piTarget while ``this.nameCheck`` run on the
+    // character read returns true.
+    const { chunk, i: start } = this;
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      const c = this.getCodeNorm();
+      if (c === EOC) {
+        this.piTarget += chunk.slice(start);
+        return;
+      }
 
-        this.state =
-          c === QUESTION ? S_XML_DECL_ENDING : S_XML_DECL_NAME_START;
+      // NL cannot satisfy this.nameCheck so we don't have to test specifically
+      // for it.
+      if (!this.nameCheck(c)) {
+        this.piTarget += chunk.slice(start, this.prevI);
+        const isQuestion = c === QUESTION;
+        if (isQuestion || isS(c)) {
+          if (this.piTarget === "xml") {
+            if (!this.xmlDeclPossible) {
+              this.fail(
+                "an XML declaration must be at the start of the document.");
+            }
+
+            this.state = isQuestion ? S_XML_DECL_ENDING : S_XML_DECL_NAME_START;
+          }
+          else {
+            this.state = isQuestion ? S_PI_ENDING : S_PI_BODY;
+          }
+        }
+        else {
+          this.fail("disallowed character in processing instruction name.");
+          this.piTarget += String.fromCodePoint(c);
+        }
+        break;
       }
-      else {
-        this.state = c === QUESTION ? S_PI_ENDING : S_PI_BODY;
-      }
-    }
-    else if (c !== EOC) {
-      this.fail("disallowed character in processing instruction name.");
-      this.piTarget += String.fromCodePoint(c);
     }
   }
 
