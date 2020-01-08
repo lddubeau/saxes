@@ -95,7 +95,7 @@ const S_CLOSE_TAG_SAW_WHITE = 43; // </a   >
 /**
  * The list of supported events.
  */
-exports.EVENTS = [
+export const EVENTS = [
   "text",
   "processinginstruction",
   "doctype",
@@ -2562,8 +2562,9 @@ export interface SaxesParserPlain extends SaxesParserImpl {
 }
 
 export interface SaxesParserConstructor {
-  new (opt: SaxesOptions & { xmlns: true }): SaxesParserNS;
-  new (opt: SaxesOptions & { xmlns?: false | undefined }): SaxesParserPlain;
+  new (opt?: SaxesOptions & { xmlns: true }): SaxesParserNS;
+  new (opt?: SaxesOptions & { xmlns?: false | undefined }): SaxesParserPlain;
+  new (opt?: SaxesOptions): SaxesParser;
 }
 
 export const SaxesParser: SaxesParserConstructor = SaxesParserImpl;
