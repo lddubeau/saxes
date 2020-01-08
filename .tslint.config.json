@@ -1,0 +1,7 @@
+{
+  "extends": "eslint-config-lddubeau-ts/tslint.config.json",
+  "rules": {
+    "mocha-no-side-effect-code": false,
+    "chai-vague-errors": false
+  }
+}

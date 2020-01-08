@@ -3,6 +3,7 @@
     "target": "es6",
     "downlevelIteration": true,
     "module": "commonjs",
+    "moduleResolution": "node",
     "declaration": true,
     "sourceMap": true,
     "outDir": "build/dist/",
