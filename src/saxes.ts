@@ -46,49 +46,49 @@ const XML_ENTITIES: Record<string, string> = {
 const EOC = -1;
 const NL_LIKE = -2;
 
-const S_BEGIN_WHITESPACE = "sBeginWhitespace"; // leading whitespace
-const S_DOCTYPE = "sDoctype"; // <!DOCTYPE
-const S_DOCTYPE_QUOTE = "sDoctypeQuote"; // <!DOCTYPE "//blah
-const S_DTD = "sDTD"; // <!DOCTYPE "//blah" [ ...
-const S_DTD_QUOTED = "sDTDQuoted"; // <!DOCTYPE "//blah" [ "foo
-const S_DTD_OPEN_WAKA = "sDTDOpenWaka";
-const S_DTD_OPEN_WAKA_BANG = "sDTDOpenWakaBang";
-const S_DTD_COMMENT = "sDTDComment"; // <!--
-const S_DTD_COMMENT_ENDING = "sDTDCommentEnding"; // <!-- blah -
-const S_DTD_COMMENT_ENDED = "sDTDCommentEnded"; // <!-- blah --
-const S_DTD_PI = "sDTDPI"; // <?
-const S_DTD_PI_ENDING = "sDTDPIEnding"; // <?hi "there" ?
-const S_TEXT = "sText"; // general stuff
-const S_ENTITY = "sEntity"; // &amp and such
-const S_OPEN_WAKA = "sOpenWaka"; // <
-const S_OPEN_WAKA_BANG = "sOpenWakaBang"; // <!...
-const S_COMMENT = "sComment"; // <!--
-const S_COMMENT_ENDING = "sCommentEnding"; // <!-- blah -
-const S_COMMENT_ENDED = "sCommentEnded"; // <!-- blah --
-const S_CDATA = "sCData"; // <![CDATA[ something
-const S_CDATA_ENDING = "sCDataEnding"; // ]
-const S_CDATA_ENDING_2 = "sCDataEnding2"; // ]]
-const S_PI_FIRST_CHAR = "sPIFirstChar"; // <?hi, first char
-const S_PI_REST = "sPIRest"; // <?hi, rest of the name
-const S_PI_BODY = "sPIBody"; // <?hi there
-const S_PI_ENDING = "sPIEnding"; // <?hi "there" ?
-const S_XML_DECL_NAME_START = "sXMLDeclNameStart"; // <?xml
-const S_XML_DECL_NAME = "sXMLDeclName"; // <?xml foo
-const S_XML_DECL_EQ = "sXMLDeclEq"; // <?xml foo=
-const S_XML_DECL_VALUE_START = "sXMLDeclValueStart"; // <?xml foo=
-const S_XML_DECL_VALUE = "sXMLDeclValue"; // <?xml foo="bar"
-const S_XML_DECL_ENDING = "sXMLDeclEnding"; // <?xml ... ?
-const S_OPEN_TAG = "sOpenTag"; // <strong
-const S_OPEN_TAG_SLASH = "sOpenTagSlash"; // <strong /
-const S_ATTRIB = "sAttrib"; // <a
-const S_ATTRIB_NAME = "sAttribName"; // <a foo
-const S_ATTRIB_NAME_SAW_WHITE = "sAttribNameSawWhite"; // <a foo _
-const S_ATTRIB_VALUE = "sAttribValue"; // <a foo=
-const S_ATTRIB_VALUE_QUOTED = "sAttribValueQuoted"; // <a foo="bar
-const S_ATTRIB_VALUE_CLOSED = "sAttribValueClosed"; // <a foo="bar"
-const S_ATTRIB_VALUE_UNQUOTED = "sAttribValueUnquoted"; // <a foo=bar
-const S_CLOSE_TAG = "sCloseTag"; // </a
-const S_CLOSE_TAG_SAW_WHITE = "sCloseTagSawWhite"; // </a   >
+const S_BEGIN_WHITESPACE = 0; // leading whitespace
+const S_DOCTYPE = 1; // <!DOCTYPE
+const S_DOCTYPE_QUOTE = 2; // <!DOCTYPE "//blah
+const S_DTD = 3; // <!DOCTYPE "//blah" [ ...
+const S_DTD_QUOTED = 4; // <!DOCTYPE "//blah" [ "foo
+const S_DTD_OPEN_WAKA = 5;
+const S_DTD_OPEN_WAKA_BANG = 6;
+const S_DTD_COMMENT = 7; // <!--
+const S_DTD_COMMENT_ENDING = 8; // <!-- blah -
+const S_DTD_COMMENT_ENDED = 9; // <!-- blah --
+const S_DTD_PI = 10; // <?
+const S_DTD_PI_ENDING = 11; // <?hi "there" ?
+const S_TEXT = 12; // general stuff
+const S_ENTITY = 13; // &amp and such
+const S_OPEN_WAKA = 14; // <
+const S_OPEN_WAKA_BANG = 15; // <!...
+const S_COMMENT = 16; // <!--
+const S_COMMENT_ENDING = 17; // <!-- blah -
+const S_COMMENT_ENDED = 18; // <!-- blah --
+const S_CDATA = 19; // <![CDATA[ something
+const S_CDATA_ENDING = 20; // ]
+const S_CDATA_ENDING_2 = 21; // ]]
+const S_PI_FIRST_CHAR = 22; // <?hi, first char
+const S_PI_REST = 23; // <?hi, rest of the name
+const S_PI_BODY = 24; // <?hi there
+const S_PI_ENDING = 25; // <?hi "there" ?
+const S_XML_DECL_NAME_START = 26; // <?xml
+const S_XML_DECL_NAME = 27; // <?xml foo
+const S_XML_DECL_EQ = 28; // <?xml foo=
+const S_XML_DECL_VALUE_START = 29; // <?xml foo=
+const S_XML_DECL_VALUE = 30; // <?xml foo="bar"
+const S_XML_DECL_ENDING = 31; // <?xml ... ?
+const S_OPEN_TAG = 32; // <strong
+const S_OPEN_TAG_SLASH = 33; // <strong /
+const S_ATTRIB = 34; // <a
+const S_ATTRIB_NAME = 35; // <a foo
+const S_ATTRIB_NAME_SAW_WHITE = 36; // <a foo _
+const S_ATTRIB_VALUE = 37; // <a foo=
+const S_ATTRIB_VALUE_QUOTED = 38; // <a foo="bar
+const S_ATTRIB_VALUE_CLOSED = 39; // <a foo="bar"
+const S_ATTRIB_VALUE_UNQUOTED = 40; // <a foo=bar
+const S_CLOSE_TAG = 41; // </a
+const S_CLOSE_TAG_SAW_WHITE = 42; // </a   >
 
 
 /**
@@ -431,17 +431,23 @@ class SaxesParserImpl {
   private readonly xmlnsOpt: boolean;
   private readonly trackPosition: boolean;
   private readonly fileName?: string;
+  // @ts-ignore
   private readonly nameStartCheck: (c: number) => boolean;
   private readonly nameCheck: (c: number) => boolean;
   private readonly isName: (name: string) => boolean;
   private readonly ns!: Record<string, string>;
 
+  // @ts-ignore
   private openWakaBang!: string;
   private text!: string;
   private name!: string;
+  // @ts-ignore
   private piTarget!: string;
+  // @ts-ignore
   private entity!: string;
+  // @ts-ignore
   private xmlDeclName!: string;
+  // @ts-ignore
   private q!: null | number;
   private tags!: SaxesTagIncomplete[];
   private tag!: SaxesTagIncomplete | null;
@@ -462,21 +468,27 @@ class SaxesParserImpl {
   private carriedFromPrevious?: string;
   private forbiddenState!: number;
   private attribList!: (SaxesAttributeNS | SaxesAttributePlain)[];
-  private state!: string;
+  private state!: number;
   private reportedTextBeforeRoot!: boolean;
   private reportedTextAfterRoot!: boolean;
   private closedRoot!: boolean;
   private sawRoot!: boolean;
+  // @ts-ignore
   private xmlDeclPossible!: boolean;
+  // @ts-ignore
   private xmlDeclExpects!: string[];
+  // @ts-ignore
   private requiredSeparator!: boolean;
-  private entityReturnState?: string;
+  // @ts-ignore
+  private entityReturnState?: number;
   private processAttribs!: (this: this) => void;
   private positionAtNewLine!: number;
+  // @ts-ignore
   private doctype!: boolean;
-  private getCode!: (this: this) => number;
+  private getCode!: () => number;
   private isChar!: (c: number) => boolean;
-  private pushAttrib!: (this: this, name: string, value: string) => void;
+  // @ts-ignore
+  private pushAttrib!: (name: string, value: string) => void;
   private _closed!: boolean;
 
   /**
@@ -790,8 +802,9 @@ class SaxesParserImpl {
     this.chunk = chunk as string;
     this.i = 0;
     while (this.i < limit) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (this as any)[this.state]();
+      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-use-before-define, no-use-before-define
+      stateTable[this.state](this as any);
     }
     this.chunkPosition += limit;
 
@@ -989,6 +1002,7 @@ class SaxesParserImpl {
    * the end of the chunk. The return value cannot be NL_LIKE: NL is returned
    * instead.
    */
+  // @ts-ignore
   private captureTo(chars: number[]): number {
     let { i: start } = this;
     const { chunk } = this;
@@ -1018,6 +1032,7 @@ class SaxesParserImpl {
    * @return ``true`` if we ran into the character. Otherwise, we ran into the
    * end of the current chunk.
    */
+  // @ts-ignore
   private captureToChar(char: number): boolean {
     let { i: start } = this;
     const { chunk } = this;
@@ -1051,6 +1066,7 @@ class SaxesParserImpl {
    * the end of the chunk. The return value cannot be NL_LIKE: NL is returned
    * instead.
    */
+  // @ts-ignore
   private captureNameChars(): number {
     const { chunk, i: start } = this;
     // eslint-disable-next-line no-constant-condition
@@ -1079,6 +1095,7 @@ class SaxesParserImpl {
    * the end of the chunk.  The return value cannot be NL_LIKE: NL is returned
    * instead.
    */
+  // @ts-ignore
   private captureWhileNameCheck(buffer: string): number {
     const { chunk, i: start } = this;
     // eslint-disable-next-line no-constant-condition
@@ -1107,6 +1124,7 @@ class SaxesParserImpl {
    * the end of the chunk. The return value cannot be NL_LIKE: NL is returned
    * instead.
    */
+  // @ts-ignore
   private skipSpaces(): number {
     // eslint-disable-next-line no-constant-condition
     while (true) {
@@ -1134,88 +1152,7 @@ class SaxesParserImpl {
     /* eslint-enable @typescript-eslint/unbound-method */
   }
 
-  // STATE HANDLERS
-
   // @ts-ignore
-  private sBeginWhitespace(): void {
-    // We are essentially peeking at the first character of the chunk. Since
-    // S_BEGIN_WHITESPACE can be in effect only when we start working on the
-    // first chunk, the index at which we must look is necessarily 0. Note also
-    // that the following test does not depend on decoding surrogates.
-
-    // If the initial character is 0xFEFF, ignore it.
-    if (this.chunk.charCodeAt(0) === 0xFEFF) {
-      this.i++;
-    }
-
-    // This initial loop is a specialized version of skipSpaces. We need to know
-    // whether we've encountered spaces or not because as soon as we run into a
-    // space, an XML declaration is no longer possible. Rather than slow down
-    // skipSpaces even in places where we don't care whether it skipped anything
-    // or not, we use a specialized loop here.
-    let c;
-    let sawSpace = false;
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      c = this.getCodeNorm();
-      if (c === EOC || !isS(c)) {
-        break;
-      }
-
-      sawSpace = true;
-    }
-
-    if (sawSpace) {
-      this.xmlDeclPossible = false;
-    }
-
-    switch (c) {
-      case LESS:
-        this.state = S_OPEN_WAKA;
-        // We could naively call closeText but in this state, it is not normal
-        // to have text be filled with any data.
-        if (this.text.length !== 0) {
-          throw new Error("no-empty text at start");
-        }
-        break;
-      case EOC:
-        break;
-      default:
-        // have to process this as a text node.
-        // weird, but happens.
-        if (!this.reportedTextBeforeRoot) {
-          this.fail("text data outside of root node.");
-          this.reportedTextBeforeRoot = true;
-        }
-        this.i = this.prevI;
-        this.state = S_TEXT;
-        this.xmlDeclPossible = false;
-    }
-  }
-
-  // @ts-ignore
-  private sText(): void {
-    //
-    // We did try a version of saxes where the S_TEXT state was split in two
-    // states: one for text inside the root element, and one for text
-    // outside. This was avoiding having to test this.tags.length to decide what
-    // implementation to actually use.
-    //
-    // Peformance testing on gigabyte-size files did not show any advantage to
-    // using the two states solution instead of the current one. Conversely, it
-    // made the code a bit more complicated elsewhere. For instance, a comment
-    // can appear before the root element so when a comment ended it was
-    // necessary to determine whether to return to the S_TEXT state or to the
-    // new text-outside-root state.
-    //
-    if (this.tags.length !== 0) {
-      this.handleTextInRoot();
-    }
-    else {
-      this.handleTextOutsideRoot();
-    }
-  }
-
   private handleTextInRoot(): void {
     // This is essentially a specialized version of captureTo which is optimized
     // for performing the ]]> check. A previous version of this code, checked
@@ -1290,6 +1227,7 @@ class SaxesParserImpl {
     this.forbiddenState = forbiddenState;
   }
 
+  // @ts-ignore
   private handleTextOutsideRoot(): void {
     // This is essentially a specialized version of captureTo which is optimized
     // for a specialized task. We keep track of the presence of non-space
@@ -1357,639 +1295,6 @@ class SaxesParserImpl {
       this.reportedTextAfterRoot = true;
     }
   }
-
-  // @ts-ignore
-  private sOpenWaka(): void {
-    // Reminder: a state handler is called with at least one character
-    // available in the current chunk. So the first call to get code inside of
-    // a state handler cannot return ``EOC``. That's why we don't test
-    // for it.
-    const c = this.getCode();
-    // either a /, ?, !, or text is coming next.
-    if (isNameStartChar(c)) {
-      this.state = S_OPEN_TAG;
-      this.i = this.prevI;
-      this.xmlDeclPossible = false;
-    }
-    else {
-      switch (c) {
-        case FORWARD_SLASH:
-          this.state = S_CLOSE_TAG;
-          this.xmlDeclPossible = false;
-          break;
-        case BANG:
-          this.state = S_OPEN_WAKA_BANG;
-          this.openWakaBang = "";
-          this.xmlDeclPossible = false;
-          break;
-        case QUESTION:
-          this.state = S_PI_FIRST_CHAR;
-          break;
-        default:
-          this.fail("disallowed character in tag name");
-          this.state = S_TEXT;
-          this.xmlDeclPossible = false;
-      }
-    }
-  }
-
-  // @ts-ignore
-  private sOpenWakaBang(): void {
-    this.openWakaBang += String.fromCodePoint(this.getCodeNorm());
-    switch (this.openWakaBang) {
-      case "[CDATA[":
-        if (!this.sawRoot && !this.reportedTextBeforeRoot) {
-          this.fail("text data outside of root node.");
-          this.reportedTextBeforeRoot = true;
-        }
-
-        if (this.closedRoot && !this.reportedTextAfterRoot) {
-          this.fail("text data outside of root node.");
-          this.reportedTextAfterRoot = true;
-        }
-        this.state = S_CDATA;
-        this.openWakaBang = "";
-        break;
-      case "--":
-        this.state = S_COMMENT;
-        this.openWakaBang = "";
-        break;
-      case "DOCTYPE":
-        this.state = S_DOCTYPE;
-        if (this.doctype || this.sawRoot) {
-          this.fail("inappropriately located doctype declaration.");
-        }
-        this.openWakaBang = "";
-        break;
-      default:
-        // 7 happens to be the maximum length of the string that can possibly
-        // match one of the cases above.
-        if (this.openWakaBang.length >= 7) {
-          this.fail("incorrect syntax.");
-        }
-    }
-  }
-
-  // @ts-ignore
-  private sDoctype(): void {
-    const c = this.captureTo(DOCTYPE_TERMINATOR);
-    switch (c) {
-      case GREATER:
-        this.ondoctype(this.text);
-        this.text = "";
-        this.state = S_TEXT;
-        this.doctype = true; // just remember that we saw it.
-        break;
-      case EOC:
-        break;
-      default:
-        this.text += String.fromCodePoint(c);
-        if (c === OPEN_BRACKET) {
-          this.state = S_DTD;
-        }
-        else if (isQuote(c)) {
-          this.state = S_DOCTYPE_QUOTE;
-          this.q = c;
-        }
-    }
-  }
-
-  // @ts-ignore
-  private sDoctypeQuote(): void {
-    const q = this.q!;
-    if (this.captureToChar(q)) {
-      this.text += String.fromCodePoint(q);
-      this.q = null;
-      this.state = S_DOCTYPE;
-    }
-  }
-
-  // @ts-ignore
-  private sDTD(): void {
-    const c = this.captureTo(DTD_TERMINATOR);
-    if (c === EOC) {
-      return;
-    }
-
-    this.text += String.fromCodePoint(c);
-    if (c === CLOSE_BRACKET) {
-      this.state = S_DOCTYPE;
-    }
-    else if (c === LESS) {
-      this.state = S_DTD_OPEN_WAKA;
-    }
-    else if (isQuote(c)) {
-      this.state = S_DTD_QUOTED;
-      this.q = c;
-    }
-  }
-
-  // @ts-ignore
-  private sDTDQuoted(): void {
-    const q = this.q!;
-    if (this.captureToChar(q)) {
-      this.text += String.fromCodePoint(q);
-      this.state = S_DTD;
-      this.q = null;
-    }
-  }
-
-  // @ts-ignore
-  private sDTDOpenWaka(): void {
-    const c = this.getCodeNorm();
-    this.text += String.fromCodePoint(c);
-    switch (c) {
-      case BANG:
-        this.state = S_DTD_OPEN_WAKA_BANG;
-        this.openWakaBang = "";
-        break;
-      case QUESTION:
-        this.state = S_DTD_PI;
-        break;
-      default:
-        this.state = S_DTD;
-    }
-  }
-
-  // @ts-ignore
-  private sDTDOpenWakaBang(): void {
-    const char = String.fromCodePoint(this.getCodeNorm());
-    const owb = this.openWakaBang += char;
-    this.text += char;
-    if (owb !== "-") {
-      this.state = owb === "--" ? S_DTD_COMMENT : S_DTD;
-      this.openWakaBang = "";
-    }
-  }
-
-  // @ts-ignore
-  private sDTDComment(): void {
-    if (this.captureToChar(MINUS)) {
-      this.text += "-";
-      this.state = S_DTD_COMMENT_ENDING;
-    }
-  }
-
-  // @ts-ignore
-  private sDTDCommentEnding(): void {
-    const c = this.getCodeNorm();
-    this.text += String.fromCodePoint(c);
-    this.state = c === MINUS ? S_DTD_COMMENT_ENDED : S_DTD_COMMENT;
-  }
-
-  // @ts-ignore
-  private sDTDCommentEnded(): void {
-    const c = this.getCodeNorm();
-    this.text += String.fromCodePoint(c);
-    if (c === GREATER) {
-      this.state = S_DTD;
-    }
-    else {
-      this.fail("malformed comment.");
-      // <!-- blah -- bloo --> will be recorded as
-      // a comment of " blah -- bloo "
-      this.state = S_DTD_COMMENT;
-    }
-  }
-
-  // @ts-ignore
-  private sDTDPI(): void {
-    if (this.captureToChar(QUESTION)) {
-      this.text += "?";
-      this.state = S_DTD_PI_ENDING;
-    }
-  }
-
-  // @ts-ignore
-  private sDTDPIEnding(): void {
-    const c = this.getCodeNorm();
-    this.text += String.fromCodePoint(c);
-    if (c === GREATER) {
-      this.state = S_DTD;
-    }
-  }
-
-  // @ts-ignore
-  private sComment(): void {
-    if (this.captureToChar(MINUS)) {
-      this.state = S_COMMENT_ENDING;
-    }
-  }
-
-  // @ts-ignore
-  private sCommentEnding(): void {
-    const c = this.getCodeNorm();
-    if (c === MINUS) {
-      this.state = S_COMMENT_ENDED;
-      this.oncomment(this.text);
-      this.text = "";
-    }
-    else {
-      this.text += `-${String.fromCodePoint(c)}`;
-      this.state = S_COMMENT;
-    }
-  }
-
-  // @ts-ignore
-  private sCommentEnded(): void {
-    const c = this.getCodeNorm();
-    if (c !== GREATER) {
-      this.fail("malformed comment.");
-      // <!-- blah -- bloo --> will be recorded as
-      // a comment of " blah -- bloo "
-      this.text += `--${String.fromCodePoint(c)}`;
-      this.state = S_COMMENT;
-    }
-    else {
-      this.state = S_TEXT;
-    }
-  }
-
-  // @ts-ignore
-  private sCData(): void {
-    if (this.captureToChar(CLOSE_BRACKET)) {
-      this.state = S_CDATA_ENDING;
-    }
-  }
-
-  // @ts-ignore
-  private sCDataEnding(): void {
-    const c = this.getCodeNorm();
-    if (c === CLOSE_BRACKET) {
-      this.state = S_CDATA_ENDING_2;
-    }
-    else {
-      this.text += `]${String.fromCodePoint(c)}`;
-      this.state = S_CDATA;
-    }
-  }
-
-  // @ts-ignore
-  private sCDataEnding2(): void {
-    const c = this.getCodeNorm();
-    switch (c) {
-      case GREATER:
-        this.oncdata(this.text);
-        this.text = "";
-        this.state = S_TEXT;
-        break;
-      case CLOSE_BRACKET:
-        this.text += "]";
-        break;
-      default:
-        this.text += `]]${String.fromCodePoint(c)}`;
-        this.state = S_CDATA;
-    }
-  }
-
-  // @ts-ignore
-  private sPIFirstChar(): void {
-    const c = this.getCodeNorm();
-    if (this.nameStartCheck(c)) {
-      this.piTarget += String.fromCodePoint(c);
-      this.state = S_PI_REST;
-    }
-    else if (c === QUESTION || isS(c)) {
-      this.fail("processing instruction without a target.");
-      this.state = c === QUESTION ? S_PI_ENDING : S_PI_BODY;
-    }
-    else {
-      this.fail("disallowed character in processing instruction name.");
-      this.piTarget += String.fromCodePoint(c);
-      this.state = S_PI_REST;
-    }
-  }
-
-  // @ts-ignore
-  private sPIRest(): void {
-    const c = this.captureWhileNameCheck("piTarget");
-    if (c === QUESTION || isS(c)) {
-      if (this.piTarget === "xml") {
-        if (!this.xmlDeclPossible) {
-          this.fail("an XML declaration must be at the start of the document.");
-        }
-
-        this.state = c === QUESTION ? S_XML_DECL_ENDING : S_XML_DECL_NAME_START;
-      }
-      else {
-        this.state = c === QUESTION ? S_PI_ENDING : S_PI_BODY;
-      }
-    }
-    else if (c !== EOC) {
-      this.fail("disallowed character in processing instruction name.");
-      this.piTarget += String.fromCodePoint(c);
-    }
-  }
-
-  // @ts-ignore
-  private sPIBody(): void {
-    if (this.text.length === 0) {
-      const c = this.getCodeNorm();
-      if (c === QUESTION) {
-        this.state = S_PI_ENDING;
-      }
-      else if (!isS(c)) {
-        this.text = String.fromCodePoint(c);
-      }
-    }
-    // The question mark character is not valid inside any of the XML
-    // declaration name/value pairs.
-    else if (this.captureToChar(QUESTION)) {
-      this.state = S_PI_ENDING;
-    }
-  }
-
-  // @ts-ignore
-  private sXMLDeclNameStart(): void {
-    let c = this.getCodeNorm();
-    if (isS(c)) {
-      c = this.skipSpaces();
-    }
-    else if (this.requiredSeparator && c !== QUESTION) {
-      this.fail("whitespace required.");
-    }
-    this.requiredSeparator = false;
-
-    // The question mark character is not valid inside any of the XML
-    // declaration name/value pairs.
-    if (c === QUESTION) {
-      // This is the only state from which it is valid to go to
-      // S_XML_DECL_ENDING.
-      this.state = S_XML_DECL_ENDING;
-      return;
-    }
-
-    if (c !== EOC) {
-      this.state = S_XML_DECL_NAME;
-      this.xmlDeclName = String.fromCodePoint(c);
-    }
-  }
-
-  // @ts-ignore
-  private sXMLDeclName(): void {
-    const c = this.captureTo(XML_DECL_NAME_TERMINATOR);
-    // The question mark character is not valid inside any of the XML
-    // declaration name/value pairs.
-    if (c === QUESTION) {
-      this.state = S_XML_DECL_ENDING;
-      this.xmlDeclName += this.text;
-      this.text = "";
-      this.fail("XML declaration is incomplete.");
-      return;
-    }
-
-    if (!(isS(c) || c === EQUAL)) {
-      return;
-    }
-
-    this.xmlDeclName += this.text;
-    this.text = "";
-    if (!this.xmlDeclExpects.includes(this.xmlDeclName)) {
-      switch (this.xmlDeclName.length) {
-        case 0:
-          this.fail("did not expect any more name/value pairs.");
-          break;
-        case 1:
-          this.fail(`expected the name ${this.xmlDeclExpects[0]}.`);
-          break;
-        default:
-          this.fail(`expected one of ${this.xmlDeclExpects.join(", ")}`);
-      }
-    }
-
-    this.state = c === EQUAL ? S_XML_DECL_VALUE_START : S_XML_DECL_EQ;
-  }
-
-  // @ts-ignore
-  private sXMLDeclEq(): void {
-    const c = this.getCodeNorm();
-    // The question mark character is not valid inside any of the XML
-    // declaration name/value pairs.
-    if (c === QUESTION) {
-      this.state = S_XML_DECL_ENDING;
-      this.fail("XML declaration is incomplete.");
-      return;
-    }
-
-    if (isS(c)) {
-      return;
-    }
-
-    if (c !== EQUAL) {
-      this.fail("value required.");
-    }
-
-    this.state = S_XML_DECL_VALUE_START;
-  }
-
-  // @ts-ignore
-  private sXMLDeclValueStart(): void {
-    const c = this.getCodeNorm();
-    // The question mark character is not valid inside any of the XML
-    // declaration name/value pairs.
-    if (c === QUESTION) {
-      this.state = S_XML_DECL_ENDING;
-      this.fail("XML declaration is incomplete.");
-      return;
-    }
-
-    if (isS(c)) {
-      return;
-    }
-
-    if (!isQuote(c)) {
-      this.fail("value must be quoted.");
-      this.q = SPACE;
-    }
-    else {
-      this.q = c;
-    }
-
-    this.state = S_XML_DECL_VALUE;
-  }
-
-  // @ts-ignore
-  private sXMLDeclValue(): void {
-    const c = this.captureTo([this.q!, QUESTION]);
-
-    // The question mark character is not valid inside any of the XML
-    // declaration name/value pairs.
-    if (c === QUESTION) {
-      this.state = S_XML_DECL_ENDING;
-      this.text = "";
-      this.fail("XML declaration is incomplete.");
-      return;
-    }
-
-    if (c === EOC) {
-      return;
-    }
-
-    const value = this.text;
-    this.text = "";
-    switch (this.xmlDeclName) {
-      case "version": {
-        this.xmlDeclExpects = ["encoding", "standalone"];
-        const version = value;
-        this.xmlDecl.version = version;
-        // This is the test specified by XML 1.0 but it is fine for XML 1.1.
-        if (!/^1\.[0-9]+$/.test(version)) {
-          this.fail("version number must match /^1\\.[0-9]+$/.");
-        }
-        // When forceXMLVersion is set, the XML declaration is ignored.
-        else if (!(this.opt.forceXMLVersion as boolean)) {
-          this.setXMLVersion(version);
-        }
-        break;
-      }
-      case "encoding":
-        if (!/^[A-Za-z][A-Za-z0-9._-]*$/.test(value)) {
-          this.fail("encoding value must match \
-/^[A-Za-z0-9][A-Za-z0-9._-]*$/.");
-        }
-        this.xmlDeclExpects = ["standalone"];
-        this.xmlDecl.encoding = value;
-        break;
-      case "standalone":
-        if (value !== "yes" && value !== "no") {
-          this.fail("standalone value must match \"yes\" or \"no\".");
-        }
-        this.xmlDeclExpects = [];
-        this.xmlDecl.standalone = value;
-        break;
-      default:
-        // We don't need to raise an error here since we've already raised one
-        // when checking what name was expected.
-    }
-    this.xmlDeclName = "";
-    this.state = S_XML_DECL_NAME_START;
-    this.requiredSeparator = true;
-  }
-
-  // @ts-ignore
-  private sPIEnding(): void {
-    const c = this.getCodeNorm();
-    if (c === GREATER) {
-      if (this.piTarget.trim().toLowerCase() === "xml") {
-        this.fail(
-          "the XML declaration must appear at the start of the document.");
-      }
-      this.onprocessinginstruction({
-        target: this.piTarget,
-        body: this.text,
-      });
-      this.piTarget = this.text = "";
-      this.state = S_TEXT;
-    }
-    else if (c === QUESTION) {
-      // We ran into ?? as part of a processing instruction. We initially
-      // took the first ? as a sign that the PI was ending, but it is
-      // not. So we have to add it to the body but we take the new ? as a
-      // sign that the PI is ending.
-      this.text += "?";
-    }
-    else {
-      this.text += `?${String.fromCodePoint(c)}`;
-      this.state = S_PI_BODY;
-    }
-    this.xmlDeclPossible = false;
-  }
-
-  // @ts-ignore
-  private sXMLDeclEnding(): void {
-    const c = this.getCodeNorm();
-    if (c === GREATER) {
-      if (this.piTarget !== "xml") {
-        this.fail("processing instructions are not allowed before root.");
-      }
-      else if (this.xmlDeclName !== "version" &&
-               this.xmlDeclExpects.includes("version")) {
-        this.fail("XML declaration must contain a version.");
-      }
-      this.xmlDeclName = "";
-      this.requiredSeparator = false;
-      this.piTarget = this.text = "";
-      this.state = S_TEXT;
-    }
-    else {
-      // We got here because the previous character was a ?, but the question
-      // mark character is not valid inside any of the XML declaration
-      // name/value pairs.
-      this.fail("The character ? is disallowed anywhere in XML declarations.");
-    }
-    this.xmlDeclPossible = false;
-  }
-
-  // @ts-ignore
-  private sOpenTag(): void {
-    const c = this.captureNameChars();
-    if (c === EOC) {
-      return;
-    }
-
-    const tag: SaxesTagIncomplete = this.tag = {
-      name: this.name,
-      attributes: Object.create(null) as Record<string, string>,
-    };
-    this.name = "";
-
-    if (this.xmlnsOpt) {
-      tag.ns = Object.create(null);
-    }
-
-    this.onopentagstart(tag);
-    this.sawRoot = true;
-    if (!this.fragmentOpt && this.closedRoot) {
-      this.fail("documents may contain only one root.");
-    }
-
-    switch (c) {
-      case GREATER:
-        this.openTag();
-        break;
-      case FORWARD_SLASH:
-        this.state = S_OPEN_TAG_SLASH;
-        break;
-      default:
-        if (!isS(c)) {
-          this.fail("disallowed character in tag name.");
-        }
-        this.state = S_ATTRIB;
-    }
-  }
-
-  // @ts-ignore
-  private sOpenTagSlash(): void {
-    if (this.getCode() === GREATER) {
-      this.openSelfClosingTag();
-    }
-    else {
-      this.fail("forward-slash in opening tag not followed by >.");
-      this.state = S_ATTRIB;
-    }
-  }
-
-  // @ts-ignore
-  private sAttrib(): void {
-    const c = this.skipSpaces();
-    if (c === EOC) {
-      return;
-    }
-    if (isNameStartChar(c)) {
-      this.i = this.prevI;
-      this.state = S_ATTRIB_NAME;
-    }
-    else if (c === GREATER) {
-      this.openTag();
-    }
-    else if (c === FORWARD_SLASH) {
-      this.state = S_OPEN_TAG_SLASH;
-    }
-    else {
-      this.fail("disallowed character in attribute name.");
-    }
-  }
-
   private pushAttribNS10(name: string, value: string): void {
     const { prefix, local } = this.qname(name);
     this.attribList.push({ name, prefix, local, value, uri: undefined });
@@ -2026,229 +1331,6 @@ class SaxesParserImpl {
   private pushAttribPlain(name: string, value: string): void {
     this.attribList.push({ name, value });
   }
-
-  // @ts-ignore
-  private sAttribName(): void {
-    const c = this.captureNameChars();
-    if (c === EQUAL) {
-      this.state = S_ATTRIB_VALUE;
-    }
-    else if (isS(c)) {
-      this.state = S_ATTRIB_NAME_SAW_WHITE;
-    }
-    else if (c === GREATER) {
-      this.fail("attribute without value.");
-      this.pushAttrib(this.name, this.name);
-      this.name = this.text = "";
-      this.openTag();
-    }
-    else if (c !== EOC) {
-      this.fail("disallowed character in attribute name.");
-    }
-  }
-
-  // @ts-ignore
-  private sAttribNameSawWhite(): void {
-    const c = this.skipSpaces();
-    switch (c) {
-      case EOC:
-        return;
-      case EQUAL:
-        this.state = S_ATTRIB_VALUE;
-        break;
-      default:
-        this.fail("attribute without value.");
-        // Should we do this???
-        // this.tag.attributes[this.name] = "";
-        this.text = "";
-        this.name = "";
-        if (c === GREATER) {
-          this.openTag();
-        }
-        else if (isNameStartChar(c)) {
-          this.i = this.prevI;
-          this.state = S_ATTRIB_NAME;
-        }
-        else {
-          this.fail("disallowed character in attribute name.");
-          this.state = S_ATTRIB;
-        }
-    }
-  }
-
-  // @ts-ignore
-  private sAttribValue(): void {
-    const c = this.getCodeNorm();
-    if (isQuote(c)) {
-      this.q = c;
-      this.state = S_ATTRIB_VALUE_QUOTED;
-    }
-    else if (!isS(c)) {
-      this.fail("unquoted attribute value.");
-      this.state = S_ATTRIB_VALUE_UNQUOTED;
-      this.i = this.prevI;
-    }
-  }
-
-  // @ts-ignore
-  private sAttribValueQuoted(): void {
-    // We deliberately do not use captureTo here. The specialized code we use
-    // here is faster than using captureTo.
-    const { q } = this;
-    let { i: start } = this;
-    const { chunk } = this;
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      const code = this.getCode();
-      switch (code) {
-        case q:
-          this.pushAttrib(this.name,
-                          this.text + chunk.slice(start, this.prevI));
-          this.name = this.text = "";
-          this.q = null;
-          this.state = S_ATTRIB_VALUE_CLOSED;
-          return;
-        case AMP:
-          this.text += chunk.slice(start, this.prevI);
-          this.state = S_ENTITY;
-          this.entityReturnState = S_ATTRIB_VALUE_QUOTED;
-          return;
-        case NL:
-        case NL_LIKE:
-        case TAB:
-          this.text += `${chunk.slice(start, this.prevI)} `;
-          start = this.i;
-          break;
-        case LESS:
-          this.text += chunk.slice(start, this.prevI);
-          this.fail("disallowed character.");
-          return;
-        case EOC:
-          this.text += chunk.slice(start);
-          return;
-        default:
-      }
-    }
-  }
-
-  // @ts-ignore
-  private sAttribValueClosed(): void {
-    const c = this.getCodeNorm();
-    if (isS(c)) {
-      this.state = S_ATTRIB;
-    }
-    else if (c === GREATER) {
-      this.openTag();
-    }
-    else if (c === FORWARD_SLASH) {
-      this.state = S_OPEN_TAG_SLASH;
-    }
-    else if (isNameStartChar(c)) {
-      this.fail("no whitespace between attributes.");
-      this.i = this.prevI;
-      this.state = S_ATTRIB_NAME;
-    }
-    else {
-      this.fail("disallowed character in attribute name.");
-    }
-  }
-
-  // @ts-ignore
-  private sAttribValueUnquoted(): void {
-    // We don't do anything regarding EOL or space handling for unquoted
-    // attributes. We already have failed by the time we get here, and the
-    // contract that saxes upholds states that upon failure, it is not safe to
-    // rely on the data passed to event handlers (other than
-    // ``onerror``). Passing "bad" data is not a problem.
-    const c = this.captureTo(ATTRIB_VALUE_UNQUOTED_TERMINATOR);
-    switch (c) {
-      case AMP:
-        this.state = S_ENTITY;
-        this.entityReturnState = S_ATTRIB_VALUE_UNQUOTED;
-        break;
-      case LESS:
-        this.fail("disallowed character.");
-        break;
-      case EOC:
-        break;
-      default:
-        if (this.text.includes("]]>")) {
-          this.fail("the string \"]]>\" is disallowed in char data.");
-        }
-        this.pushAttrib(this.name, this.text);
-        this.name = this.text = "";
-        if (c === GREATER) {
-          this.openTag();
-        }
-        else {
-          this.state = S_ATTRIB;
-        }
-    }
-  }
-
-  // @ts-ignore
-  private sCloseTag(): void {
-    const c = this.captureNameChars();
-    if (c === GREATER) {
-      this.closeTag();
-    }
-    else if (isS(c)) {
-      this.state = S_CLOSE_TAG_SAW_WHITE;
-    }
-    else if (c !== EOC) {
-      this.fail("disallowed character in closing tag.");
-    }
-  }
-
-  // @ts-ignore
-  private sCloseTagSawWhite(): void {
-    switch (this.skipSpaces()) {
-      case GREATER:
-        this.closeTag();
-        break;
-      case EOC:
-        break;
-      default:
-        this.fail("disallowed character in closing tag.");
-    }
-  }
-
-  // @ts-ignore
-  private sEntity(): void {
-    // This is essentially a specialized version of captureToChar(SEMICOLON...)
-    let { i: start } = this;
-    const { chunk } = this;
-    // eslint-disable-next-line no-labels, no-restricted-syntax
-    loop:
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      switch (this.getCode()) {
-        case NL_LIKE:
-          this.entity += `${chunk.slice(start, this.prevI)}\n`;
-          start = this.i;
-          break;
-        case SEMICOLON:
-          this.entity += chunk.slice(start, this.prevI);
-          this.state = this.entityReturnState!;
-          if (this.entity === "") {
-            this.fail("empty entity name.");
-            this.text += "&;";
-            return;
-          }
-          this.text += this.parseEntity(this.entity);
-          this.entity = "";
-          // eslint-disable-next-line no-labels
-          break loop;
-        case EOC:
-          this.entity += chunk.slice(start);
-          // eslint-disable-next-line no-labels
-          break loop;
-        default:
-      }
-    }
-  }
-
-  // END OF STATE HANDLERS
 
   /**
    * End parsing. This performs final well-formedness checks and resets the
@@ -2413,6 +1495,7 @@ class SaxesParserImpl {
    * the whole tag. This method checks for well-formeness and then emits
    * ``onopentag``.
    */
+  // @ts-ignore
   private openTag(): void {
     this.processAttribs();
 
@@ -2433,6 +1516,7 @@ class SaxesParserImpl {
    * seen the whole tag. This method checks for well-formeness and then emits
    * ``onopentag`` and ``onclosetag``.
    */
+  // @ts-ignore
   private openSelfClosingTag(): void {
     this.processAttribs();
 
@@ -2457,6 +1541,7 @@ class SaxesParserImpl {
    * the whole tag. This method checks for well-formeness and then emits
    * ``onclosetag``.
    */
+  // @ts-ignore
   private closeTag(): void {
     const { tags, name } = this;
 
@@ -2497,6 +1582,7 @@ class SaxesParserImpl {
    *
    * @returns The parsed entity.
    */
+  // @ts-ignore
   private parseEntity(entity: string): string {
     // startsWith would be significantly slower for this test.
     // eslint-disable-next-line max-len
@@ -2556,3 +1642,971 @@ export interface SaxesParserConstructor {
 
 export const SaxesParser: SaxesParserConstructor = SaxesParserImpl;
 export type SaxesParser = SaxesParserImpl;
+
+//
+// State table
+//
+
+//
+// Splitting off the state table into an array like this yields significant
+// performance improvements over the previous implementation in which the state
+// functions were methods on SaxesParserImpl (we did ``this[state]()``).
+//
+// For the record:
+//
+// * A huge switch is hard for JavaScript engines to optimize. sax-js used a
+//    huge switch. saxes got faster than sax-js after getting away from that.
+//
+// * An object with mixed number/string indices is **slow** so just merging the
+//   state table with SaxesParserImpl would not work.
+//
+// Unfortunately TypeScript has no notion of "friend functiod/class" so in order
+// for the state engine to be able to just access the internals, we need an
+// interface that exposes the internals of SaxesParserImpl.
+//
+// This arrangement also explains the @ts-ignore we need on some fields of
+// SaxesParserImpl. It looks to the TS compiler like the fields are not used
+// when in fact they are used by the state code.
+//
+
+type StateTableThis =
+  // This takes care of all the public interface.
+  { [k in keyof SaxesParserImpl]: SaxesParserImpl[k] } & {
+    fragmentOpt: SaxesParserImpl["fragmentOpt"];
+    xmlnsOpt: SaxesParserImpl["xmlnsOpt"];
+    nameStartCheck: SaxesParserImpl["nameStartCheck"];
+    openWakaBang: SaxesParserImpl["openWakaBang"];
+    text: SaxesParserImpl["text"];
+    name: SaxesParserImpl["name"];
+    piTarget: SaxesParserImpl["piTarget"];
+    entity: SaxesParserImpl["entity"];
+    xmlDeclName: SaxesParserImpl["xmlDeclName"];
+    q: SaxesParserImpl["q"];
+    tags: SaxesParserImpl["tags"];
+    tag: SaxesParserImpl["tag"];
+    chunk: SaxesParserImpl["chunk"];
+    i: SaxesParserImpl["i"];
+    prevI: SaxesParserImpl["prevI"];
+    state: SaxesParserImpl["state"];
+    reportedTextBeforeRoot: SaxesParserImpl["reportedTextBeforeRoot"];
+    reportedTextAfterRoot: SaxesParserImpl["reportedTextAfterRoot"];
+    closedRoot: SaxesParserImpl["closedRoot"];
+    sawRoot: SaxesParserImpl["sawRoot"];
+    xmlDeclPossible: SaxesParserImpl["xmlDeclPossible"];
+    xmlDeclExpects: SaxesParserImpl["xmlDeclExpects"];
+    requiredSeparator: SaxesParserImpl["requiredSeparator"];
+    entityReturnState: SaxesParserImpl["entityReturnState"];
+    doctype: SaxesParserImpl["doctype"];
+
+    getCode: SaxesParserImpl["getCode"];
+    pushAttrib: SaxesParserImpl["pushAttrib"];
+
+    getCodeNorm: SaxesParserImpl["getCodeNorm"];
+    captureTo: SaxesParserImpl["captureTo"];
+    captureToChar: SaxesParserImpl["captureToChar"];
+    captureNameChars: SaxesParserImpl["captureNameChars"];
+    captureWhileNameCheck: SaxesParserImpl["captureWhileNameCheck"];
+    skipSpaces: SaxesParserImpl["skipSpaces"];
+    setXMLVersion: SaxesParserImpl["setXMLVersion"];
+
+    handleTextInRoot: SaxesParserImpl["handleTextInRoot"];
+    handleTextOutsideRoot: SaxesParserImpl["handleTextOutsideRoot"];
+    openTag: SaxesParserImpl["openTag"];
+    openSelfClosingTag: SaxesParserImpl["openSelfClosingTag"];
+    closeTag: SaxesParserImpl["closeTag"];
+    parseEntity: SaxesParserImpl["parseEntity"];
+  };
+
+const stateTable: ((parser: StateTableThis) => void)[] = [
+  function sBeginWhitespace(parser: StateTableThis): void {
+    // We are essentially peeking at the first character of the chunk. Since
+    // S_BEGIN_WHITESPACE can be in effect only when we start working on the
+    // first chunk, the index at which we must look is necessarily 0. Note also
+    // that the following test does not depend on decoding surrogates.
+
+    // If the initial character is 0xFEFF, ignore it.
+    if (parser.chunk.charCodeAt(0) === 0xFEFF) {
+      parser.i++;
+    }
+
+    // This initial loop is a specialized version of skipSpaces. We need to know
+    // whether we've encountered spaces or not because as soon as we run into a
+    // space, an XML declaration is no longer possible. Rather than slow down
+    // skipSpaces even in places where we don't care whether it skipped anything
+    // or not, we use a specialized loop here.
+    let c;
+    let sawSpace = false;
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      c = parser.getCodeNorm();
+      if (c === EOC || !isS(c)) {
+        break;
+      }
+
+      sawSpace = true;
+    }
+
+    if (sawSpace) {
+      parser.xmlDeclPossible = false;
+    }
+
+    switch (c) {
+      case LESS:
+        parser.state = S_OPEN_WAKA;
+        // We could naively call closeText but in this state, it is not normal
+        // to have text be filled with any data.
+        if (parser.text.length !== 0) {
+          throw new Error("no-empty text at start");
+        }
+        break;
+      case EOC:
+        break;
+      default:
+        // have to process this as a text node.
+        // weird, but happens.
+        if (!parser.reportedTextBeforeRoot) {
+          parser.fail("text data outside of root node.");
+          parser.reportedTextBeforeRoot = true;
+        }
+        parser.i = parser.prevI;
+        parser.state = S_TEXT;
+        parser.xmlDeclPossible = false;
+    }
+  },
+
+  function sDoctype(parser: StateTableThis): void {
+    const c = parser.captureTo(DOCTYPE_TERMINATOR);
+    switch (c) {
+      case GREATER:
+        parser.ondoctype(parser.text);
+        parser.text = "";
+        parser.state = S_TEXT;
+        parser.doctype = true; // just remember that we saw it.
+        break;
+      case EOC:
+        break;
+      default:
+        parser.text += String.fromCodePoint(c);
+        if (c === OPEN_BRACKET) {
+          parser.state = S_DTD;
+        }
+        else if (isQuote(c)) {
+          parser.state = S_DOCTYPE_QUOTE;
+          parser.q = c;
+        }
+    }
+  },
+
+  function sDoctypeQuote(parser: StateTableThis): void {
+    const q = parser.q!;
+    if (parser.captureToChar(q)) {
+      parser.text += String.fromCodePoint(q);
+      parser.q = null;
+      parser.state = S_DOCTYPE;
+    }
+  },
+
+  function sDTD(parser: StateTableThis): void {
+    const c = parser.captureTo(DTD_TERMINATOR);
+    if (c === EOC) {
+      return;
+    }
+
+    parser.text += String.fromCodePoint(c);
+    if (c === CLOSE_BRACKET) {
+      parser.state = S_DOCTYPE;
+    }
+    else if (c === LESS) {
+      parser.state = S_DTD_OPEN_WAKA;
+    }
+    else if (isQuote(c)) {
+      parser.state = S_DTD_QUOTED;
+      parser.q = c;
+    }
+  },
+
+  function sDTDQuoted(parser: StateTableThis): void {
+    const q = parser.q!;
+    if (parser.captureToChar(q)) {
+      parser.text += String.fromCodePoint(q);
+      parser.state = S_DTD;
+      parser.q = null;
+    }
+  },
+
+  function sDTDOpenWaka(parser: StateTableThis): void {
+    const c = parser.getCodeNorm();
+    parser.text += String.fromCodePoint(c);
+    switch (c) {
+      case BANG:
+        parser.state = S_DTD_OPEN_WAKA_BANG;
+        parser.openWakaBang = "";
+        break;
+      case QUESTION:
+        parser.state = S_DTD_PI;
+        break;
+      default:
+        parser.state = S_DTD;
+    }
+  },
+
+  function sDTDOpenWakaBang(parser: StateTableThis): void {
+    const char = String.fromCodePoint(parser.getCodeNorm());
+    const owb = parser.openWakaBang += char;
+    parser.text += char;
+    if (owb !== "-") {
+      parser.state = owb === "--" ? S_DTD_COMMENT : S_DTD;
+      parser.openWakaBang = "";
+    }
+  },
+
+  function sDTDComment(parser: StateTableThis): void {
+    if (parser.captureToChar(MINUS)) {
+      parser.text += "-";
+      parser.state = S_DTD_COMMENT_ENDING;
+    }
+  },
+
+  function sDTDCommentEnding(parser: StateTableThis): void {
+    const c = parser.getCodeNorm();
+    parser.text += String.fromCodePoint(c);
+    parser.state = c === MINUS ? S_DTD_COMMENT_ENDED : S_DTD_COMMENT;
+  },
+
+  function sDTDCommentEnded(parser: StateTableThis): void {
+    const c = parser.getCodeNorm();
+    parser.text += String.fromCodePoint(c);
+    if (c === GREATER) {
+      parser.state = S_DTD;
+    }
+    else {
+      parser.fail("malformed comment.");
+      // <!-- blah -- bloo --> will be recorded as
+      // a comment of " blah -- bloo "
+      parser.state = S_DTD_COMMENT;
+    }
+  },
+
+  function sDTDPI(parser: StateTableThis): void {
+    if (parser.captureToChar(QUESTION)) {
+      parser.text += "?";
+      parser.state = S_DTD_PI_ENDING;
+    }
+  },
+
+  function sDTDPIEnding(parser: StateTableThis): void {
+    const c = parser.getCodeNorm();
+    parser.text += String.fromCodePoint(c);
+    if (c === GREATER) {
+      parser.state = S_DTD;
+    }
+  },
+
+  function sText(parser: StateTableThis): void {
+    //
+    // We did try a version of saxes where the S_TEXT state was split in two
+    // states: one for text inside the root element, and one for text
+    // outside. This was avoiding having to test parser.tags.length to decide
+    // what implementation to actually use.
+    //
+    // Peformance testing on gigabyte-size files did not show any advantage to
+    // using the two states solution instead of the current one. Conversely, it
+    // made the code a bit more complicated elsewhere. For instance, a comment
+    // can appear before the root element so when a comment ended it was
+    // necessary to determine whether to return to the S_TEXT state or to the
+    // new text-outside-root state.
+    //
+    if (parser.tags.length !== 0) {
+      parser.handleTextInRoot();
+    }
+    else {
+      parser.handleTextOutsideRoot();
+    }
+  },
+
+  function sEntity(parser: StateTableThis): void {
+    // This is essentially a specialized version of captureToChar(SEMICOLON...)
+    let { i: start } = parser;
+    const { chunk } = parser;
+    // eslint-disable-next-line no-labels, no-restricted-syntax
+    loop:
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      switch (parser.getCode()) {
+        case NL_LIKE:
+          parser.entity += `${chunk.slice(start, parser.prevI)}\n`;
+          start = parser.i;
+          break;
+        case SEMICOLON:
+          parser.entity += chunk.slice(start, parser.prevI);
+          parser.state = parser.entityReturnState!;
+          if (parser.entity === "") {
+            parser.fail("empty entity name.");
+            parser.text += "&;";
+            return;
+          }
+          parser.text += parser.parseEntity(parser.entity);
+          parser.entity = "";
+          // eslint-disable-next-line no-labels
+          break loop;
+        case EOC:
+          parser.entity += chunk.slice(start);
+          // eslint-disable-next-line no-labels
+          break loop;
+        default:
+      }
+    }
+  },
+
+  function sOpenWaka(parser: StateTableThis): void {
+    // Reminder: a state handler is called with at least one character
+    // available in the current chunk. So the first call to get code inside of
+    // a state handler cannot return ``EOC``. That's why we don't test
+    // for it.
+    const c = parser.getCode();
+    // either a /, ?, !, or text is coming next.
+    if (isNameStartChar(c)) {
+      parser.state = S_OPEN_TAG;
+      parser.i = parser.prevI;
+      parser.xmlDeclPossible = false;
+    }
+    else {
+      switch (c) {
+        case FORWARD_SLASH:
+          parser.state = S_CLOSE_TAG;
+          parser.xmlDeclPossible = false;
+          break;
+        case BANG:
+          parser.state = S_OPEN_WAKA_BANG;
+          parser.openWakaBang = "";
+          parser.xmlDeclPossible = false;
+          break;
+        case QUESTION:
+          parser.state = S_PI_FIRST_CHAR;
+          break;
+        default:
+          parser.fail("disallowed character in tag name");
+          parser.state = S_TEXT;
+          parser.xmlDeclPossible = false;
+      }
+    }
+  },
+
+  function sOpenWakaBang(parser: StateTableThis): void {
+    parser.openWakaBang += String.fromCodePoint(parser.getCodeNorm());
+    switch (parser.openWakaBang) {
+      case "[CDATA[":
+        if (!parser.sawRoot && !parser.reportedTextBeforeRoot) {
+          parser.fail("text data outside of root node.");
+          parser.reportedTextBeforeRoot = true;
+        }
+
+        if (parser.closedRoot && !parser.reportedTextAfterRoot) {
+          parser.fail("text data outside of root node.");
+          parser.reportedTextAfterRoot = true;
+        }
+        parser.state = S_CDATA;
+        parser.openWakaBang = "";
+        break;
+      case "--":
+        parser.state = S_COMMENT;
+        parser.openWakaBang = "";
+        break;
+      case "DOCTYPE":
+        parser.state = S_DOCTYPE;
+        if (parser.doctype || parser.sawRoot) {
+          parser.fail("inappropriately located doctype declaration.");
+        }
+        parser.openWakaBang = "";
+        break;
+      default:
+        // 7 happens to be the maximum length of the string that can possibly
+        // match one of the cases above.
+        if (parser.openWakaBang.length >= 7) {
+          parser.fail("incorrect syntax.");
+        }
+    }
+  },
+
+  function sComment(parser: StateTableThis): void {
+    if (parser.captureToChar(MINUS)) {
+      parser.state = S_COMMENT_ENDING;
+    }
+  },
+
+  function sCommentEnding(parser: StateTableThis): void {
+    const c = parser.getCodeNorm();
+    if (c === MINUS) {
+      parser.state = S_COMMENT_ENDED;
+      parser.oncomment(parser.text);
+      parser.text = "";
+    }
+    else {
+      parser.text += `-${String.fromCodePoint(c)}`;
+      parser.state = S_COMMENT;
+    }
+  },
+
+  function sCommentEnded(parser: StateTableThis): void {
+    const c = parser.getCodeNorm();
+    if (c !== GREATER) {
+      parser.fail("malformed comment.");
+      // <!-- blah -- bloo --> will be recorded as
+      // a comment of " blah -- bloo "
+      parser.text += `--${String.fromCodePoint(c)}`;
+      parser.state = S_COMMENT;
+    }
+    else {
+      parser.state = S_TEXT;
+    }
+  },
+
+  function sCData(parser: StateTableThis): void {
+    if (parser.captureToChar(CLOSE_BRACKET)) {
+      parser.state = S_CDATA_ENDING;
+    }
+  },
+
+  function sCDataEnding(parser: StateTableThis): void {
+    const c = parser.getCodeNorm();
+    if (c === CLOSE_BRACKET) {
+      parser.state = S_CDATA_ENDING_2;
+    }
+    else {
+      parser.text += `]${String.fromCodePoint(c)}`;
+      parser.state = S_CDATA;
+    }
+  },
+
+  function sCDataEnding2(parser: StateTableThis): void {
+    const c = parser.getCodeNorm();
+    switch (c) {
+      case GREATER:
+        parser.oncdata(parser.text);
+        parser.text = "";
+        parser.state = S_TEXT;
+        break;
+      case CLOSE_BRACKET:
+        parser.text += "]";
+        break;
+      default:
+        parser.text += `]]${String.fromCodePoint(c)}`;
+        parser.state = S_CDATA;
+    }
+  },
+
+  function sPIFirstChar(parser: StateTableThis): void {
+    const c = parser.getCodeNorm();
+    if (parser.nameStartCheck(c)) {
+      parser.piTarget += String.fromCodePoint(c);
+      parser.state = S_PI_REST;
+    }
+    else if (c === QUESTION || isS(c)) {
+      parser.fail("processing instruction without a target.");
+      parser.state = c === QUESTION ? S_PI_ENDING : S_PI_BODY;
+    }
+    else {
+      parser.fail("disallowed character in processing instruction name.");
+      parser.piTarget += String.fromCodePoint(c);
+      parser.state = S_PI_REST;
+    }
+  },
+
+  function sPIRest(parser: StateTableThis): void {
+    const c = parser.captureWhileNameCheck("piTarget");
+    if (c === QUESTION || isS(c)) {
+      if (parser.piTarget === "xml") {
+        if (!parser.xmlDeclPossible) {
+          parser.fail(
+            "an XML declaration must be at the start of the document.");
+        }
+
+        parser.state =
+          c === QUESTION ? S_XML_DECL_ENDING : S_XML_DECL_NAME_START;
+      }
+      else {
+        parser.state = c === QUESTION ? S_PI_ENDING : S_PI_BODY;
+      }
+    }
+    else if (c !== EOC) {
+      parser.fail("disallowed character in processing instruction name.");
+      parser.piTarget += String.fromCodePoint(c);
+    }
+  },
+
+  function sPIBody(parser: StateTableThis): void {
+    if (parser.text.length === 0) {
+      const c = parser.getCodeNorm();
+      if (c === QUESTION) {
+        parser.state = S_PI_ENDING;
+      }
+      else if (!isS(c)) {
+        parser.text = String.fromCodePoint(c);
+      }
+    }
+    // The question mark character is not valid inside any of the XML
+    // declaration name/value pairs.
+    else if (parser.captureToChar(QUESTION)) {
+      parser.state = S_PI_ENDING;
+    }
+  },
+
+  function sPIEnding(parser: StateTableThis): void {
+    const c = parser.getCodeNorm();
+    if (c === GREATER) {
+      if (parser.piTarget.trim().toLowerCase() === "xml") {
+        parser.fail(
+          "the XML declaration must appear at the start of the document.");
+      }
+      parser.onprocessinginstruction({
+        target: parser.piTarget,
+        body: parser.text,
+      });
+      parser.piTarget = parser.text = "";
+      parser.state = S_TEXT;
+    }
+    else if (c === QUESTION) {
+      // We ran into ?? as part of a processing instruction. We initially
+      // took the first ? as a sign that the PI was ending, but it is
+      // not. So we have to add it to the body but we take the new ? as a
+      // sign that the PI is ending.
+      parser.text += "?";
+    }
+    else {
+      parser.text += `?${String.fromCodePoint(c)}`;
+      parser.state = S_PI_BODY;
+    }
+    parser.xmlDeclPossible = false;
+  },
+
+  function sXMLDeclNameStart(parser: StateTableThis): void {
+    let c = parser.getCodeNorm();
+    if (isS(c)) {
+      c = parser.skipSpaces();
+    }
+    else if (parser.requiredSeparator && c !== QUESTION) {
+      parser.fail("whitespace required.");
+    }
+    parser.requiredSeparator = false;
+
+    // The question mark character is not valid inside any of the XML
+    // declaration name/value pairs.
+    if (c === QUESTION) {
+      // This is the only state from which it is valid to go to
+      // S_XML_DECL_ENDING.
+      parser.state = S_XML_DECL_ENDING;
+      return;
+    }
+
+    if (c !== EOC) {
+      parser.state = S_XML_DECL_NAME;
+      parser.xmlDeclName = String.fromCodePoint(c);
+    }
+  },
+
+  function sXMLDeclName(parser: StateTableThis): void {
+    const c = parser.captureTo(XML_DECL_NAME_TERMINATOR);
+    // The question mark character is not valid inside any of the XML
+    // declaration name/value pairs.
+    if (c === QUESTION) {
+      parser.state = S_XML_DECL_ENDING;
+      parser.xmlDeclName += parser.text;
+      parser.text = "";
+      parser.fail("XML declaration is incomplete.");
+      return;
+    }
+
+    if (!(isS(c) || c === EQUAL)) {
+      return;
+    }
+
+    parser.xmlDeclName += parser.text;
+    parser.text = "";
+    if (!parser.xmlDeclExpects.includes(parser.xmlDeclName)) {
+      switch (parser.xmlDeclName.length) {
+        case 0:
+          parser.fail("did not expect any more name/value pairs.");
+          break;
+        case 1:
+          parser.fail(`expected the name ${parser.xmlDeclExpects[0]}.`);
+          break;
+        default:
+          parser.fail(`expected one of ${parser.xmlDeclExpects.join(", ")}`);
+      }
+    }
+
+    parser.state = c === EQUAL ? S_XML_DECL_VALUE_START : S_XML_DECL_EQ;
+  },
+
+  function sXMLDeclEq(parser: StateTableThis): void {
+    const c = parser.getCodeNorm();
+    // The question mark character is not valid inside any of the XML
+    // declaration name/value pairs.
+    if (c === QUESTION) {
+      parser.state = S_XML_DECL_ENDING;
+      parser.fail("XML declaration is incomplete.");
+      return;
+    }
+
+    if (isS(c)) {
+      return;
+    }
+
+    if (c !== EQUAL) {
+      parser.fail("value required.");
+    }
+
+    parser.state = S_XML_DECL_VALUE_START;
+  },
+
+  function sXMLDeclValueStart(parser: StateTableThis): void {
+    const c = parser.getCodeNorm();
+    // The question mark character is not valid inside any of the XML
+    // declaration name/value pairs.
+    if (c === QUESTION) {
+      parser.state = S_XML_DECL_ENDING;
+      parser.fail("XML declaration is incomplete.");
+      return;
+    }
+
+    if (isS(c)) {
+      return;
+    }
+
+    if (!isQuote(c)) {
+      parser.fail("value must be quoted.");
+      parser.q = SPACE;
+    }
+    else {
+      parser.q = c;
+    }
+
+    parser.state = S_XML_DECL_VALUE;
+  },
+
+  function sXMLDeclValue(parser: StateTableThis): void {
+    const c = parser.captureTo([parser.q!, QUESTION]);
+
+    // The question mark character is not valid inside any of the XML
+    // declaration name/value pairs.
+    if (c === QUESTION) {
+      parser.state = S_XML_DECL_ENDING;
+      parser.text = "";
+      parser.fail("XML declaration is incomplete.");
+      return;
+    }
+
+    if (c === EOC) {
+      return;
+    }
+
+    const value = parser.text;
+    parser.text = "";
+    switch (parser.xmlDeclName) {
+      case "version": {
+        parser.xmlDeclExpects = ["encoding", "standalone"];
+        const version = value;
+        parser.xmlDecl.version = version;
+        // This is the test specified by XML 1.0 but it is fine for XML 1.1.
+        if (!/^1\.[0-9]+$/.test(version)) {
+          parser.fail("version number must match /^1\\.[0-9]+$/.");
+        }
+        // When forceXMLVersion is set, the XML declaration is ignored.
+        else if (!(parser.opt.forceXMLVersion as boolean)) {
+          parser.setXMLVersion(version);
+        }
+        break;
+      }
+      case "encoding":
+        if (!/^[A-Za-z][A-Za-z0-9._-]*$/.test(value)) {
+          parser.fail("encoding value must match \
+/^[A-Za-z0-9][A-Za-z0-9._-]*$/.");
+        }
+        parser.xmlDeclExpects = ["standalone"];
+        parser.xmlDecl.encoding = value;
+        break;
+      case "standalone":
+        if (value !== "yes" && value !== "no") {
+          parser.fail("standalone value must match \"yes\" or \"no\".");
+        }
+        parser.xmlDeclExpects = [];
+        parser.xmlDecl.standalone = value;
+        break;
+      default:
+        // We don't need to raise an error here since we've already raised one
+        // when checking what name was expected.
+    }
+    parser.xmlDeclName = "";
+    parser.state = S_XML_DECL_NAME_START;
+    parser.requiredSeparator = true;
+  },
+
+  function sXMLDeclEnding(parser: StateTableThis): void {
+    const c = parser.getCodeNorm();
+    if (c === GREATER) {
+      if (parser.piTarget !== "xml") {
+        parser.fail("processing instructions are not allowed before root.");
+      }
+      else if (parser.xmlDeclName !== "version" &&
+               parser.xmlDeclExpects.includes("version")) {
+        parser.fail("XML declaration must contain a version.");
+      }
+      parser.xmlDeclName = "";
+      parser.requiredSeparator = false;
+      parser.piTarget = parser.text = "";
+      parser.state = S_TEXT;
+    }
+    else {
+      // We got here because the previous character was a ?, but the question
+      // mark character is not valid inside any of the XML declaration
+      // name/value pairs.
+      parser.fail(
+        "The character ? is disallowed anywhere in XML declarations.");
+    }
+    parser.xmlDeclPossible = false;
+  },
+
+  function sOpenTag(parser: StateTableThis): void {
+    const c = parser.captureNameChars();
+    if (c === EOC) {
+      return;
+    }
+
+    const tag: SaxesTagIncomplete = parser.tag = {
+      name: parser.name,
+      attributes: Object.create(null) as Record<string, string>,
+    };
+    parser.name = "";
+
+    if (parser.xmlnsOpt) {
+      tag.ns = Object.create(null);
+    }
+
+    parser.onopentagstart(tag);
+    parser.sawRoot = true;
+    if (!parser.fragmentOpt && parser.closedRoot) {
+      parser.fail("documents may contain only one root.");
+    }
+
+    switch (c) {
+      case GREATER:
+        parser.openTag();
+        break;
+      case FORWARD_SLASH:
+        parser.state = S_OPEN_TAG_SLASH;
+        break;
+      default:
+        if (!isS(c)) {
+          parser.fail("disallowed character in tag name.");
+        }
+        parser.state = S_ATTRIB;
+    }
+  },
+
+  function sOpenTagSlash(parser: StateTableThis): void {
+    if (parser.getCode() === GREATER) {
+      parser.openSelfClosingTag();
+    }
+    else {
+      parser.fail("forward-slash in opening tag not followed by >.");
+      parser.state = S_ATTRIB;
+    }
+  },
+
+  function sAttrib(parser: StateTableThis): void {
+    const c = parser.skipSpaces();
+    if (c === EOC) {
+      return;
+    }
+    if (isNameStartChar(c)) {
+      parser.i = parser.prevI;
+      parser.state = S_ATTRIB_NAME;
+    }
+    else if (c === GREATER) {
+      parser.openTag();
+    }
+    else if (c === FORWARD_SLASH) {
+      parser.state = S_OPEN_TAG_SLASH;
+    }
+    else {
+      parser.fail("disallowed character in attribute name.");
+    }
+  },
+
+  function sAttribName(parser: StateTableThis): void {
+    const c = parser.captureNameChars();
+    if (c === EQUAL) {
+      parser.state = S_ATTRIB_VALUE;
+    }
+    else if (isS(c)) {
+      parser.state = S_ATTRIB_NAME_SAW_WHITE;
+    }
+    else if (c === GREATER) {
+      parser.fail("attribute without value.");
+      parser.pushAttrib(parser.name, parser.name);
+      parser.name = parser.text = "";
+      parser.openTag();
+    }
+    else if (c !== EOC) {
+      parser.fail("disallowed character in attribute name.");
+    }
+  },
+
+  function sAttribNameSawWhite(parser: StateTableThis): void {
+    const c = parser.skipSpaces();
+    switch (c) {
+      case EOC:
+        return;
+      case EQUAL:
+        parser.state = S_ATTRIB_VALUE;
+        break;
+      default:
+        parser.fail("attribute without value.");
+        // Should we do this???
+        // parser.tag.attributes[parser.name] = "";
+        parser.text = "";
+        parser.name = "";
+        if (c === GREATER) {
+          parser.openTag();
+        }
+        else if (isNameStartChar(c)) {
+          parser.i = parser.prevI;
+          parser.state = S_ATTRIB_NAME;
+        }
+        else {
+          parser.fail("disallowed character in attribute name.");
+          parser.state = S_ATTRIB;
+        }
+    }
+  },
+
+  function sAttribValue(parser: StateTableThis): void {
+    const c = parser.getCodeNorm();
+    if (isQuote(c)) {
+      parser.q = c;
+      parser.state = S_ATTRIB_VALUE_QUOTED;
+    }
+    else if (!isS(c)) {
+      parser.fail("unquoted attribute value.");
+      parser.state = S_ATTRIB_VALUE_UNQUOTED;
+      parser.i = parser.prevI;
+    }
+  },
+
+  function sAttribValueQuoted(parser: StateTableThis): void {
+    // We deliberately do not use captureTo here. The specialized code we use
+    // here is faster than using captureTo.
+    const { q, chunk } = parser;
+    let { i: start } = parser;
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      const code = parser.getCode();
+      switch (code) {
+        case q:
+          parser.pushAttrib(parser.name,
+                            parser.text + chunk.slice(start, parser.prevI));
+          parser.name = parser.text = "";
+          parser.q = null;
+          parser.state = S_ATTRIB_VALUE_CLOSED;
+          return;
+        case AMP:
+          parser.text += chunk.slice(start, parser.prevI);
+          parser.state = S_ENTITY;
+          parser.entityReturnState = S_ATTRIB_VALUE_QUOTED;
+          return;
+        case NL:
+        case NL_LIKE:
+        case TAB:
+          parser.text += `${chunk.slice(start, parser.prevI)} `;
+          start = parser.i;
+          break;
+        case LESS:
+          parser.text += chunk.slice(start, parser.prevI);
+          parser.fail("disallowed character.");
+          return;
+        case EOC:
+          parser.text += chunk.slice(start);
+          return;
+        default:
+      }
+    }
+  },
+
+  function sAttribValueClosed(parser: StateTableThis): void {
+    const c = parser.getCodeNorm();
+    if (isS(c)) {
+      parser.state = S_ATTRIB;
+    }
+    else if (c === GREATER) {
+      parser.openTag();
+    }
+    else if (c === FORWARD_SLASH) {
+      parser.state = S_OPEN_TAG_SLASH;
+    }
+    else if (isNameStartChar(c)) {
+      parser.fail("no whitespace between attributes.");
+      parser.i = parser.prevI;
+      parser.state = S_ATTRIB_NAME;
+    }
+    else {
+      parser.fail("disallowed character in attribute name.");
+    }
+  },
+
+  function sAttribValueUnquoted(parser: StateTableThis): void {
+    // We don't do anything regarding EOL or space handling for unquoted
+    // attributes. We already have failed by the time we get here, and the
+    // contract that saxes upholds states that upon failure, it is not safe to
+    // rely on the data passed to event handlers (other than
+    // ``onerror``). Passing "bad" data is not a problem.
+    const c = parser.captureTo(ATTRIB_VALUE_UNQUOTED_TERMINATOR);
+    switch (c) {
+      case AMP:
+        parser.state = S_ENTITY;
+        parser.entityReturnState = S_ATTRIB_VALUE_UNQUOTED;
+        break;
+      case LESS:
+        parser.fail("disallowed character.");
+        break;
+      case EOC:
+        break;
+      default:
+        if (parser.text.includes("]]>")) {
+          parser.fail("the string \"]]>\" is disallowed in char data.");
+        }
+        parser.pushAttrib(parser.name, parser.text);
+        parser.name = parser.text = "";
+        if (c === GREATER) {
+          parser.openTag();
+        }
+        else {
+          parser.state = S_ATTRIB;
+        }
+    }
+  },
+
+  function sCloseTag(parser: StateTableThis): void {
+    const c = parser.captureNameChars();
+    if (c === GREATER) {
+      parser.closeTag();
+    }
+    else if (isS(c)) {
+      parser.state = S_CLOSE_TAG_SAW_WHITE;
+    }
+    else if (c !== EOC) {
+      parser.fail("disallowed character in closing tag.");
+    }
+  },
+
+  function sCloseTagSawWhite(parser: StateTableThis): void {
+    switch (parser.skipSpaces()) {
+      case GREATER:
+        parser.closeTag();
+        break;
+      case EOC:
+        break;
+      default:
+        parser.fail("disallowed character in closing tag.");
+    }
+  },
+];
