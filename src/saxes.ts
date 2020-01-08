@@ -422,10 +422,7 @@ export interface ForcedXMLVersion extends XMLVersionOptions {
   undefined>;
 }
 
-export type SaxesOptions =
-  CommonOptions &
-  (NSOptionsWithNamespaces | NSOptionsWithoutNamespaces) &
-  (NoForcedXMLVersion | ForcedXMLVersion);
+export type SaxesOptions = CommonOptions & NSOptions & XMLVersionOptions;
 
 class SaxesParserImpl {
   private readonly fragmentOpt: boolean;
@@ -2511,7 +2508,6 @@ class SaxesParserImpl {
    */
   private parseEntity(entity: string): string {
     // startsWith would be significantly slower for this test.
-    // eslint-disable-next-line max-len
     // eslint-disable-next-line @typescript-eslint/prefer-string-starts-ends-with
     if (entity[0] !== "#") {
       const defined = this.ENTITIES[entity];
@@ -2562,8 +2558,8 @@ export interface SaxesParserPlain extends SaxesParserImpl {
 }
 
 export interface SaxesParserConstructor {
-  new (opt?: SaxesOptions & { xmlns: true }): SaxesParserNS;
-  new (opt?: SaxesOptions & { xmlns?: false | undefined }): SaxesParserPlain;
+  new (opt?: SaxesOptions & { xmlns?: false }): SaxesParserPlain;
+  new (opt: SaxesOptions & { xmlns: true }): SaxesParserNS;
   new (opt?: SaxesOptions): SaxesParser;
 }
 
