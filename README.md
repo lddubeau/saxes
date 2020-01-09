@@ -125,8 +125,7 @@ Settings supported:
   causes a cost that offsets the benefits of turning off this logic.
 
 * `fileName` - String. Set a file name for error reporting. This is useful only
-  when tracking positions. You may leave it unset, in which case the file name
-  in error messages will be `undefined`.
+  when tracking positions. You may leave it unset.
 
 * `fragment` - Boolean. If `true`, parse the XML as an XML fragment. Default is
   `false`.
