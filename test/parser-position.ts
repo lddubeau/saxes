@@ -102,6 +102,13 @@ describe("parser position", () => {
     });
   });
 
+  testPosition("astral plane", ["<a>💩</a>"], [
+    ["opentagstart", { position: 3, line: 1, column: 3 }],
+    ["opentag", { position: 3, line: 1, column: 3 }],
+    ["text", { position: 6, line: 1, column: 5 }],
+    ["closetag", { position: 9, line: 1, column: 8 }],
+  ]);
+
   test({
     name: "empty document",
     xml: "",

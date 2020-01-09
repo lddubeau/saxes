@@ -117,7 +117,12 @@ Settings supported:
   is `false`.
 
 * `position` - Boolean. If `false`, then don't track line/col/position. Unset is
-  treated as `true`. Default is unset.
+  treated as `true`. Default is unset. Currently, setting this to `false` only
+  results in a cosmetic change: the errors reported do not contain position
+  information. sax-js would literally turn off the position-computing logic if
+  this flag was set to false. The notion was that it would optimize
+  execution. In saxes at least it turns out that continually testing this flag
+  causes a cost that offsets the benefits of turning off this logic.
 
 * `fileName` - String. Set a file name for error reporting. This is useful only
   when tracking positions. You may leave it unset, in which case the file name
@@ -164,8 +169,10 @@ done processing the buffer, which is signaled by the `end` event.
 
 The parser has the following properties:
 
-`line`, `column`, `position` - Indications of the position in the XML document
-where the parser currently is looking.
+`line`, `column`, `columnIndex`, `position` - Indications of the position in the
+XML document where the parser currently is looking. The `columnIndex` property
+counts columns as if indexing into a JavaScript string, whereas the `column`
+property counts Unicode characters.
 
 `closed` - Boolean indicating whether or not the parser can be written to.  If
 it's `true`, then wait for the `ready` event to write again.

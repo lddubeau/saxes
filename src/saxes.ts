@@ -505,8 +505,23 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
    */
   xmlDecl!: XMLDecl;
 
-  /** The line number the parser is  currently looking at. */
+  /**
+   * The line number of the next character to be read by the parser. This field
+   * is one-based. (The first line is numbered 1.)
+   */
   line!: number;
+
+  /**
+   * The column number of the next character to be read by the parser.  *
+   * This field is zero-based. (The first column is 0.)
+   *
+   * This field counts columns by *Unicode character*. Note that this *can*
+   * be different from the index of the character in a JavaScript string due
+   * to how JavaScript handles astral plane characters.
+   *
+   * See [[columnIndex]] for a number that corresponds to the JavaScript index.
+   */
+  column!: number;
 
   /**
    * A map of entity name to expansion.
@@ -664,18 +679,37 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
     };
 
     this.line = 1;
+    this.column = 0;
 
     this.ENTITIES = Object.create(XML_ENTITIES);
 
     this.onready();
   }
 
-  /** The stream position the parser is currently looking at. */
+  /**
+   * The stream position the parser is currently looking at. This field is
+   * zero-based.
+   *
+   * This field is not based on counting Unicode characters but is to be
+   * interpreted as a plain index into a JavaScript string.
+   */
   get position(): number {
     return this.chunkPosition + this.i;
   }
 
-  get column(): number {
+  /**
+   * The column number of the next character to be read by the parser.  *
+   * This field is zero-based. (The first column in a line is 0.)
+   *
+   * This field reports the index at which the next character would be in the
+   * line if the line were represented as a JavaScript string.  Note that this
+   * *can* be different to a count based on the number of *Unicode characters*
+   * due to how JavaScript handles astral plane characters.
+   *
+   * See [[column]] for a number that corresponds to a count of Unicode
+   * characters.
+   */
+  get columnIndex(): number {
     return this.position - this.positionAtNewLine;
   }
 
@@ -898,6 +932,7 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
     // than using codePointAt.
     const code = chunk.charCodeAt(i);
 
+    this.column++;
     if (code < 0xD800) {
       if (code >= SPACE || code === TAB) {
         return code;
@@ -906,6 +941,7 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
       switch (code) {
         case NL:
           this.line++;
+          this.column = 0;
           this.positionAtNewLine = this.position;
           return NL;
         case CR:
@@ -921,6 +957,7 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
 
           // In either case, \r becomes \n.
           this.line++;
+          this.column = 0;
           this.positionAtNewLine = this.position;
           return NL_LIKE;
         default:
@@ -978,6 +1015,7 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
     // than using codePointAt.
     const code = chunk.charCodeAt(i);
 
+    this.column++;
     if (code < 0xD800) {
       if ((code > 0x1F && code < 0x7F) || (code > 0x9F && code !== LS) ||
           code === TAB) {
@@ -987,6 +1025,7 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
       switch (code) {
         case NL: // 0xA
           this.line++;
+          this.column = 0;
           this.positionAtNewLine = this.position;
           return NL;
         case CR: { // 0xD
@@ -1004,6 +1043,7 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
         case NEL: // 0x85
         case LS: // Ox2028
           this.line++;
+          this.column = 0;
           this.positionAtNewLine = this.position;
           return NL_LIKE;
         default:
@@ -1043,6 +1083,11 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
   private getCodeNorm(): number {
     const c = this.getCode();
     return c === NL_LIKE ? NL : c;
+  }
+
+  private unget(): void {
+    this.i = this.prevI;
+    this.column--;
   }
 
   /**
@@ -1181,6 +1226,7 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
     // If the initial character is 0xFEFF, ignore it.
     if (this.chunk.charCodeAt(0) === 0xFEFF) {
       this.i++;
+      this.column++;
     }
 
     // This initial loop is a specialized version of skipSpaces. We need to know
@@ -1216,7 +1262,7 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
       case EOC:
         break;
       default:
-        this.i = this.prevI;
+        this.unget();
         this.state = S_TEXT;
         this.xmlDeclPossible = false;
     }
@@ -1416,7 +1462,7 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
     // either a /, ?, !, or text is coming next.
     if (isNameStartChar(c)) {
       this.state = S_OPEN_TAG;
-      this.i = this.prevI;
+      this.unget();
       this.xmlDeclPossible = false;
     }
     else {
@@ -1816,7 +1862,7 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
 
     if (!isS(c)) {
       this.fail("whitespace required.");
-      this.i = this.prevI;
+      this.unget();
     }
 
     this.state = S_XML_DECL_NAME_START;
@@ -1899,7 +1945,7 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
       return;
     }
     if (isNameStartChar(c)) {
-      this.i = this.prevI;
+      this.unget();
       this.state = S_ATTRIB_NAME;
     }
     else if (c === GREATER) {
@@ -1950,7 +1996,7 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
           this.openTag();
         }
         else if (isNameStartChar(c)) {
-          this.i = this.prevI;
+          this.unget();
           this.state = S_ATTRIB_NAME;
         }
         else {
@@ -1969,7 +2015,7 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
     else if (!isS(c)) {
       this.fail("unquoted attribute value.");
       this.state = S_ATTRIB_VALUE_UNQUOTED;
-      this.i = this.prevI;
+      this.unget();
     }
   }
 
@@ -2025,7 +2071,7 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
     }
     else if (isNameStartChar(c)) {
       this.fail("no whitespace between attributes.");
-      this.i = this.prevI;
+      this.unget();
       this.state = S_ATTRIB_NAME;
     }
     else {
