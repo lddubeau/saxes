@@ -234,15 +234,14 @@ describe("xml declaration", () => {
   it("well-formed", () => {
     const parser = new SaxesParser();
     let seen = false;
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    parser.onopentagstart = () => {
+    parser.on("opentagstart", () => {
       expect(parser.xmlDecl).to.deep.equal({
         version: "1.1",
         encoding: "utf-8",
         standalone: "yes",
       });
       seen = true;
-    };
+    });
     parser.write(
       "<?xml version=\"1.1\" encoding=\"utf-8\" standalone=\"yes\"?><root/>");
     parser.close();
@@ -252,10 +251,9 @@ describe("xml declaration", () => {
   function parse(source: string, options?: SaxesOptions): boolean {
     const parser = new SaxesParser(options);
     let error = false;
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    parser.onerror = () => {
+    parser.on("error", () => {
       error = true;
-    };
+    });
     parser.write(source);
     parser.close();
     return error;

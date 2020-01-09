@@ -2,11 +2,6 @@ import * as ed5 from "xmlchars/xml/1.0/ed5";
 import * as ed2 from "xmlchars/xml/1.1/ed2";
 import * as NSed3 from "xmlchars/xmlns/1.0/ed3";
 
-// I don't see a way to get this file to lint nicely without spurious warnings,
-// without messed up documentation (I don't want extra underscores in variable
-// names), short of using @ts-ignore all over the place. So...
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
-
 import isS = ed5.isS;
 import isChar10 = ed5.isChar;
 import isNameStartChar = ed5.isNameStartChar;
@@ -92,23 +87,6 @@ const S_CLOSE_TAG = 42; // </a
 const S_CLOSE_TAG_SAW_WHITE = 43; // </a   >
 
 
-/**
- * The list of supported events.
- */
-export const EVENTS = [
-  "text",
-  "processinginstruction",
-  "doctype",
-  "comment",
-  "opentagstart",
-  "opentag",
-  "closetag",
-  "cdata",
-  "error",
-  "end",
-  "ready",
-] as const;
-
 const TAB = 9;
 const NL = 0xA;
 const CR = 0xD;
@@ -192,6 +170,137 @@ const isName = (name: string): boolean => NAME_RE.test(name);
 const FORBIDDEN_START = 0;
 const FORBIDDEN_BRACKET = 1;
 const FORBIDDEN_BRACKET_BRACKET = 2;
+
+/**
+ * The list of supported events.
+ */
+export const EVENTS = [
+  "text",
+  "processinginstruction",
+  "doctype",
+  "comment",
+  "opentagstart",
+  "opentag",
+  "closetag",
+  "cdata",
+  "error",
+  "end",
+  "ready",
+] as const;
+
+const EVENT_NAME_TO_HANDLER_NAME: Record<EventName, string> = {
+  text: "textHandler",
+  processinginstruction: "piHandler",
+  doctype: "doctypeHandler",
+  comment: "commentHandler",
+  opentagstart: "openTagStartHandler",
+  opentag: "openTagHandler",
+  closetag: "closeTagHandler",
+  cdata: "cdataHandler",
+  error: "errorHandler",
+  end: "endHandler",
+  ready: "readyHandler",
+};
+
+/**
+ * Event handler for text data. The default implementation is a no-op.
+ *
+ * @param text The text data encountered by the parser.
+ *
+ */
+export type TextHandler = (text: string) => void;
+
+/**
+ * Event handler for processing instructions. The default implementation is a
+ * no-op.
+ *
+ * @param data The target and body of the processing instruction.
+ */
+export type PIHandler = (data: { target: string; body: string }) => void;
+
+
+/**
+ * Event handler for doctype. The default implementation is a no-op.
+ *
+ * @param doctype The doctype contents.
+ */
+export type DoctypeHandler = (doctype: string) => void;
+
+/**
+ * Event handler for comments. The default implementation is a no-op.
+ *
+ * @param comment The comment contents.
+ */
+export type CommentHandler = (comment: string) => void;
+
+/**
+ * Event handler for the start of an open tag. This is called as soon as we
+ * have a tag name. The default implementation is a no-op.
+ *
+ * @param tag The tag.
+ */
+export type OpenTagStartHandler<O> = (tag: StartTagForOptions<O>) => void;
+
+/**
+ * Event handler for an open tag. This is called when the open tag is
+ * complete. (We've encountered the ">" that ends the open tag.) The default
+ * implementation is a no-op.
+ *
+ * @param tag The tag.
+ */
+export type OpenTagHandler<O> = (tag: TagForOptions<O>) => void;
+
+/**
+ * Event handler for a close tag. Note that for self-closing tags, this is
+ * called right after ``onopentag``. The default implementation is a no-op.
+ *
+ * @param tag The tag.
+ */
+export type CloseTagHandler<O> = (tag: TagForOptions<O>) => void;
+
+/**
+ * Event handler for a CDATA section. This is called when ending the
+ * CDATA section. The default implementation is a no-op.
+ *
+ * @param cdata The contents of the CDATA section.
+ */
+export type CDataHandler = (cdata: string) => void;
+
+/**
+ * Event handler for the stream end. This is called when the stream has been
+ * closed with ``close`` or by passing ``null`` to ``write``. The default
+ * implementation is a no-op.
+ */
+export type EndHandler = () => void;
+
+/**
+ * Event handler indicating parser readiness . This is called when the parser
+ * is ready to parse a new document.  The default implementation is a no-op.
+ */
+export type ReadyHandler = () => void;
+
+/**
+ * Event handler indicating an error. The default implementation throws the
+ * error. Override with a no-op handler if you don't want this.
+ *
+ * @param err The error that occurred.
+ */
+export type ErrorHandler = (err: Error) => void;
+
+export type EventName = (typeof EVENTS)[number];
+export type EventNameToHandler<O, N extends EventName> = {
+  "text": TextHandler;
+  "processinginstruction": PIHandler;
+  "doctype": DoctypeHandler;
+  "comment": CommentHandler;
+  "opentagstart": OpenTagStartHandler<O>;
+  "opentag": OpenTagHandler<O>;
+  "closetag": CloseTagHandler<O>;
+  "cdata": CDataHandler;
+  "error": ErrorHandler;
+  "end": EndHandler;
+  "ready": ReadyHandler;
+}[N];
 
 /**
  * This interface defines the structure of attributes when the parser is
@@ -430,7 +539,7 @@ export type SaxesOptions = CommonOptions & NSOptions & XMLVersionOptions;
 
 export type TagForOptions<O extends SaxesOptions> =
   O extends { xmlns: true } ? SaxesTagNS :
-    O extends { xmlns: false | undefined } ? SaxesTagPlain :
+    O extends { xmlns?: false | undefined } ? SaxesTagPlain :
       SaxesTag;
 
 export type StartTagForOptions<O extends SaxesOptions> =
@@ -438,7 +547,7 @@ export type StartTagForOptions<O extends SaxesOptions> =
     O extends { xmlns: false | undefined } ? SaxesStartTagPlain :
       SaxesStartTag;
 
-export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
+export class SaxesParser<O extends SaxesOptions = {}> {
   private readonly fragmentOpt: boolean;
   private readonly xmlnsOpt: boolean;
   private readonly trackPosition: boolean;
@@ -489,6 +598,17 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
   private pushAttrib!: (name: string, value: string) => void;
   private _closed!: boolean;
   private readonly stateTable: ((this: SaxesParser<O>) => void)[];
+  private textHandler?: TextHandler;
+  private piHandler?: PIHandler;
+  private doctypeHandler?: DoctypeHandler;
+  private commentHandler?: CommentHandler;
+  private openTagStartHandler?: OpenTagStartHandler<O>;
+  private openTagHandler?: OpenTagHandler<O>;
+  private closeTagHandler?: CloseTagHandler<O>;
+  private cdataHandler?: CDataHandler;
+  private errorHandler?: ErrorHandler;
+  private endHandler?: EndHandler;
+  private readyHandler?: ReadyHandler;
 
   /**
    * Indicates whether or not the parser is closed. If ``true``, wait for
@@ -683,7 +803,8 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
 
     this.ENTITIES = Object.create(XML_ENTITIES);
 
-    this.onready();
+    // eslint-disable-next-line no-unused-expressions
+    this.readyHandler?.();
   }
 
   /**
@@ -713,105 +834,29 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
     return this.position - this.positionAtNewLine;
   }
 
-  /* eslint-disable class-methods-use-this */
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  /* eslint-disable @typescript-eslint/no-empty-function */
   /**
-   * Event handler for text data. The default implementation is a no-op.
+   * Set an event listener on an event. The parser supports one handler per
+   * event type. If you try to set an event handler over an existing handler,
+   * the old handler is silently overwritten.
    *
-   * @param text The text data encountered by the parser.
+   * @param name The event to listen to.
    *
+   * @param handler The handler to set.
    */
-  // @ts-ignore
-  ontext(text: string): void {}
-
-  /**
-   * Event handler for processing instructions. The default implementation is a
-   * no-op.
-   *
-   * @param data The target and body of the processing instruction.
-   */
-  // @ts-ignore
-  onprocessinginstruction(data: { target: string; body: string }): void {}
-
-  /**
-   * Event handler for doctype. The default implementation is a no-op.
-   *
-   * @param doctype The doctype contents.
-   */
-  // @ts-ignore
-  ondoctype(doctype: string): void {}
-
-  /**
-   * Event handler for comments. The default implementation is a no-op.
-   *
-   * @param comment The comment contents.
-   */
-  // @ts-ignore
-  oncomment(comment: string): void {}
-
-  /**
-   * Event handler for the start of an open tag. This is called as soon as we
-   * have a tag name. The default implementation is a no-op.
-   *
-   * @param tag The tag.
-   */
-  // @ts-ignore
-  onopentagstart(tag: StartTagForOptions<O>): void {}
-
-  /**
-   * Event handler for an open tag. This is called when the open tag is
-   * complete. (We've encountered the ">" that ends the open tag.) The default
-   * implementation is a no-op.
-   *
-   * @param tag The tag.
-   */
-  // @ts-ignore
-  onopentag(tag: TagForOptions<O>): void {}
-
-  /**
-   * Event handler for a close tag. Note that for self-closing tags, this is
-   * called right after ``onopentag``. The default implementation is a no-op.
-   *
-   * @param tag The tag.
-   */
-  // @ts-ignore
-  onclosetag(tag: TagForOptions<O>): void {}
-
-  /**
-   * Event handler for a CDATA section. This is called when ending the
-   * CDATA section. The default implementation is a no-op.
-   *
-   * @param cdata The contents of the CDATA section.
-   */
-  // @ts-ignore
-  oncdata(cdata: string): void {}
-
-  /**
-   * Event handler for the stream end. This is called when the stream has been
-   * closed with ``close`` or by passing ``null`` to ``write``. The default
-   * implementation is a no-op.
-   */
-  onend(): void {}
-
-  /**
-   * Event handler indicating parser readiness . This is called when the parser
-   * is ready to parse a new document.  The default implementation is a no-op.
-   */
-  onready(): void {}
-
-  /**
-   * Event handler indicating an error. The default implementation throws the
-   * error. Override with a no-op handler if you don't want this.
-   *
-   * @param err The error that occurred.
-   */
-  onerror(err: Error): void {
-    throw err;
+  on<N extends EventName>(name: N, handler: EventNameToHandler<O, N>): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (this as any)[EVENT_NAME_TO_HANDLER_NAME[name]] = handler;
   }
-  /* eslint-enable class-methods-use-this */
-  /* eslint-enable @typescript-eslint/no-unused-vars */
-  /* eslint-enable @typescript-eslint/no-empty-function */
+
+  /**
+   * Unset an event handler.
+   *
+   * @parma name The event to stop listening to.
+   */
+  off(name: EventName): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (this as any)[EVENT_NAME_TO_HANDLER_NAME[name]] = undefined;
+  }
 
   /**
    * Report a parsing error. This method is made public so that client code may
@@ -834,7 +879,14 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
       message += ": ";
     }
     message += er;
-    this.onerror(new Error(message));
+    const handler = this.errorHandler;
+    const err = new Error(message);
+    if (handler === undefined) {
+      throw err;
+    }
+    else {
+      handler(err);
+    }
     return this;
   }
 
@@ -1271,12 +1323,14 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
   private sDoctype(): void {
     const c = this.captureTo(DOCTYPE_TERMINATOR);
     switch (c) {
-      case GREATER:
-        this.ondoctype(this.text);
+      case GREATER: {
+        // eslint-disable-next-line no-unused-expressions
+        this.doctypeHandler?.(this.text);
         this.text = "";
         this.state = S_TEXT;
         this.doctype = true; // just remember that we saw it.
         break;
+      }
       case EOC:
         break;
       default:
@@ -1533,7 +1587,8 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
     const c = this.getCodeNorm();
     if (c === MINUS) {
       this.state = S_COMMENT_ENDED;
-      this.oncomment(this.text);
+      // eslint-disable-next-line no-unused-expressions
+      this.commentHandler?.(this.text);
       this.text = "";
     }
     else {
@@ -1576,11 +1631,13 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
   private sCDataEnding2(): void {
     const c = this.getCodeNorm();
     switch (c) {
-      case GREATER:
-        this.oncdata(this.text);
+      case GREATER: {
+        // eslint-disable-next-line no-unused-expressions
+        this.cdataHandler?.(this.text);
         this.text = "";
         this.state = S_TEXT;
         break;
+      }
       case CLOSE_BRACKET:
         this.text += "]";
         break;
@@ -1675,7 +1732,8 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
         this.fail(
           "the XML declaration must appear at the start of the document.");
       }
-      this.onprocessinginstruction({
+      // eslint-disable-next-line no-unused-expressions
+      this.piHandler?.({
         target: piTarget,
         body: this.text,
       });
@@ -1908,7 +1966,8 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
       tag.ns = Object.create(null);
     }
 
-    this.onopentagstart(tag as TagForOptions<O>);
+    // eslint-disable-next-line no-unused-expressions
+    this.openTagStartHandler?.(tag as StartTagForOptions<O>);
     this.sawRoot = true;
     if (!this.fragmentOpt && this.closedRoot) {
       this.fail("documents may contain only one root.");
@@ -2148,7 +2207,7 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
     // of ]]> in text data. The sequence ]]> is forbidden to appear as-is.
     //
     let { i: start, forbiddenState } = this;
-    const { chunk } = this;
+    const { chunk, textHandler: handler } = this;
     // eslint-disable-next-line no-labels, no-restricted-syntax
     scanLoop:
     // eslint-disable-next-line no-constant-condition
@@ -2156,14 +2215,16 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
       switch (this.getCode()) {
         case LESS: {
           this.state = S_OPEN_WAKA;
-          const { text } = this;
-          const slice = chunk.slice(start, this.prevI);
-          if (text.length !== 0) {
-            this.ontext(text + slice);
-            this.text = "";
-          }
-          else if (slice.length !== 0) {
-            this.ontext(slice);
+          if (handler !== undefined) {
+            const { text } = this;
+            const slice = chunk.slice(start, this.prevI);
+            if (text.length !== 0) {
+              handler(text + slice);
+              this.text = "";
+            }
+            else if (slice.length !== 0) {
+              handler(slice);
+            }
           }
           forbiddenState = FORBIDDEN_START;
           // eslint-disable-next-line no-labels
@@ -2172,7 +2233,9 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
         case AMP:
           this.state = S_ENTITY;
           this.entityReturnState = S_TEXT;
-          this.text += chunk.slice(start, this.prevI);
+          if (handler !== undefined) {
+            this.text += chunk.slice(start, this.prevI);
+          }
           forbiddenState = FORBIDDEN_START;
           // eslint-disable-next-line no-labels
           break scanLoop;
@@ -2197,12 +2260,16 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
           forbiddenState = FORBIDDEN_START;
           break;
         case NL_LIKE:
-          this.text += `${chunk.slice(start, this.prevI)}\n`;
+          if (handler !== undefined) {
+            this.text += `${chunk.slice(start, this.prevI)}\n`;
+          }
           start = this.i;
           forbiddenState = FORBIDDEN_START;
           break;
         case EOC:
-          this.text += chunk.slice(start);
+          if (handler !== undefined) {
+            this.text += chunk.slice(start);
+          }
           // eslint-disable-next-line no-labels
           break scanLoop;
         default:
@@ -2218,7 +2285,7 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
     // characters in the text since these are errors when appearing outside the
     // document root element.
     let { i: start } = this;
-    const { chunk } = this;
+    const { chunk, textHandler: handler } = this;
     let nonSpace = false;
     // eslint-disable-next-line no-labels, no-restricted-syntax
     outRootLoop:
@@ -2228,14 +2295,16 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
       switch (code) {
         case LESS: {
           this.state = S_OPEN_WAKA;
-          const { text } = this;
-          const slice = chunk.slice(start, this.prevI);
-          if (text.length !== 0) {
-            this.ontext(text + slice);
-            this.text = "";
-          }
-          else if (slice.length !== 0) {
-            this.ontext(slice);
+          if (handler !== undefined) {
+            const { text } = this;
+            const slice = chunk.slice(start, this.prevI);
+            if (text.length !== 0) {
+              handler(text + slice);
+              this.text = "";
+            }
+            else if (slice.length !== 0) {
+              handler(slice);
+            }
           }
           // eslint-disable-next-line no-labels
           break outRootLoop;
@@ -2243,16 +2312,22 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
         case AMP:
           this.state = S_ENTITY;
           this.entityReturnState = S_TEXT;
-          this.text += chunk.slice(start, this.prevI);
+          if (handler !== undefined) {
+            this.text += chunk.slice(start, this.prevI);
+          }
           nonSpace = true;
           // eslint-disable-next-line no-labels
           break outRootLoop;
         case NL_LIKE:
-          this.text += `${chunk.slice(start, this.prevI)}\n`;
+          if (handler !== undefined) {
+            this.text += `${chunk.slice(start, this.prevI)}\n`;
+          }
           start = this.i;
           break;
         case EOC:
-          this.text += chunk.slice(start);
+          if (handler !== undefined) {
+            this.text += chunk.slice(start);
+          }
           // eslint-disable-next-line no-labels
           break outRootLoop;
         default:
@@ -2338,11 +2413,13 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
     }
     const { text } = this;
     if (text.length !== 0) {
-      this.ontext(text);
+      // eslint-disable-next-line no-unused-expressions
+      this.textHandler?.(text);
       this.text = "";
     }
     this._closed = true;
-    this.onend();
+    // eslint-disable-next-line no-unused-expressions
+    this.endHandler?.();
     this._init();
     return this;
   }
@@ -2489,7 +2566,8 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
 
     // There cannot be any pending text here due to the onopentagstart that was
     // necessarily emitted before we get here. So we do not check text.
-    this.onopentag(tag as TagForOptions<O>);
+    // eslint-disable-next-line no-unused-expressions
+    this.openTagHandler?.(tag as TagForOptions<O>);
     tags.push(tag);
     this.state = S_TEXT;
     this.name = "";
@@ -2509,8 +2587,10 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
 
     // There cannot be any pending text here due to the onopentagstart that was
     // necessarily emitted before we get here. So we do not check text.
-    this.onopentag(tag as TagForOptions<O>);
-    this.onclosetag(tag as TagForOptions<O>);
+    // eslint-disable-next-line no-unused-expressions
+    this.openTagHandler?.(tag as TagForOptions<O>);
+    // eslint-disable-next-line no-unused-expressions
+    this.closeTagHandler?.(tag as TagForOptions<O>);
     const top = this.tag = tags[tags.length - 1] ?? null;
     if (top === null) {
       this.closedRoot = true;
@@ -2538,10 +2618,13 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
       return;
     }
 
+    const handler = this.closeTagHandler;
     let l = tags.length;
     while (l-- > 0) {
       const tag = this.tag = tags.pop() as SaxesTag;
-      this.onclosetag(tag as TagForOptions<O>);
+      if (handler !== undefined) {
+        handler(tag as TagForOptions<O>);
+      }
       if (tag.name === name) {
         break;
       }

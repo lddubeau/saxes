@@ -8,21 +8,18 @@ const saxes = require("../build/dist/saxes");
 
 const parser = new saxes.SaxesParser();
 
-function inspector(ev) {
-  return function handler(data) {
-    // eslint-disable-next-line no-invalid-this
-    console.error("%s %s %j", `${this.line}:${this.column}`, ev, data);
-  };
-}
+const inspector = ev => function handler(data) {
+  console.error("%s %s %j", `${parser.line}:${parser.column}`, ev, data);
+};
 
 saxes.EVENTS.forEach(ev => {
-  parser[`on${ev}`] = inspector(ev);
+  parser.on(ev, inspector(ev));
 });
 
-parser.onend = () => {
+parser.on("end", () => {
   console.error("end");
   console.error(parser);
-};
+});
 
 let xml = fs.readFileSync(path.join(__dirname, "test.xml"), "utf8");
 function processChunk() {

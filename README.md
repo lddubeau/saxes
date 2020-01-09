@@ -93,18 +93,18 @@ you may assume incorrectly.
 var saxes = require("./lib/saxes"),
   parser = new saxes.SaxesParser();
 
-parser.onerror = function (e) {
+parser.on("error", function (e) {
   // an error happened.
-};
-parser.ontext = function (t) {
+});
+parser.on("text", function (t) {
   // got some text.  t is the string of text.
-};
-parser.onopentag = function (node) {
+});
+parser.on("opentag", function (node) {
   // opened a tag.  node has "name" and "attributes"
-};
-parser.onend = function () {
+});
+parser.on("end", function () {
   // parser stream is done, and ready to have more stuff written to it.
-};
+});
 
 parser.write('<xml>Hello, <who name="world">world</who>!</xml>').close();
 ```
@@ -272,6 +272,11 @@ no point in setting these options.
   strings. If you can feed your data in a way that does not split surrogates,
   you should do it. (Obviously, feeding all the data at once with a single write
   is fastest.)
+
+* Don't set event handlers you don't need. Saxes has always aimed to avoid doing
+  work that will just be tossed away but future improvements hope to do this
+  more aggressively. One way saxes knows whether or not some data is needed is
+  by checking whether a handler has been set for a specific event.
 
 ## FAQ
 

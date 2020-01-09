@@ -22,9 +22,9 @@ if (bs === undefined) {
   const xml = fs.readFileSync(filePath);
   const start = Date.now();
   const parser = new saxes.SaxesParser({ xmlns: true });
-  parser.onerror = err => {
+  parser.on("error", err => {
     console.error(err);
-  };
+  });
 
   parser.write(xml);
   parser.close();
@@ -34,9 +34,9 @@ else {
   const input = fs.createReadStream(filePath);
   const start = Date.now();
   const parser = new saxes.SaxesParser({ xmlns: true });
-  parser.onerror = err => {
+  parser.on("error", err => {
     console.error(err);
-  };
+  });
 
   input.on("readable", () => {
     // eslint-disable-next-line no-constant-condition

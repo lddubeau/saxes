@@ -17,7 +17,7 @@ export function test(options: TestOptions): void {
     let expectedIx = 0;
     for (const ev of EVENTS) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any, no-loop-func
-      (parser as any)[`on${ev}`] = (n: any) => {
+      parser.on(ev, (n: any) => {
         if (process.env.DEBUG !== undefined) {
           console.error({
             expected: expected[expectedIx],
@@ -31,7 +31,7 @@ export function test(options: TestOptions): void {
         expect([ev, ev === "error" ? n.message : n]).to.deep
           .equal(expected[expectedIx]);
         expectedIx++;
-      };
+      });
     }
 
     expect(xml !== undefined || fn !== undefined, "must use xml or fn")

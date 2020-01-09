@@ -240,13 +240,12 @@ class SaxesDriver extends BaseDriver {
     const parser = new SaxesParser({
       xmlns: !test.forbidsNamespaces,
     });
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    parser.onerror = (err: Error) => {
+    parser.on("error", (err: Error) => {
       if (process?.env?.DEBUG !== undefined) {
         console.log(err);
       }
       errors.push(err);
-    };
+    });
 
     this.writeSource(parser, source);
     this.processResult(test, handling, errors.length === 0);
