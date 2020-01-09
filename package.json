@@ -3,32 +3,28 @@
   "description": "An evented streaming XML parser in JavaScript",
   "author": "Louis-Dominique Dubeau <ldd@lddubeau.com>",
   "version": "4.0.2",
-  "main": "build/dist/saxes.js",
-  "types": "build/dist/saxes.d.ts",
+  "main": "saxes.js",
+  "types": "saxes.d.ts",
   "license": "ISC",
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "scripts": {
     "tsc": "tsc",
-    "build": "npm run tsc",
-    "test": "mocha --delay",
+    "copy": "cp -p package.json README.md build/dist",
+    "build": "npm run tsc && npm run copy",
+    "test": "npm run build && mocha --delay",
     "lint": "eslint --ignore-path .gitignore '**/*.ts' '**/*.js'",
     "lint-fix": "npm run lint -- --fix",
     "posttest": "npm run lint",
+    "typedoc": "typedoc --tsconfig tsconfig.json --name saxes --out build/docs/ --listInvalidSymbolLinks --excludePrivate --excludeNotExported",
+    "build-docs": "npm run typedoc",
     "preversion": "npm test",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
     "postversion": "npm publish",
     "postpublish": "git push origin --follow-tags"
   },
   "repository": "https://github.com/lddubeau/saxes.git",
-  "files": [
-    "lib/saxes.js",
-    "lib/saxes.d.ts",
-    "LICENSE",
-    "README.md",
-    "CHANGELOG.md"
-  ],
   "devDependencies": {
     "@commitlint/cli": "^8.3.4",
     "@commitlint/config-angular": "^8.3.4",
@@ -55,6 +51,7 @@
     "tsd": "^0.11.0",
     "tslint": "^5.20.1",
     "tslint-microsoft-contrib": "^6.2.0",
+    "typedoc": "^0.15.6",
     "typescript": "^3.7.4"
   },
   "dependencies": {
