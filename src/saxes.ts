@@ -1216,12 +1216,6 @@ export class SaxesParser<O extends SaxesOptions = SaxesOptions> {
       case EOC:
         break;
       default:
-        // have to process this as a text node.
-        // weird, but happens.
-        if (!this.reportedTextBeforeRoot) {
-          this.fail("text data outside of root node.");
-          this.reportedTextBeforeRoot = true;
-        }
         this.i = this.prevI;
         this.state = S_TEXT;
         this.xmlDeclPossible = false;
