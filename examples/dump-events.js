@@ -13,7 +13,7 @@ for (const ev of saxes.EVENTS) {
   parser[`on${ev}`] = console.log.bind(undefined, ev);
 }
 
-parser.onerror = (err) => {
+parser.onerror = err => {
   console.error(err);
 };
 

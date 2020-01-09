@@ -22,7 +22,7 @@ if (bs === undefined) {
   const xml = fs.readFileSync(filePath);
   const start = Date.now();
   const parser = new saxes.SaxesParser({ xmlns: true });
-  parser.onerror = (err) => {
+  parser.onerror = err => {
     console.error(err);
   };
 
@@ -34,7 +34,7 @@ else {
   const input = fs.createReadStream(filePath);
   const start = Date.now();
   const parser = new saxes.SaxesParser({ xmlns: true });
-  parser.onerror = (err) => {
+  parser.onerror = err => {
     console.error(err);
   };
 

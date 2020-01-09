@@ -10,11 +10,12 @@ const parser = new saxes.SaxesParser();
 
 function inspector(ev) {
   return function handler(data) {
+    // eslint-disable-next-line no-invalid-this
     console.error("%s %s %j", `${this.line}:${this.column}`, ev, data);
   };
 }
 
-saxes.EVENTS.forEach((ev) => {
+saxes.EVENTS.forEach(ev => {
   parser[`on${ev}`] = inspector(ev);
 });
 
