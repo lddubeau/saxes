@@ -1,0 +1,446 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>saxes</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">saxes</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1> saxes</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#saxes" id="saxes" style="color: inherit; text-decoration: none;">
+					<h1>saxes</h1>
+				</a>
+				<p>A sax-style non-validating parser for XML.</p>
+				<p>Saxes is a fork of <a href="https://github.com/isaacs/sax-js">sax</a> 1.2.4. All mentions
+				of sax in this project&#39;s documentation are references to sax 1.2.4.</p>
+				<p>Designed with <a href="http://nodejs.org/">node</a> in mind, but should work fine in the
+				browser or other CommonJS implementations.</p>
+				<p>Saxes does not support Node versions older than 10.</p>
+				<a href="#notable-differences-from-sax" id="notable-differences-from-sax" style="color: inherit; text-decoration: none;">
+					<h2>Notable Differences from Sax.</h2>
+				</a>
+				<ul>
+					<li><p>Saxes aims to be much stricter than sax with regards to XML
+							well-formedness. Sax, even in its so-called &quot;strict mode&quot;, is not strict. It
+							silently accepts structures that are not well-formed XML. Projects that need
+						better compliance with well-formedness constraints cannot use sax as-is.</p>
+						<p>Consequently, saxes does not support HTML, or pseudo-XML, or bad XML. Saxes
+							will report well-formedness errors in all these cases but it won&#39;t try to
+						extract data from malformed documents like sax does.</p>
+					</li>
+					<li><p>Saxes is much much faster than sax, mostly because of a substantial redesign
+							of the internal parsing logic. The speed improvement is not merely due to
+							removing features that were supported by sax. That helped a bit, but saxes
+							adds some expensive checks in its aim for conformance with the XML
+							specification. Redesigning the parsing logic is what accounts for most of the
+						performance improvement.</p>
+					</li>
+					<li><p>Saxes does not aim to support antiquated platforms. We will not pollute the
+							source or the default build with support for antiquated platforms. If you want
+							support for IE 11, you are welcome to produce a PR that adds a <em>new build</em>
+						transpiled to ES5.</p>
+					</li>
+					<li><p>Saxes handles errors differently from sax: it provides a default onerror
+							handler which throws. You can replace it with your own handler if you want. If
+						your handler does nothing, there is no <code>resume</code> method to call.</p>
+					</li>
+					<li><p>There&#39;s no <code>Stream</code> API. A revamped API may be introduced later. (It is still
+							a &quot;streaming parser&quot; in the general sense that you write a character stream to
+						it.)</p>
+					</li>
+					<li><p>Saxes does not have facilities for limiting the size the data chunks passed to
+						event handlers. See the FAQ entry for more details.</p>
+					</li>
+				</ul>
+				<a href="#conformance" id="conformance" style="color: inherit; text-decoration: none;">
+					<h2>Conformance</h2>
+				</a>
+				<p>Saxes supports:</p>
+				<ul>
+					<li><a href="https://www.w3.org/TR/2008/REC-xml-20081126/">XML 1.0 fifth edition</a></li>
+					<li><a href="https://www.w3.org/TR/2006/REC-xml11-20060816/">XML 1.1 second edition</a></li>
+					<li><a href="https://www.w3.org/TR/2009/REC-xml-names-20091208/">Namespaces in XML 1.0 (Third Edition)</a>.</li>
+					<li><a href="https://www.w3.org/TR/2006/REC-xml-names11-20060816/">Namespaces in XML 1.1 (Second Edition)</a>.</li>
+				</ul>
+				<a href="#limitations" id="limitations" style="color: inherit; text-decoration: none;">
+					<h2>Limitations</h2>
+				</a>
+				<p>This is a non-validating parser so it only verifies whether the document is
+					well-formed. We do aim to raise errors for all malformed constructs
+					encountered. However, this parser does not thorougly parse the contents of
+					DTDs. So most malformedness errors caused by errors <strong>in DTDs</strong> cannot be
+				reported.</p>
+				<a href="#regarding-codeltdoctypecode-and-codeltentitycode" id="regarding-codeltdoctypecode-and-codeltentitycode" style="color: inherit; text-decoration: none;">
+					<h2>Regarding <code>&lt;!DOCTYPE</code> and <code>&lt;!ENTITY</code></h2>
+				</a>
+				<p>The parser will handle the basic XML entities in text nodes and attribute
+					values: <code>&amp;amp; &amp;lt; &amp;gt; &amp;apos; &amp;quot;</code>. It&#39;s possible to define additional
+					entities in XML by putting them in the DTD. This parser doesn&#39;t do anything with
+					that. If you want to listen to the <code>ondoctype</code> event, and then fetch the
+					doctypes, and read the entities and add them to <code>parser.ENTITIES</code>, then be my
+				guest.</p>
+				<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
+					<h2>Documentation</h2>
+				</a>
+				<p>The source code contains JSDOC comments. Use them. What follows is a brief
+				summary of what is available. The final authority is the source code.</p>
+				<p><strong>PAY CLOSE ATTENTION TO WHAT IS PUBLIC AND WHAT IS PRIVATE.</strong></p>
+				<p>The move to TypeScript makes it so that everything is now formally private,
+				protected, or public.</p>
+				<p>If you use anything not public, that&#39;s at your own peril.</p>
+				<p>If there&#39;s a mistake in the documentation, raise an issue. If you just assume,
+				you may assume incorrectly.</p>
+				<a href="#summary-usage-information" id="summary-usage-information" style="color: inherit; text-decoration: none;">
+					<h2>Summary Usage Information</h2>
+				</a>
+				<a href="#example" id="example" style="color: inherit; text-decoration: none;">
+					<h3>Example</h3>
+				</a>
+				<pre><code class="language-javascript"><span class="hljs-keyword">var</span> saxes = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./lib/saxes"</span>),
+  parser = <span class="hljs-keyword">new</span> saxes.SaxesParser();
+
+parser.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) </span>{
+  <span class="hljs-comment">// an error happened.</span>
+};
+parser.ontext = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">t</span>) </span>{
+  <span class="hljs-comment">// got some text.  t is the string of text.</span>
+};
+parser.onopentag = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">node</span>) </span>{
+  <span class="hljs-comment">// opened a tag.  node has "name" and "attributes"</span>
+};
+parser.onend = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-comment">// parser stream is done, and ready to have more stuff written to it.</span>
+};
+
+parser.write(<span class="hljs-string">'&lt;xml&gt;Hello, &lt;who name="world"&gt;world&lt;/who&gt;!&lt;/xml&gt;'</span>).close();</code></pre>
+				<a href="#constructor-arguments" id="constructor-arguments" style="color: inherit; text-decoration: none;">
+					<h3>Constructor Arguments</h3>
+				</a>
+				<p>Settings supported:</p>
+				<ul>
+					<li><p><code>xmlns</code> - Boolean. If <code>true</code>, then namespaces are supported. Default
+						is <code>false</code>.</p>
+					</li>
+					<li><p><code>position</code> - Boolean. If <code>false</code>, then don&#39;t track line/col/position. Unset is
+						treated as <code>true</code>. Default is unset.</p>
+					</li>
+					<li><p><code>fileName</code> - String. Set a file name for error reporting. This is useful only
+							when tracking positions. You may leave it unset, in which case the file name
+						in error messages will be <code>undefined</code>.</p>
+					</li>
+					<li><p><code>fragment</code> - Boolean. If <code>true</code>, parse the XML as an XML fragment. Default is
+						<code>false</code>.</p>
+					</li>
+					<li><p><code>additionalNamespaces</code> - A plain object whose key, value pairs define
+							namespaces known before parsing the XML file. It is not legal to pass
+						bindings for the namespaces <code>&quot;xml&quot;</code> or <code>&quot;xmlns&quot;</code>.</p>
+					</li>
+					<li><p><code>defaultXMLVersion</code> - The default version of the XML specification to use if
+							the document contains no XML declaration. If the document does contain an XML
+							declaration, then this setting is ignored. Must be <code>&quot;1.0&quot;</code> or <code>&quot;1.1&quot;</code>. The
+						default is <code>&quot;1.0&quot;</code>.</p>
+					</li>
+					<li><p><code>forceXMLVersion</code> - Boolean. A flag indicating whether to force the XML
+							version used for parsing to the value of <code>defaultXMLVersion</code>. When this flag
+							is <code>true</code>, <code>defaultXMLVersion</code> must be specified. If unspecified, the
+						default value of this flag is <code>false</code>.</p>
+						<p>Example: suppose you are parsing a document that has an XML declaration
+						specifying XML version 1.1.</p>
+						<p>If you set <code>defaultXMLVersion</code> to <code>&quot;1.0&quot;</code> without setting
+							<code>forceXMLVersion</code> then the XML declaration will override the value of
+						<code>defaultXMLVersion</code> and the document will be parsed according to XML 1.1.</p>
+						<p>If you set <code>defaultXMLVersion</code> to <code>&quot;1.0&quot;</code> and set <code>forceXMLVersion</code> to
+							<code>true</code>, then the XML declaration will be ignored and the document will be
+						parsed according to XML 1.0.</p>
+					</li>
+				</ul>
+				<a href="#methods" id="methods" style="color: inherit; text-decoration: none;">
+					<h3>Methods</h3>
+				</a>
+				<p><code>write</code> - Write bytes onto the stream. You don&#39;t have to pass the whole document
+					in one <code>write</code> call. You can read your source chunk by chunk and call <code>write</code>
+				with each chunk.</p>
+				<p><code>close</code> - Close the stream. Once closed, no more data may be written until it is
+				done processing the buffer, which is signaled by the <code>end</code> event.</p>
+				<a href="#properties" id="properties" style="color: inherit; text-decoration: none;">
+					<h3>Properties</h3>
+				</a>
+				<p>The parser has the following properties:</p>
+				<p><code>line</code>, <code>column</code>, <code>position</code> - Indications of the position in the XML document
+				where the parser currently is looking.</p>
+				<p><code>closed</code> - Boolean indicating whether or not the parser can be written to.  If
+				it&#39;s <code>true</code>, then wait for the <code>ready</code> event to write again.</p>
+				<p><code>opt</code> - Any options passed into the constructor.</p>
+				<p><code>xmlDecl</code> - The XML declaration for this document. It contains the fields
+					<code>version</code>, <code>encoding</code> and <code>standalone</code>. They are all <code>undefined</code> before
+					encountering the XML declaration. If they are undefined after the XML
+					declaration, the corresponding value was not set by the declaration. There is no
+					event associated with the XML declaration. In a well-formed document, the XML
+					declaration may be preceded only by an optional BOM. So by the time any event
+					generated by the parser happens, the declaration has been processed if present
+					at all. Otherwise, you have a malformed document, and as stated above, you
+				cannot rely on the parser data!</p>
+				<a href="#error-handling" id="error-handling" style="color: inherit; text-decoration: none;">
+					<h3>Error Handling</h3>
+				</a>
+				<p>The parser continues to parse even upon encountering errors, and does its best
+					to continue reporting errors. You should heed all errors reported. After an
+					error, however, saxes may interpret your document incorrectly. For instance
+					<code>&lt;foo a=bc=&quot;d&quot;/&gt;</code> is invalid XML. Did you mean to have <code>&lt;foo a=&quot;bc=d&quot;/&gt;</code> or
+					<code>&lt;foo a=&quot;b&quot; c=&quot;d&quot;/&gt;</code> or some other variation?  For the sake of continuing to
+					provide errors, saxes will continue parsing the document, but the structure it
+					reports may be incorrect. It is only after the errors are fixed in the document
+				that saxes can provide a reliable interpretation of the document.</p>
+				<p>That leaves you with two rules of thumb when using saxes:</p>
+				<ul>
+					<li><p>Pay attention to the errors that saxes report. The default <code>onerror</code> handler
+						throws, so by default, you cannot miss errors.</p>
+					</li>
+					<li><p><strong>ONCE AN ERROR HAS BEEN ENCOUNTERED, STOP RELYING ON THE EVENT HANDLERS OTHER
+							THAN <code>onerror</code>.</strong> As explained above, when saxes runs into a well-formedness
+							problem, it makes a guess in order to continue reporting more errors. The guess
+						may be wrong.</p>
+					</li>
+				</ul>
+				<a href="#events" id="events" style="color: inherit; text-decoration: none;">
+					<h3>Events</h3>
+				</a>
+				<p>To listen to an event, override <code>on&lt;eventname&gt;</code>. The list of supported events
+				are also in the exported <code>EVENTS</code> array.</p>
+				<p>See the JSDOC comments in the source code for a description of each supported
+				event.</p>
+				<a href="#parsing-xml-fragments" id="parsing-xml-fragments" style="color: inherit; text-decoration: none;">
+					<h3>Parsing XML Fragments</h3>
+				</a>
+				<p>The XML specification does not define any method by which to parse XML
+					fragments. However, there are usage scenarios in which it is desirable to parse
+				fragments. In order to allow this, saxes provides three initialization options.</p>
+				<p>If you pass the option <code>fragment: true</code> to the parser constructor, the parser
+					will expect an XML fragment. It essentially starts with a parsing state
+					equivalent to the one it would be in if <code>parser.write(&quot;&lt;foo&quot;&gt;)</code> had been called
+					right after initialization. In other words, it expects content which is
+					acceptable inside an element. This also turns off well-formedness checks that
+				are inappropriate when parsing a fragment.</p>
+				<p>The option <code>additionalNamespaces</code> allows you to define additional prefix-to-URI
+					bindings known before parsing starts. You would use this over <code>resolvePrefix</code> if
+				you have at the ready a series of namespaces bindings to use.</p>
+				<p>The option <code>resolvePrefix</code> allows you to pass a function which saxes will use if
+					it is unable to resolve a namespace prefix by itself. You would use this over
+					<code>additionalNamespaces</code> in a context where getting a complete list of defined
+				namespaces is onerous.</p>
+				<p>Note that you can use <code>additionalNamespaces</code> and <code>resolvePrefix</code> together if you
+				want. <code>additionalNamespaces</code> applies before <code>resolvePrefix</code>.</p>
+				<p>The options <code>additionalNamespaces</code> and <code>resolvePrefix</code> are really meant to be
+					used for parsing fragments. However, saxes won&#39;t prevent you from using them
+					with <code>fragment: false</code>. Note that if you do this, your document may parse
+					without errors and yet be malformed because the document can refer to namespaces
+				which are not defined <em>in</em> the document.</p>
+				<p>Of course, <code>additionalNamespaces</code> and <code>resolvePrefix</code> are used only if <code>xmlns</code>
+					is <code>true</code>. If you are parsing a fragment that does not use namespaces, there&#39;s
+				no point in setting these options.</p>
+				<a href="#performance-tips" id="performance-tips" style="color: inherit; text-decoration: none;">
+					<h3>Performance Tips</h3>
+				</a>
+				<ul>
+					<li><p>saxes works faster on files that use newlines (<code>\u000A</code>) as end of line
+							markers than files that use other end of line markers (like <code>\r</code> or
+							<code>\r\n</code>). The XML specification requires that conformant applications behave
+							as if all characters that are to be treated as end of line characters are
+							converted to <code>\u000A</code> prior to parsing. The optimal code path for saxes is a
+						file in which all end of line characters are already <code>\u000A</code>.</p>
+					</li>
+					<li><p>Don&#39;t split Unicode strings you feed to saxes across surrogates. When you
+							naively split a string in JavaScript, you run the risk of splitting a Unicode
+							character into two surrogates. e.g.  In the following example <code>a</code> and <code>b</code>
+							each contain half of a single Unicode character: <code>const a = &quot;\u{1F4A9}&quot;[0];
+const b = &quot;\u{1F4A9}&quot;[1]</code> If you feed such split surrogates to versions of
+							saxes prior to 4, you&#39;d get errors. Saxes version 4 and over are able to
+							detect when a chunk of data ends with a surrogate and carry over the surrogate
+							to the next chunk. However this operation entails slicing and concatenating
+							strings. If you can feed your data in a way that does not split surrogates,
+							you should do it. (Obviously, feeding all the data at once with a single write
+						is fastest.)</p>
+					</li>
+				</ul>
+				<a href="#faq" id="faq" style="color: inherit; text-decoration: none;">
+					<h2>FAQ</h2>
+				</a>
+				<p>Q. Why has saxes dropped support for limiting the size of data chunks passed to
+				event handlers?</p>
+				<p>A. With sax you could set <code>MAX_BUFFER_LENGTH</code> to cause the parser to limit the
+					size of data chunks passed to event handlers. So if you ran into a span of text
+					above the limit, multiple <code>text</code> events with smaller data chunks were fired
+				instead of a single event with a large chunk.</p>
+				<p>However, that functionality had some problematic characteristics. It had an
+					arbitrary default value. It was library-wide so all parsers created from a
+					single instance of the <code>sax</code> library shared it. This could potentially cause
+					conflicts among libraries running in the same VM but using sax for different
+				purposes.</p>
+				<p>These issues could have been easily fixed, but there were larger issues. The
+					buffer limit arbitrarily applied to some events but not others. It would split
+					<code>text</code>, <code>cdata</code> and <code>script</code> events. However, if a <code>comment</code>,
+					<code>doctype</code>, <code>attribute</code> or <code>processing instruction</code> were more than the
+					limit, the parser would generate an error and you were left picking up the
+				pieces.</p>
+				<p>It was not intuitive to use. You&#39;d think setting the limit to 1K would prevent
+					chunks bigger than 1K to be passed to event handlers. But that was not the
+					case. A comment in the source code told you that you might go over the limit if
+					you passed large chunks to <code>write</code>. So if you want a 1K limit, don&#39;t pass 64K
+					chunks to <code>write</code>. Fair enough. You know what limit you want so you can
+					control the size of the data you pass to <code>write</code>. So you limit the chunks to
+					<code>write</code> to 1K at a time. Even if you do this, your event handlers may get data
+					chunks that are 2K in size. Suppose on the previous <code>write</code> the parser has
+					just finished processing an open tag, so it is ready for text. Your <code>write</code>
+					passes 1K of text. You are not above the limit yet, so no event is generated
+					yet. The next <code>write</code> passes another 1K of text. It so happens that sax checks
+					buffer limits only once per <code>write</code>, after the chunk of data has been
+					processed. Now you&#39;ve hit the limit and you get a <code>text</code> event with 2K of
+					data. So even if you limit your <code>write</code> calls to the buffer limit you&#39;ve set,
+					you may still get events with chunks at twice the buffer size limit you&#39;ve
+				specified.</p>
+				<p>We may consider reinstating an equivalent functionality, provided that it
+					addresses the issues above and does not cause a huge performance drop for
+				use-case scenarios that don&#39;t need it.</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_saxes_.html">&quot;saxes&quot;</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
