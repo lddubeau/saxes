@@ -103,7 +103,7 @@ describe("parser position", () => {
   });
 
   test({
-    name: "pi before root",
+    name: "empty document",
     xml: "",
     expect: [
       ["error", "fnord.xml:1:0: document must contain a root element."],
