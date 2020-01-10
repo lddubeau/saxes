@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { EVENTS, SaxesOptions, SaxesParser } from "../build/dist/saxes";
 
 export interface TestOptions {
-  xml?: string;
+  xml?: string | string[];
   name: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   expect: any[];
@@ -38,7 +38,15 @@ export function test(options: TestOptions): void {
       .to.be.true;
 
     if (xml !== undefined) {
-      parser.write(xml).close();
+      if (Array.isArray(xml)) {
+        for (const chunk of xml) {
+          parser.write(chunk);
+        }
+        parser.close();
+      }
+      else {
+        parser.write(xml).close();
+      }
     }
 
     if (fn !== undefined) {
