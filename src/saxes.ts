@@ -1288,24 +1288,14 @@ export class SaxesParser<O extends SaxesOptions = {}> {
   }
 
   private sBeginWhitespace(): void {
-    // This initial loop is a specialized version of skipSpaces. We need to know
-    // whether we've encountered spaces or not because as soon as we run into a
-    // space, an XML declaration is no longer possible. Rather than slow down
-    // skipSpaces even in places where we don't care whether it skipped anything
-    // or not, we use a specialized loop here.
-    let c;
-    let sawSpace = false;
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      c = this.getCodeNorm();
-      if (c === EOC || !isS(c)) {
-        break;
-      }
-
-      sawSpace = true;
-    }
-
-    if (sawSpace) {
+    // We need to know whether we've encountered spaces or not because as soon
+    // as we run into a space, an XML declaration is no longer possible. Rather
+    // than slow down skipSpaces even in places where we don't care whether it
+    // skipped anything or not, we check whether prevI is equal to the value of
+    // i from before we skip spaces.
+    const iBefore = this.i;
+    const c = this.skipSpaces();
+    if (this.prevI !== iBefore) {
       this.xmlDeclPossible = false;
     }
 
