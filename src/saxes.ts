@@ -2609,9 +2609,8 @@ export class SaxesParser<O extends SaxesOptions = {}> {
     while (l-- > 0) {
       const tag = this.tag = tags.pop() as SaxesTag;
       this.topNS = tag.ns!;
-      if (handler !== undefined) {
-        handler(tag as TagForOptions<O>);
-      }
+      // eslint-disable-next-line no-unused-expressions
+      handler?.(tag as TagForOptions<O>);
       if (tag.name === name) {
         break;
       }
