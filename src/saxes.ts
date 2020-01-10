@@ -597,6 +597,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
   private isChar!: (c: number) => boolean;
   private pushAttrib!: (name: string, value: string) => void;
   private _closed!: boolean;
+  private currentXMLVersion!: string;
   private readonly stateTable: ((this: SaxesParser<O>) => void)[];
   private textHandler?: TextHandler;
   private piHandler?: PIHandler;
@@ -671,6 +672,9 @@ export class SaxesParser<O extends SaxesOptions = {}> {
       this.isName = isNCName;
       // eslint-disable-next-line @typescript-eslint/unbound-method
       this.processAttribs = this.processAttribsNS;
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      this.pushAttrib = this.pushAttribNS;
+
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       this.ns = { __proto__: null as any, ...rootNS };
@@ -686,6 +690,8 @@ export class SaxesParser<O extends SaxesOptions = {}> {
       this.isName = isName;
       // eslint-disable-next-line @typescript-eslint/unbound-method
       this.processAttribs = this.processAttribsPlain;
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      this.pushAttrib = this.pushAttribPlain;
     }
 
     //
@@ -1252,18 +1258,15 @@ export class SaxesParser<O extends SaxesOptions = {}> {
   }
 
   private setXMLVersion(version: string): void {
+    this.currentXMLVersion = version;
     /*  eslint-disable @typescript-eslint/unbound-method */
     if (version === "1.0") {
       this.isChar = isChar10;
       this.getCode = this.getCode10;
-      this.pushAttrib =
-        this.xmlnsOpt ? this.pushAttribNS10 : this.pushAttribPlain;
     }
     else {
       this.isChar = isChar11;
       this.getCode = this.getCode11;
-      this.pushAttrib =
-        this.xmlnsOpt ? this.pushAttribNS11 : this.pushAttribPlain;
     }
     /* eslint-enable @typescript-eslint/unbound-method */
   }
@@ -2352,29 +2355,14 @@ export class SaxesParser<O extends SaxesOptions = {}> {
     }
   }
 
-  private pushAttribNS10(name: string, value: string): void {
+  private pushAttribNS(name: string, value: string): void {
     const { prefix, local } = this.qname(name);
     this.attribList.push({ name, prefix, local, value, uri: undefined });
     if (prefix === "xmlns") {
       const trimmed = value.trim();
-      if (trimmed === "") {
+      if (this.currentXMLVersion === "1.0" && trimmed === "") {
         this.fail("invalid attempt to undefine prefix in XML 1.0");
       }
-      this.tag!.ns![local] = trimmed;
-      nsPairCheck(this, local, trimmed);
-    }
-    else if (name === "xmlns") {
-      const trimmed = value.trim();
-      this.tag!.ns![""] = trimmed;
-      nsPairCheck(this, "", trimmed);
-    }
-  }
-
-  private pushAttribNS11(name: string, value: string): void {
-    const { prefix, local } = this.qname(name);
-    this.attribList.push({ name, prefix, local, value, uri: undefined });
-    if (prefix === "xmlns") {
-      const trimmed = value.trim();
       this.tag!.ns![local] = trimmed;
       nsPairCheck(this, local, trimmed);
     }
