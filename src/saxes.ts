@@ -565,6 +565,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
   private q!: null | number;
   private tags!: SaxesTagIncomplete[];
   private tag!: SaxesTagIncomplete | null;
+  private topNS!: Record<string, string> | null;
   private chunk!: string;
   private chunkPosition!: number;
   private i!: number;
@@ -762,6 +763,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
     this.q = null;
     this.tags = [];
     this.tag = null;
+    this.topNS = null;
     this.chunk = "";
     this.chunkPosition = 0;
     this.i = 0;
@@ -1963,7 +1965,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
     this.name = "";
 
     if (this.xmlnsOpt) {
-      tag.ns = Object.create(null);
+      this.topNS = tag.ns = Object.create(null);
     }
 
     // eslint-disable-next-line no-unused-expressions
@@ -2363,12 +2365,12 @@ export class SaxesParser<O extends SaxesOptions = {}> {
       if (this.currentXMLVersion === "1.0" && trimmed === "") {
         this.fail("invalid attempt to undefine prefix in XML 1.0");
       }
-      this.tag!.ns![local] = trimmed;
+      this.topNS![local] = trimmed;
       nsPairCheck(this, local, trimmed);
     }
     else if (name === "xmlns") {
       const trimmed = value.trim();
-      this.tag!.ns![""] = trimmed;
+      this.topNS![""] = trimmed;
       nsPairCheck(this, "", trimmed);
     }
   }
@@ -2416,7 +2418,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
    * @returns The namespace URI or ``undefined`` if the prefix is not defined.
    */
   resolve(prefix: string): string | undefined {
-    let uri = this.tag!.ns![prefix];
+    let uri = this.topNS![prefix];
     if (uri !== undefined) {
       return uri;
     }
@@ -2606,6 +2608,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
     let l = tags.length;
     while (l-- > 0) {
       const tag = this.tag = tags.pop() as SaxesTag;
+      this.topNS = tag.ns!;
       if (handler !== undefined) {
         handler(tag as TagForOptions<O>);
       }
