@@ -56,3 +56,16 @@ test({
     ["closetag", { name: "P", attributes: {}, isSelfClosing: false }],
   ],
 });
+
+// There is only one BOM allowed at the start
+test({
+  name: "multiple BOMs (multiple chunks)",
+  xml: ["\uFEFF", "\uFEFF<P></P>"],
+  expect: [
+    ["text", "\uFEFF"],
+    ["error", "1:3: text data outside of root node."],
+    ["opentagstart", { name: "P", attributes: {} }],
+    ["opentag", { name: "P", attributes: {}, isSelfClosing: false }],
+    ["closetag", { name: "P", attributes: {}, isSelfClosing: false }],
+  ],
+});

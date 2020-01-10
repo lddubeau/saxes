@@ -41,51 +41,51 @@ const XML_ENTITIES: Record<string, string> = {
 const EOC = -1;
 const NL_LIKE = -2;
 
-const S_BEGIN_WHITESPACE = 0; // leading whitespace
-const S_DOCTYPE = 1; // <!DOCTYPE
-const S_DOCTYPE_QUOTE = 2; // <!DOCTYPE "//blah
-const S_DTD = 3; // <!DOCTYPE "//blah" [ ...
-const S_DTD_QUOTED = 4; // <!DOCTYPE "//blah" [ "foo
-const S_DTD_OPEN_WAKA = 5;
-const S_DTD_OPEN_WAKA_BANG = 6;
-const S_DTD_COMMENT = 7; // <!--
-const S_DTD_COMMENT_ENDING = 8; // <!-- blah -
-const S_DTD_COMMENT_ENDED = 9; // <!-- blah --
-const S_DTD_PI = 10; // <?
-const S_DTD_PI_ENDING = 11; // <?hi "there" ?
-const S_TEXT = 12; // general stuff
-const S_ENTITY = 13; // &amp and such
-const S_OPEN_WAKA = 14; // <
-const S_OPEN_WAKA_BANG = 15; // <!...
-const S_COMMENT = 16; // <!--
-const S_COMMENT_ENDING = 17; // <!-- blah -
-const S_COMMENT_ENDED = 18; // <!-- blah --
-const S_CDATA = 19; // <![CDATA[ something
-const S_CDATA_ENDING = 20; // ]
-const S_CDATA_ENDING_2 = 21; // ]]
-const S_PI_FIRST_CHAR = 22; // <?hi, first char
-const S_PI_REST = 23; // <?hi, rest of the name
-const S_PI_BODY = 24; // <?hi there
-const S_PI_ENDING = 25; // <?hi "there" ?
-const S_XML_DECL_NAME_START = 26; // <?xml
-const S_XML_DECL_NAME = 27; // <?xml foo
-const S_XML_DECL_EQ = 28; // <?xml foo=
-const S_XML_DECL_VALUE_START = 29; // <?xml foo=
-const S_XML_DECL_VALUE = 30; // <?xml foo="bar"
-const S_XML_DECL_SEPARATOR = 31; // <?xml foo="bar"
-const S_XML_DECL_ENDING = 32; // <?xml ... ?
-const S_OPEN_TAG = 33; // <strong
-const S_OPEN_TAG_SLASH = 34; // <strong /
-const S_ATTRIB = 35; // <a
-const S_ATTRIB_NAME = 36; // <a foo
-const S_ATTRIB_NAME_SAW_WHITE = 37; // <a foo _
-const S_ATTRIB_VALUE = 38; // <a foo=
-const S_ATTRIB_VALUE_QUOTED = 39; // <a foo="bar
-const S_ATTRIB_VALUE_CLOSED = 40; // <a foo="bar"
-const S_ATTRIB_VALUE_UNQUOTED = 41; // <a foo=bar
-const S_CLOSE_TAG = 42; // </a
-const S_CLOSE_TAG_SAW_WHITE = 43; // </a   >
-
+const S_BEGIN = 0; // Initial state.
+const S_BEGIN_WHITESPACE = 1; // leading whitespace
+const S_DOCTYPE = 2; // <!DOCTYPE
+const S_DOCTYPE_QUOTE = 3; // <!DOCTYPE "//blah
+const S_DTD = 4; // <!DOCTYPE "//blah" [ ...
+const S_DTD_QUOTED = 5; // <!DOCTYPE "//blah" [ "foo
+const S_DTD_OPEN_WAKA = 6;
+const S_DTD_OPEN_WAKA_BANG = 7;
+const S_DTD_COMMENT = 8; // <!--
+const S_DTD_COMMENT_ENDING = 9; // <!-- blah -
+const S_DTD_COMMENT_ENDED = 10; // <!-- blah --
+const S_DTD_PI = 11; // <?
+const S_DTD_PI_ENDING = 12; // <?hi "there" ?
+const S_TEXT = 13; // general stuff
+const S_ENTITY = 14; // &amp and such
+const S_OPEN_WAKA = 15; // <
+const S_OPEN_WAKA_BANG = 16; // <!...
+const S_COMMENT = 17; // <!--
+const S_COMMENT_ENDING = 18; // <!-- blah -
+const S_COMMENT_ENDED = 19; // <!-- blah --
+const S_CDATA = 20; // <![CDATA[ something
+const S_CDATA_ENDING = 21; // ]
+const S_CDATA_ENDING_2 = 22; // ]]
+const S_PI_FIRST_CHAR = 23; // <?hi, first char
+const S_PI_REST = 24; // <?hi, rest of the name
+const S_PI_BODY = 25; // <?hi there
+const S_PI_ENDING = 26; // <?hi "there" ?
+const S_XML_DECL_NAME_START = 27; // <?xml
+const S_XML_DECL_NAME = 28; // <?xml foo
+const S_XML_DECL_EQ = 29; // <?xml foo=
+const S_XML_DECL_VALUE_START = 30; // <?xml foo=
+const S_XML_DECL_VALUE = 31; // <?xml foo="bar"
+const S_XML_DECL_SEPARATOR = 32; // <?xml foo="bar"
+const S_XML_DECL_ENDING = 33; // <?xml ... ?
+const S_OPEN_TAG = 34; // <strong
+const S_OPEN_TAG_SLASH = 35; // <strong /
+const S_ATTRIB = 36; // <a
+const S_ATTRIB_NAME = 37; // <a foo
+const S_ATTRIB_NAME_SAW_WHITE = 38; // <a foo _
+const S_ATTRIB_VALUE = 39; // <a foo=
+const S_ATTRIB_VALUE_QUOTED = 40; // <a foo="bar
+const S_ATTRIB_VALUE_CLOSED = 41; // <a foo="bar"
+const S_ATTRIB_VALUE_UNQUOTED = 42; // <a foo=bar
+const S_CLOSE_TAG = 43; // </a
+const S_CLOSE_TAG_SAW_WHITE = 44; // </a   >
 
 const TAB = 9;
 const NL = 0xA;
@@ -695,6 +695,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
     //
     this.stateTable = [
       /* eslint-disable @typescript-eslint/unbound-method */
+      this.sBegin,
       this.sBeginWhitespace,
       this.sDoctype,
       this.sDoctypeQuote,
@@ -767,7 +768,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
     // this.opt.fragment while parsing.
 
     const { fragmentOpt } = this;
-    this.state = fragmentOpt ? S_TEXT : S_BEGIN_WHITESPACE;
+    this.state = fragmentOpt ? S_TEXT : S_BEGIN;
     // We want these to be all true if we are dealing with a fragment.
     this.reportedTextBeforeRoot = this.reportedTextAfterRoot = this.closedRoot =
       this.sawRoot = fragmentOpt;
@@ -1269,11 +1270,13 @@ export class SaxesParser<O extends SaxesOptions = {}> {
 
   // STATE ENGINE METHODS
 
-  private sBeginWhitespace(): void {
+  // This needs to be a state separate from S_BEGIN_WHITESPACE because we want
+  // to be sure never to come back to this state later.
+  private sBegin(): void {
     // We are essentially peeking at the first character of the chunk. Since
-    // S_BEGIN_WHITESPACE can be in effect only when we start working on the
-    // first chunk, the index at which we must look is necessarily 0. Note also
-    // that the following test does not depend on decoding surrogates.
+    // S_BEGIN can be in effect only when we start working on the first chunk,
+    // the index at which we must look is necessarily 0. Note also that the
+    // following test does not depend on decoding surrogates.
 
     // If the initial character is 0xFEFF, ignore it.
     if (this.chunk.charCodeAt(0) === 0xFEFF) {
@@ -1281,6 +1284,10 @@ export class SaxesParser<O extends SaxesOptions = {}> {
       this.column++;
     }
 
+    this.state = S_BEGIN_WHITESPACE;
+  }
+
+  private sBeginWhitespace(): void {
     // This initial loop is a specialized version of skipSpaces. We need to know
     // whether we've encountered spaces or not because as soon as we run into a
     // space, an XML declaration is no longer possible. Rather than slow down
@@ -2407,8 +2414,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
       const tag = tags.pop()!;
       this.fail(`unclosed tag: ${tag.name}`);
     }
-    if ((this.state !== S_BEGIN_WHITESPACE) &&
-        (this.state !== S_TEXT)) {
+    if ((this.state !== S_BEGIN) && (this.state !== S_TEXT)) {
       this.fail("unexpected end.");
     }
     const { text } = this;
