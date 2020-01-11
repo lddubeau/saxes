@@ -66,7 +66,7 @@ reported.
 The parser will handle the basic XML entities in text nodes and attribute
 values: `&amp; &lt; &gt; &apos; &quot;`. It's possible to define additional
 entities in XML by putting them in the DTD. This parser doesn't do anything with
-that. If you want to listen to the `ondoctype` event, and then fetch the
+that. If you want to listen to the `doctype` event, and then fetch the
 doctypes, and read the entities and add them to `parser.ENTITIES`, then be my
 guest.
 
