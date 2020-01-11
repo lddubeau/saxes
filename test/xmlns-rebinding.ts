@@ -18,6 +18,42 @@ test({
       },
     ],
     [
+      "attribute",
+      {
+        name: "xmlns:x",
+        value: "x1",
+        prefix: "xmlns",
+        local: "x",
+      },
+    ],
+    [
+      "attribute",
+      {
+        name: "xmlns:y",
+        value: "y1",
+        prefix: "xmlns",
+        local: "y",
+      },
+    ],
+    [
+      "attribute",
+      {
+        name: "x:a",
+        value: "x1",
+        prefix: "x",
+        local: "a",
+      },
+    ],
+    [
+      "attribute",
+      {
+        name: "y:a",
+        value: "y1",
+        prefix: "y",
+        local: "a",
+      },
+    ],
+    [
       "opentag",
       {
         name: "root",
@@ -72,6 +108,15 @@ test({
       },
     ],
     [
+      "attribute",
+      {
+        name: "xmlns:x",
+        value: "x2",
+        prefix: "xmlns",
+        local: "x",
+      },
+    ],
+    [
       "opentag",
       {
         name: "rebind",
@@ -100,6 +145,24 @@ test({
         name: "check",
         attributes: {},
         ns: {},
+      },
+    ],
+    [
+      "attribute",
+      {
+        name: "x:a",
+        value: "x2",
+        prefix: "x",
+        local: "a",
+      },
+    ],
+    [
+      "attribute",
+      {
+        name: "y:a",
+        value: "y1",
+        prefix: "y",
+        local: "a",
       },
     ],
     [
@@ -185,6 +248,24 @@ test({
         name: "check",
         attributes: {},
         ns: {},
+      },
+    ],
+    [
+      "attribute",
+      {
+        name: "x:a",
+        value: "x1",
+        prefix: "x",
+        local: "a",
+      },
+    ],
+    [
+      "attribute",
+      {
+        name: "y:a",
+        value: "y1",
+        prefix: "y",
+        local: "a",
       },
     ],
     [

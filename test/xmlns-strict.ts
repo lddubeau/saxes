@@ -42,6 +42,15 @@ test({
       },
     ],
     [
+      "attribute",
+      {
+        name: "attr",
+        value: "normal",
+        prefix: "",
+        local: "attr",
+      },
+    ],
+    [
       "opentag",
       {
         name: "plain",
@@ -90,6 +99,15 @@ test({
       },
     ],
     [
+      "attribute",
+      {
+        name: "xmlns",
+        value: "uri:default",
+        prefix: "",
+        local: "xmlns",
+      },
+    ],
+    [
       "opentag",
       {
         name: "ns1",
@@ -118,6 +136,15 @@ test({
         name: "plain",
         ns: {},
         attributes: {},
+      },
+    ],
+    [
+      "attribute",
+      {
+        name: "attr",
+        value: "normal",
+        prefix: "",
+        local: "attr",
       },
     ],
     [
@@ -189,6 +216,15 @@ test({
         name: "ns2",
         attributes: {},
         ns: {},
+      },
+    ],
+    [
+      "attribute",
+      {
+        name: "xmlns:a",
+        value: "uri:nsa",
+        prefix: "xmlns",
+        local: "a",
       },
     ],
     [
@@ -220,6 +256,15 @@ test({
         name: "plain",
         attributes: {},
         ns: {},
+      },
+    ],
+    [
+      "attribute",
+      {
+        name: "attr",
+        value: "normal",
+        prefix: "",
+        local: "attr",
       },
     ],
     [
@@ -268,6 +313,15 @@ test({
         name: "a:ns",
         attributes: {},
         ns: {},
+      },
+    ],
+    [
+      "attribute",
+      {
+        name: "a:attr",
+        value: "namespaced",
+        prefix: "a",
+        local: "attr",
       },
     ],
     [

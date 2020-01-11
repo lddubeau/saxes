@@ -22,6 +22,10 @@ describe("eol handling", () => {
     const expect = [
       ["text", "\n\n"],
       ["opentagstart", { name: "moo", attributes: {} }],
+      ["attribute", {
+        name: "a",
+        value: "12         3",
+      }],
       ["opentag", {
         name: "moo",
         attributes: {
@@ -142,6 +146,14 @@ SYSTEM
       ["processinginstruction", { target: "fnord", body: "" }],
       ["text", "\n"],
       ["opentagstart", { name: "moo", attributes: {} }],
+      ["attribute", {
+        name: "a",
+        value: "12         3",
+      }],
+      ["attribute", {
+        name: "b",
+        value: " z ",
+      }],
       ["opentag", {
         name: "moo",
         attributes: {
@@ -160,6 +172,10 @@ abc
       ["processinginstruction", { target: "fnord", body: "" }],
       ["text", "\n"],
       ["opentagstart", { name: "abc", attributes: {} }],
+      ["attribute", {
+        name: "a",
+        value: "bc",
+      }],
       ["opentag", {
         name: "abc",
         attributes: {

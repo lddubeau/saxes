@@ -5,6 +5,12 @@ test({
   xml: "<root length='12345'></root>",
   expect: [
     ["opentagstart", { name: "root", attributes: {}, ns: {} }],
+    ["attribute", {
+      name: "length",
+      value: "12345",
+      prefix: "",
+      local: "length",
+    }],
     [
       "opentag",
       {

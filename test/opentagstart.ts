@@ -14,6 +14,15 @@ describe("openstarttag", () => {
         },
       ],
       [
+        "attribute",
+        {
+          name: "length",
+          value: "12345",
+          prefix: "",
+          local: "length",
+        },
+      ],
+      [
         "opentag",
         {
           name: "root",
@@ -68,6 +77,13 @@ describe("openstarttag", () => {
         {
           name: "root",
           attributes: {},
+        },
+      ],
+      [
+        "attribute",
+        {
+          name: "length",
+          value: "12345",
         },
       ],
       [

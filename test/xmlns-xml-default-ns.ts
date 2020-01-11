@@ -31,6 +31,25 @@ test({
       },
     ],
     [
+      "attribute",
+      {
+        name: "xmlns",
+        // eslint-disable-next-line @typescript-eslint/tslint/config
+        value: "http://foo",
+        prefix: "",
+        local: "xmlns",
+      },
+    ],
+    [
+      "attribute",
+      {
+        name: "attr",
+        value: "bar",
+        prefix: "",
+        local: "attr",
+      },
+    ],
+    [
       "opentag",
       {
         name: "elm",

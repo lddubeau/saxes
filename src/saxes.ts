@@ -180,6 +180,7 @@ export const EVENTS = [
   "doctype",
   "comment",
   "opentagstart",
+  "attribute",
   "opentag",
   "closetag",
   "cdata",
@@ -194,6 +195,7 @@ const EVENT_NAME_TO_HANDLER_NAME: Record<EventName, string> = {
   doctype: "doctypeHandler",
   comment: "commentHandler",
   opentagstart: "openTagStartHandler",
+  attribute: "attributeHandler",
   opentag: "openTagHandler",
   closetag: "closeTagHandler",
   cdata: "cdataHandler",
@@ -240,6 +242,17 @@ export type CommentHandler = (comment: string) => void;
  * @param tag The tag.
  */
 export type OpenTagStartHandler<O> = (tag: StartTagForOptions<O>) => void;
+
+export type AttributeEventForOptions<O extends SaxesOptions> =
+  O extends { xmlns: true } ? SaxesAttributeNSIncomplete :
+    O extends { xmlns?: false | undefined } ? SaxesAttributePlain :
+      SaxesAttribute;
+
+/**
+ * Event handler for attributes.
+ */
+export type AttributeHandler<O> =
+  (attribute: AttributeEventForOptions<O>) => void;
 
 /**
  * Event handler for an open tag. This is called when the open tag is
@@ -294,6 +307,7 @@ export type EventNameToHandler<O, N extends EventName> = {
   "doctype": DoctypeHandler;
   "comment": CommentHandler;
   "opentagstart": OpenTagStartHandler<O>;
+  "attribute": AttributeHandler<O>;
   "opentag": OpenTagHandler<O>;
   "closetag": CloseTagHandler<O>;
   "cdata": CDataHandler;
@@ -333,20 +347,17 @@ export interface SaxesAttributeNS {
 }
 
 /**
- * This is an alias for SaxesAttributeNS which will eventually be removed in a
- * future major version.
- *
- * @deprecated
+ * This is an attribute, as recorded by a parser which parses namespaces but
+ * prior to the URI being resolvable. This is what is passed to the attribute
+ * event handler.
  */
-export type SaxesAttribute = SaxesAttributeNS;
+export type SaxesAttributeNSIncomplete =  Exclude<SaxesAttributeNS, "uri">;
 
 /**
  * This interface defines the structure of attributes when the parser is
  * NOT processing namespaces (created with ``xmlns: false``).
- *
- * This is not exported because this structure is used only internally.
  */
-interface SaxesAttributePlain {
+export interface SaxesAttributePlain {
   /**
    * The attribute's name.
    */
@@ -355,6 +366,11 @@ interface SaxesAttributePlain {
   /** The attribute's value. */
   value: string;
 }
+
+/**
+ * A saxes attribute, with or without namespace information.
+ */
+export type SaxesAttribute = SaxesAttributeNS | SaxesAttributePlain;
 
 /**
  * This are the fields that MAY be present on a complete tag.
@@ -544,7 +560,7 @@ export type TagForOptions<O extends SaxesOptions> =
 
 export type StartTagForOptions<O extends SaxesOptions> =
   O extends { xmlns: true } ? SaxesStartTagNS :
-    O extends { xmlns: false | undefined } ? SaxesStartTagPlain :
+    O extends { xmlns?: false | undefined } ? SaxesStartTagPlain :
       SaxesStartTag;
 
 export class SaxesParser<O extends SaxesOptions = {}> {
@@ -582,7 +598,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
   private prevI!: number;
   private carriedFromPrevious?: string;
   private forbiddenState!: number;
-  private attribList!: (SaxesAttributeNS | SaxesAttributePlain)[];
+  private attribList!: (SaxesAttributeNSIncomplete | SaxesAttributePlain)[];
   private state!: number;
   private reportedTextBeforeRoot!: boolean;
   private reportedTextAfterRoot!: boolean;
@@ -611,6 +627,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
   private errorHandler?: ErrorHandler;
   private endHandler?: EndHandler;
   private readyHandler?: ReadyHandler;
+  private attributeHandler?: AttributeHandler<O>;
 
   /**
    * Indicates whether or not the parser is closed. If ``true``, wait for
@@ -2087,8 +2104,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
     let { i: start } = this;
     // eslint-disable-next-line no-constant-condition
     while (true) {
-      const code = this.getCode();
-      switch (code) {
+      switch (this.getCode()) {
         case q:
           this.pushAttrib(this.name,
                           this.text + chunk.slice(start, this.prevI));
@@ -2359,7 +2375,10 @@ export class SaxesParser<O extends SaxesOptions = {}> {
 
   private pushAttribNS(name: string, value: string): void {
     const { prefix, local } = this.qname(name);
-    this.attribList.push({ name, prefix, local, value, uri: undefined });
+    const attr = { name, prefix, local, value };
+    this.attribList.push(attr);
+    // eslint-disable-next-line no-unused-expressions
+    this.attributeHandler?.(attr as AttributeEventForOptions<O>);
     if (prefix === "xmlns") {
       const trimmed = value.trim();
       if (this.currentXMLVersion === "1.0" && trimmed === "") {
@@ -2376,7 +2395,10 @@ export class SaxesParser<O extends SaxesOptions = {}> {
   }
 
   private pushAttribPlain(name: string, value: string): void {
-    this.attribList.push({ name, value });
+    const attr = { name, value };
+    this.attribList.push(attr);
+    // eslint-disable-next-line no-unused-expressions
+    this.attributeHandler?.(attr as AttributeEventForOptions<O>);
   }
 
   /**
@@ -2493,7 +2515,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
     const seen = new Set();
     // Note: do not apply default ns to attributes:
     //   http://www.w3.org/TR/REC-xml-names/#defaulting
-    for (const attr of attribList as SaxesAttributeNS[]) {
+    for (const attr of attribList as SaxesAttributeNSIncomplete[]) {
       const { name, prefix, local } = attr;
       let uri;
       let eqname;

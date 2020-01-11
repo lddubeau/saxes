@@ -11,6 +11,14 @@ test({
       name: "root",
       attributes: {},
     }],
+    ["attribute", {
+      name: "attr1",
+      value: "\r \n\t",
+    }],
+    ["attribute", {
+      name: "attr2",
+      value: "   a  b",
+    }],
     ["opentag", {
       name: "root",
       attributes: { attr1: "\r \n\t", attr2: "   a  b" },

@@ -56,6 +56,15 @@ describe("xml default prefix", () => {
         },
       ],
       [
+        "attribute",
+        {
+          name: "xml:lang",
+          local: "lang",
+          prefix: "xml",
+          value: "en",
+        },
+      ],
+      [
         "opentag",
         {
           name: "root",
@@ -111,6 +120,15 @@ describe("xml default prefix", () => {
           name: "xml:root",
           attributes: {},
           ns: {},
+        },
+      ],
+      [
+        "attribute",
+        {
+          name: "xmlns:xml",
+          local: "xml",
+          prefix: "xmlns",
+          value: "ERROR",
         },
       ],
       [

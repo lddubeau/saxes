@@ -1,5 +1,6 @@
 import { expect } from "chai";
-import { EVENTS, SaxesOptions, SaxesParser } from "../build/dist/saxes";
+import { EventName, EVENTS, SaxesOptions,
+         SaxesParser } from "../build/dist/saxes";
 
 export interface TestOptions {
   xml?: string | string[];
@@ -8,14 +9,15 @@ export interface TestOptions {
   expect: any[];
   fn?: (parser: SaxesParser<{}>) => void;
   opt?: SaxesOptions;
+  events?: EventName[];
 }
 
 export function test(options: TestOptions): void {
-  const { xml, name, expect: expected, fn } = options;
+  const { xml, name, expect: expected, fn, events } = options;
   it(name, () => {
     const parser = new SaxesParser(options.opt);
     let expectedIx = 0;
-    for (const ev of EVENTS) {
+    for (const ev of events ?? EVENTS) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any, no-loop-func
       parser.on(ev, (n: any) => {
         if (process.env.DEBUG !== undefined) {
@@ -49,9 +51,7 @@ export function test(options: TestOptions): void {
       }
     }
 
-    if (fn !== undefined) {
-      fn(parser);
-    }
+    fn?.(parser);
 
     expect(expectedIx).to.equal(expected.length);
   });

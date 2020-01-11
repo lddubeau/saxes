@@ -56,31 +56,10 @@ for (const entity in entitiesToTest) {
 test({
   name: "xml internal entities",
   expect: [
-    [
-      "opentagstart",
-      {
-        name: "a",
-        attributes: {},
-      },
-    ],
     ...attributeErrors,
-    [
-      "opentag",
-      {
-        name: "a",
-        attributes: myAttributes,
-        isSelfClosing: true,
-      },
-    ],
-    [
-      "closetag",
-      {
-        name: "a",
-        attributes: myAttributes,
-        isSelfClosing: true,
-      },
-    ],
   ],
+  // We only care about errrors for this test.
+  events: ["error"],
   fn(parser: SaxesParser): void {
     Object.assign(parser.ENTITIES, ENTITIES);
     parser.write(`${xmlStart}/>`).close();

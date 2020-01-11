@@ -16,6 +16,7 @@ test({
   name: "cdata end in attribute",
   expect: [
     ["opentagstart", { name: "r", attributes: {} }],
+    ["attribute", { name: "foo", value: "]]>" }],
     ["opentag", {
       name: "r",
       attributes: {

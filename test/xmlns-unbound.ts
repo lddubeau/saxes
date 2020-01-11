@@ -64,6 +64,15 @@ describe("xmlns unbound prefixes", () => {
         },
       ],
       [
+        "attribute",
+        {
+          name: "xmlns:unbound",
+          value: "someuri",
+          prefix: "xmlns",
+          local: "unbound",
+        },
+      ],
+      [
         "opentag",
         {
           name: "unbound:root",
@@ -125,6 +134,15 @@ describe("xmlns unbound prefixes", () => {
           name: "root",
           attributes: {},
           ns: {},
+        },
+      ],
+      [
+        "attribute",
+        {
+          name: "unbound:attr",
+          value: "value",
+          prefix: "unbound",
+          local: "attr",
         },
       ],
       [

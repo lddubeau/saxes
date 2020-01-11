@@ -7,6 +7,12 @@ test({
   expect: [
     ["opentagstart", { name: "root", attributes: {}, ns: {} }],
     ["error", "1:14: unquoted attribute value."],
+    ["attribute", {
+      name: "length",
+      value: "12345",
+      prefix: "",
+      local: "length",
+    }],
     ["opentag", {
       name: "root",
       attributes: {
