@@ -205,7 +205,7 @@ const EVENT_NAME_TO_HANDLER_NAME: Record<EventName, string> = {
 };
 
 /**
- * Event handler for text data. The default implementation is a no-op.
+ * Event handler for text data.
  *
  * @param text The text data encountered by the parser.
  *
@@ -213,8 +213,7 @@ const EVENT_NAME_TO_HANDLER_NAME: Record<EventName, string> = {
 export type TextHandler = (text: string) => void;
 
 /**
- * Event handler for processing instructions. The default implementation is a
- * no-op.
+ * Event handler for processing instructions.
  *
  * @param data The target and body of the processing instruction.
  */
@@ -222,14 +221,14 @@ export type PIHandler = (data: { target: string; body: string }) => void;
 
 
 /**
- * Event handler for doctype. The default implementation is a no-op.
+ * Event handler for doctype.
  *
  * @param doctype The doctype contents.
  */
 export type DoctypeHandler = (doctype: string) => void;
 
 /**
- * Event handler for comments. The default implementation is a no-op.
+ * Event handler for comments.
  *
  * @param comment The comment contents.
  */
@@ -237,7 +236,7 @@ export type CommentHandler = (comment: string) => void;
 
 /**
  * Event handler for the start of an open tag. This is called as soon as we
- * have a tag name. The default implementation is a no-op.
+ * have a tag name.
  *
  * @param tag The tag.
  */
@@ -256,8 +255,7 @@ export type AttributeHandler<O> =
 
 /**
  * Event handler for an open tag. This is called when the open tag is
- * complete. (We've encountered the ">" that ends the open tag.) The default
- * implementation is a no-op.
+ * complete. (We've encountered the ">" that ends the open tag.)
  *
  * @param tag The tag.
  */
@@ -265,7 +263,7 @@ export type OpenTagHandler<O> = (tag: TagForOptions<O>) => void;
 
 /**
  * Event handler for a close tag. Note that for self-closing tags, this is
- * called right after ``onopentag``. The default implementation is a no-op.
+ * called right after ``opentag``.
  *
  * @param tag The tag.
  */
@@ -273,7 +271,7 @@ export type CloseTagHandler<O> = (tag: TagForOptions<O>) => void;
 
 /**
  * Event handler for a CDATA section. This is called when ending the
- * CDATA section. The default implementation is a no-op.
+ * CDATA section.
  *
  * @param cdata The contents of the CDATA section.
  */
@@ -281,20 +279,18 @@ export type CDataHandler = (cdata: string) => void;
 
 /**
  * Event handler for the stream end. This is called when the stream has been
- * closed with ``close`` or by passing ``null`` to ``write``. The default
- * implementation is a no-op.
+ * closed with ``close`` or by passing ``null`` to ``write``.
  */
 export type EndHandler = () => void;
 
 /**
  * Event handler indicating parser readiness . This is called when the parser
- * is ready to parse a new document.  The default implementation is a no-op.
+ * is ready to parse a new document.
  */
 export type ReadyHandler = () => void;
 
 /**
- * Event handler indicating an error. The default implementation throws the
- * error. Override with a no-op handler if you don't want this.
+ * Event handler indicating an error.
  *
  * @param err The error that occurred.
  */
