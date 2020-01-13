@@ -893,28 +893,41 @@ export class SaxesParser<O extends SaxesOptions = {}> {
   }
 
   /**
+   * Make an error object. The error object will have a message that contains
+   * the ``fileName`` option passed at the creation of the parser. If position
+   * tracking was turned on, it will also have line and column number
+   * information.
+   *
+   * @param message The message describing the error to report.
+   *
+   * @returns An error object with a properly formatted message.
+   */
+  makeError(message: string): Error {
+    let msg = this.fileName ?? "";
+    if (this.trackPosition) {
+      if (msg.length > 0) {
+        msg += ":";
+      }
+      msg += `${this.line}:${this.column}`;
+    }
+    if (msg.length > 0) {
+      msg += ": ";
+    }
+    return new Error(msg + message);
+  }
+
+  /**
    * Report a parsing error. This method is made public so that client code may
    * check for issues that are outside the scope of this project and can report
    * errors.
    *
-   * @param er The error to report.
+   * @param message The error to report.
    *
    * @returns this
    */
-  fail(er: string): this {
-    let message = this.fileName ?? "";
-    if (this.trackPosition) {
-      if (message.length > 0) {
-        message += ":";
-      }
-      message += `${this.line}:${this.column}`;
-    }
-    if (message.length > 0) {
-      message += ": ";
-    }
-    message += er;
+  fail(message: string): this {
+    const err = this.makeError(message);
     const handler = this.errorHandler;
-    const err = new Error(message);
     if (handler === undefined) {
       throw err;
     }
