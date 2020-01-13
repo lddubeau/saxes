@@ -20,6 +20,14 @@ describe("eol handling", () => {
     /* eslint-enable linebreak-style */
 
     const expect = [
+      [
+        "xmldecl",
+        {
+          encoding: "utf-8",
+          version: "1.0",
+          standalone: undefined,
+        },
+      ],
       ["text", "\n\n"],
       ["opentagstart", { name: "moo", attributes: {} }],
       ["attribute", {
@@ -124,6 +132,14 @@ a
     const xmlDeclEnd = nl.indexOf("?>");
 
     const expect = [
+      [
+        "xmldecl",
+        {
+          encoding: "utf-8",
+          version: "1.0",
+          standalone: "no",
+        },
+      ],
       ["text", "\n"],
       ["doctype", `
 root
@@ -200,7 +216,12 @@ abc
         isSelfClosing: false,
       }],
       ["text", "\n"],
-    ];
+    ] as const;
+
+    const fixed11 =
+      expect.map(x => (x[0] === "xmldecl" ?
+        [x[0], { ...x[1], version: "1.1" }] : x));
+
 
     describe("nl", () => {
       test({
@@ -266,17 +287,17 @@ abc
     describe("nel", () => {
       // We have to switch the EOL characters after the XML declaration.
       const nel = nl.slice(0, xmlDeclEnd).replace("1.0", "1.1") +
-            nl.slice(xmlDeclEnd).replace(/\n/g, "\u0085");
+        nl.slice(xmlDeclEnd).replace(/\n/g, "\u0085");
 
       test({
         name: "one chunk",
         xml: nel,
-        expect,
+        expect: fixed11,
       });
 
       test({
         name: "char-by-char",
-        expect,
+        expect: fixed11,
         fn(parser: SaxesParser): void {
           for (const x of nel) {
             parser.write(x);
@@ -294,12 +315,12 @@ abc
       test({
         name: "one chunk",
         xml: ls,
-        expect,
+        expect: fixed11,
       });
 
       test({
         name: "char-by-char",
-        expect,
+        expect: fixed11,
         fn(parser: SaxesParser): void {
           for (const x of ls) {
             parser.write(x);
@@ -317,6 +338,14 @@ abc
       [
         "error",
         "2:6: an XML declaration must be at the start of the document.",
+      ],
+      [
+        "xmldecl",
+        {
+          encoding: "utf-8",
+          version: "1.0",
+          standalone: undefined,
+        },
       ],
       ["opentagstart", {
         name: "doc",

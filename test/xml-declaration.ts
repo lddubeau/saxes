@@ -19,6 +19,14 @@ describe("xml declaration", () => {
     xml: "<?xml?><root/>",
     expect: [
       ["error", "1:7: XML declaration must contain a version."],
+      [
+        "xmldecl",
+        {
+          encoding: undefined,
+          version: undefined,
+          standalone: undefined,
+        },
+      ],
       ["opentagstart", { name: "root", attributes: {}, ns: {} }],
       [
         "opentag",
@@ -55,6 +63,14 @@ describe("xml declaration", () => {
     xml: "<?xml version?><root/>",
     expect: [
       ["error", "1:14: XML declaration is incomplete."],
+      [
+        "xmldecl",
+        {
+          encoding: undefined,
+          version: undefined,
+          standalone: undefined,
+        },
+      ],
       ["opentagstart", { name: "root", attributes: {}, ns: {} }],
       [
         "opentag",
@@ -91,6 +107,14 @@ describe("xml declaration", () => {
     xml: "<?xml version=?><root/>",
     expect: [
       ["error", "1:15: XML declaration is incomplete."],
+      [
+        "xmldecl",
+        {
+          encoding: undefined,
+          version: undefined,
+          standalone: undefined,
+        },
+      ],
       ["opentagstart", { name: "root", attributes: {}, ns: {} }],
       [
         "opentag",
@@ -128,6 +152,14 @@ describe("xml declaration", () => {
     expect: [
       ["error", "1:15: value must be quoted."],
       ["error", "1:16: XML declaration is incomplete."],
+      [
+        "xmldecl",
+        {
+          encoding: undefined,
+          version: undefined,
+          standalone: undefined,
+        },
+      ],
       ["opentagstart", { name: "root", attributes: {}, ns: {} }],
       [
         "opentag",
@@ -164,6 +196,14 @@ describe("xml declaration", () => {
     xml: "<?xml version=\"a?><root/>",
     expect: [
       ["error", "1:17: XML declaration is incomplete."],
+      [
+        "xmldecl",
+        {
+          encoding: undefined,
+          version: undefined,
+          standalone: undefined,
+        },
+      ],
       ["opentagstart", { name: "root", attributes: {}, ns: {} }],
       [
         "opentag",
@@ -200,6 +240,14 @@ describe("xml declaration", () => {
     xml: "<?xml version=\"a\"?><root/>",
     expect: [
       ["error", "1:17: version number must match /^1\\.[0-9]+$/."],
+      [
+        "xmldecl",
+        {
+          encoding: undefined,
+          version: "a",
+          standalone: undefined,
+        },
+      ],
       ["opentagstart", { name: "root", attributes: {}, ns: {} }],
       [
         "opentag",

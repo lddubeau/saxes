@@ -175,6 +175,7 @@ const FORBIDDEN_BRACKET_BRACKET = 2;
  * The list of supported events.
  */
 export const EVENTS = [
+  "xmldecl",
   "text",
   "processinginstruction",
   "doctype",
@@ -190,6 +191,7 @@ export const EVENTS = [
 ] as const;
 
 const EVENT_NAME_TO_HANDLER_NAME: Record<EventName, string> = {
+  xmldecl: "xmldeclHandler",
   text: "textHandler",
   processinginstruction: "piHandler",
   doctype: "doctypeHandler",
@@ -203,6 +205,14 @@ const EVENT_NAME_TO_HANDLER_NAME: Record<EventName, string> = {
   end: "endHandler",
   ready: "readyHandler",
 };
+
+/**
+ * Event handler for the
+ *
+ * @param text The text data encountered by the parser.
+ *
+ */
+export type XMLDeclHandler = (decl: XMLDecl) => void;
 
 /**
  * Event handler for text data.
@@ -298,6 +308,7 @@ export type ErrorHandler = (err: Error) => void;
 
 export type EventName = (typeof EVENTS)[number];
 export type EventNameToHandler<O, N extends EventName> = {
+  "xmldecl": XMLDeclHandler;
   "text": TextHandler;
   "processinginstruction": PIHandler;
   "doctype": DoctypeHandler;
@@ -347,7 +358,7 @@ export interface SaxesAttributeNS {
  * prior to the URI being resolvable. This is what is passed to the attribute
  * event handler.
  */
-export type SaxesAttributeNSIncomplete =  Exclude<SaxesAttributeNS, "uri">;
+export type SaxesAttributeNSIncomplete = Exclude<SaxesAttributeNS, "uri">;
 
 /**
  * This interface defines the structure of attributes when the parser is
@@ -612,6 +623,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
   private _closed!: boolean;
   private currentXMLVersion!: string;
   private readonly stateTable: ((this: SaxesParser<O>) => void)[];
+  private xmldeclHandler?: XMLDeclHandler;
   private textHandler?: TextHandler;
   private piHandler?: PIHandler;
   private doctypeHandler?: DoctypeHandler;
@@ -1951,6 +1963,8 @@ export class SaxesParser<O extends SaxesOptions = {}> {
                this.xmlDeclExpects.includes("version")) {
         this.fail("XML declaration must contain a version.");
       }
+      // eslint-disable-next-line no-unused-expressions
+      this.xmldeclHandler?.(this.xmlDecl);
       this.name = "";
       this.piTarget = this.text = "";
       this.state = S_TEXT;

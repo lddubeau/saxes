@@ -3,13 +3,13 @@ import { EventName, EVENTS, SaxesOptions,
          SaxesParser } from "../build/dist/saxes";
 
 export interface TestOptions {
-  xml?: string | string[];
+  xml?: string | readonly string[];
   name: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  expect: any[];
+  expect: readonly any[];
   fn?: (parser: SaxesParser<{}>) => void;
   opt?: SaxesOptions;
-  events?: EventName[];
+  events?: readonly EventName[];
 }
 
 export function test(options: TestOptions): void {

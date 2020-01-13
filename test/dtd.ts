@@ -10,6 +10,14 @@ describe("dtd", () => {
 ]>
 <root/>`,
     expect: [
+      [
+        "xmldecl",
+        {
+          encoding: "UTF-8",
+          version: "1.0",
+          standalone: undefined,
+        },
+      ],
       ["text", "\n"],
       ["doctype", ` root [
 <!-- I'm a test. -->
@@ -30,6 +38,14 @@ describe("dtd", () => {
 ]>
 <root/>`,
     expect: [
+      [
+        "xmldecl",
+        {
+          encoding: "UTF-8",
+          version: "1.0",
+          standalone: undefined,
+        },
+      ],
       ["text", "\n"],
       ["doctype", ` root [
 <? I'm a test. ?>
@@ -50,6 +66,14 @@ describe("dtd", () => {
 ]>
 <root/>`,
     expect: [
+      [
+        "xmldecl",
+        {
+          encoding: "UTF-8",
+          version: "1.0",
+          standalone: undefined,
+        },
+      ],
       ["text", "\n"],
       ["doctype", ` root [
 <!NOTATION not1 SYSTEM "]>">
