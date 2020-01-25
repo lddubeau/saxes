@@ -54,7 +54,7 @@
     "tsd": "^0.11.0",
     "tslint": "^5.20.1",
     "tslint-microsoft-contrib": "^6.2.0",
-    "typedoc": "^0.16.8",
+    "typedoc": "^0.16.9",
     "typescript": "^3.7.5"
   },
   "dependencies": {
