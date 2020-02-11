@@ -98,6 +98,8 @@ module.exports = {
             lintFile: "./.tslint.config.json",
           },
         ],
+        // Routinely violated by large describe blocks.
+        "max-lines-per-function": "off",
       }
     }],
   }],

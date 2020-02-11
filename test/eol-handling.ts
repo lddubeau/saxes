@@ -1,6 +1,5 @@
-import { test } from "./testutil";
-
 import { SaxesParser } from "../build/dist/saxes";
+import { test } from "./testutil";
 
 describe("eol handling", () => {
   describe("mixed", () => {

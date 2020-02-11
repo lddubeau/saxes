@@ -1,8 +1,7 @@
 import { expect } from "chai";
 
-import { test } from "./testutil";
-
 import { EVENTS, SaxesOptions, SaxesParser } from "../build/dist/saxes";
+import { test } from "./testutil";
 
 function testPosition(name: string, chunks: string[],
                       // eslint-disable-next-line @typescript-eslint/no-explicit-any

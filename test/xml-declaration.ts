@@ -1,8 +1,7 @@
 import { expect } from "chai";
 
-import { test } from "./testutil";
-
 import { SaxesOptions, SaxesParser } from "../build/dist/saxes";
+import { test } from "./testutil";
 
 const XML_1_0_DECLARATION = "<?xml version=\"1.0\"?>";
 const XML_1_1_DECLARATION = "<?xml version=\"1.1\"?>";

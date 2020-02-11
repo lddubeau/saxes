@@ -1,6 +1,5 @@
-import { test } from "./testutil";
-
 import { SaxesParser } from "../build/dist/saxes";
+import { test } from "./testutil";
 
 describe("unicode test", () => {
   describe("poop", () => {

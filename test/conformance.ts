@@ -1,11 +1,11 @@
-import { build } from "@xml-conformance-suite/mocha/builders/basic";
-import { ResourceLoader } from "@xml-conformance-suite/js/resource-loader";
-import { loadTests } from "@xml-conformance-suite/js/test-parser";
-import { TestSpec } from "@xml-conformance-suite/js/test-spec";
 import { BaseDriver } from "@xml-conformance-suite/js/drivers/base";
+import { ResourceLoader } from "@xml-conformance-suite/js/resource-loader";
 import { TestHandling } from "@xml-conformance-suite/js/selection";
 import { BaseSelection } from "@xml-conformance-suite/js/selections/base";
+import { loadTests } from "@xml-conformance-suite/js/test-parser";
+import { TestSpec } from "@xml-conformance-suite/js/test-spec";
 import { Test } from "@xml-conformance-suite/js/test-suite";
+import { build } from "@xml-conformance-suite/mocha/builders/basic";
 
 import { SaxesParser } from "../build/dist/saxes";
 

@@ -1,4 +1,5 @@
 import { expect } from "chai";
+
 import { EventName, EVENTS, SaxesOptions,
          SaxesParser } from "../build/dist/saxes";
 
