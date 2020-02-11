@@ -41,7 +41,7 @@
     "conventional-changelog-cli": "^2.0.31",
     "eslint": "^6.8.0",
     "eslint-config-lddubeau-base": "^5.0.0",
-    "eslint-config-lddubeau-ts": "^1.1.5",
+    "eslint-config-lddubeau-ts": "^1.1.6",
     "eslint-import-resolver-typescript": "^2.0.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
