@@ -1,3 +1,49 @@
+<a name="5.0.0-rc.1"></a>
+# [5.0.0-rc.1](https://github.com/lddubeau/saxes/compare/v4.0.2...v5.0.0-rc.1) (2020-02-12)
+
+
+### Bug Fixes
+
+* disallow BOM characters at the beginning of subsequent chunks ([66d07b6](https://github.com/lddubeau/saxes/commit/66d07b6))
+* fix some typing mistakes ([f2a1d5e](https://github.com/lddubeau/saxes/commit/f2a1d5e))
+* handle column computation over characters in the astral plane ([cefc8f7](https://github.com/lddubeau/saxes/commit/cefc8f7))
+
+
+### Features
+
+* add makeError method ([50fa39a](https://github.com/lddubeau/saxes/commit/50fa39a))
+* add xmldecl event ([a2e677f](https://github.com/lddubeau/saxes/commit/a2e677f))
+* formal method for setting event listeners ([f346150](https://github.com/lddubeau/saxes/commit/f346150))
+* reinstating the attribute events ([7c80f7b](https://github.com/lddubeau/saxes/commit/7c80f7b))
+* saxes is now implemented in TS ([664ba69](https://github.com/lddubeau/saxes/commit/664ba69))
+
+
+### Performance Improvements
+
+* add topNS for faster namespace processing ([1a33a57](https://github.com/lddubeau/saxes/commit/1a33a57))
+
+
+### BREAKING CHANGES
+
+* The individually named event handlers no longer exist. You now
+must use the methods `on` and `off` to set handlers. Upcoming features require
+that saxes know when handlers are added and removed, and it may be necessary in
+the future to qualify how to add or remove a handler. Getters/setters are too
+restrictives so we bite the bullet now and move to actual methods.
+* The fix to column number reporting changes the meaning of the
+``column`` field. If you need the old behavior of ``column`` you can use the new
+``columnIndex`` field which behaves like the old ``column`` and may be useful in
+some contexts. Ultimately you should decide whether your application needs to
+know column numbers by Unicode character count or by JavaScript index. (And you
+need to know the difference between the two. You can see [this
+page](https://mathiasbynens.be/notes/javascript-unicode) for a detailed
+discussion of the Unicode problem in JavaScript. Note that the numbers put in
+the error messages that ``fail`` produce are still based on the ``column`` field
+and thus use the new meaning of ``column``. If you want error message that use
+``columnIndex`` you may override the ``fail`` method.
+
+
+
 <a name="4.0.2"></a>
 ## [4.0.2](https://github.com/lddubeau/saxes/compare/v4.0.0-rc.4...v4.0.2) (2019-10-14)
 
