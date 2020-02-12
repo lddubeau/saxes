@@ -12,7 +12,7 @@
   },
   "scripts": {
     "tsc": "tsc",
-    "copy": "cp -p README.md build/dist && && sed -e'/\"private\": true/d' package.json > build/package.json",
+    "copy": "cp -p README.md build/dist && sed -e'/\"private\": true/d' package.json > build/package.json",
     "build": "npm run tsc && npm run copy",
     "test": "npm run build && mocha --delay",
     "lint": "eslint --ignore-path .gitignore '**/*.ts' '**/*.js'",
