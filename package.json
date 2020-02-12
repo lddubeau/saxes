@@ -1,5 +1,6 @@
 {
   "name": "saxes",
+  "private": true,
   "description": "An evented streaming XML parser in JavaScript",
   "author": "Louis-Dominique Dubeau <ldd@lddubeau.com>",
   "version": "5.0.0-rc.2",
@@ -11,7 +12,7 @@
   },
   "scripts": {
     "tsc": "tsc",
-    "copy": "cp -p package.json README.md build/dist",
+    "copy": "cp -p README.md build/dist && && sed -e'/\"private\": true/d' package.json > build/package.json",
     "build": "npm run tsc && npm run copy",
     "test": "npm run build && mocha --delay",
     "lint": "eslint --ignore-path .gitignore '**/*.ts' '**/*.js'",
