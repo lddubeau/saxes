@@ -20,9 +20,9 @@
     "typedoc": "typedoc --tsconfig tsconfig.json --name saxes --out build/docs/ --listInvalidSymbolLinks --excludePrivate --excludeNotExported",
     "build-docs": "npm run typedoc",
     "gh-pages": "npm run build-docs && mkdir -p build && (cd build; rm -rf gh-pages; git clone .. --branch gh-pages gh-pages) && mkdir -p build/gh-pages/latest && find build/gh-pages/latest -type f -delete && cp -rp build/docs/* build/gh-pages/latest && find build/gh-pages -type d -empty -delete",
-    "preversion": "npm test",
+    "self:publish": "cd build/dist && npm publish",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
-    "postversion": "npm publish",
+    "postversion": "npm run test && npm run self:publish",
     "postpublish": "git push origin --follow-tags"
   },
   "repository": "https://github.com/lddubeau/saxes.git",
