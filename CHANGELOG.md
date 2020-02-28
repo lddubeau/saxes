@@ -1,3 +1,8 @@
+<a name="5.0.0"></a>
+# [5.0.0](https://github.com/lddubeau/saxes/compare/v5.0.0-rc.2...v5.0.0) (2020-02-28)
+
+
+
 <a name="5.0.0-rc.2"></a>
 # [5.0.0-rc.2](https://github.com/lddubeau/saxes/compare/v5.0.0-rc.1...v5.0.0-rc.2) (2020-02-12)
 

@@ -3,7 +3,7 @@
   "private": true,
   "description": "An evented streaming XML parser in JavaScript",
   "author": "Louis-Dominique Dubeau <ldd@lddubeau.com>",
-  "version": "5.0.0-rc.2",
+  "version": "5.0.0",
   "main": "saxes.js",
   "types": "saxes.d.ts",
   "license": "ISC",
