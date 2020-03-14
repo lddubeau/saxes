@@ -30,7 +30,7 @@
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-angular": "^8.3.4",
-    "@types/chai": "^4.2.10",
+    "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
     "@typescript-eslint/eslint-plugin": "^2.23.0",
     "@typescript-eslint/eslint-plugin-tslint": "^2.23.0",
