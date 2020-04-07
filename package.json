@@ -46,7 +46,7 @@
     "eslint-import-resolver-typescript": "^2.0.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-prefer-arrow": "^1.1.7",
+    "eslint-plugin-prefer-arrow": "^1.2.0",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-simple-import-sort": "^5.0.2",
     "husky": "^4.2.3",
