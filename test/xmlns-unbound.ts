@@ -84,7 +84,6 @@ describe("xmlns unbound prefixes", () => {
               value: "someuri",
               prefix: "xmlns",
               local: "unbound",
-              // eslint-disable-next-line @typescript-eslint/tslint/config
               uri: "http://www.w3.org/2000/xmlns/",
             },
           },
@@ -107,7 +106,6 @@ describe("xmlns unbound prefixes", () => {
               value: "someuri",
               prefix: "xmlns",
               local: "unbound",
-              // eslint-disable-next-line @typescript-eslint/tslint/config
               uri: "http://www.w3.org/2000/xmlns/",
             },
           },

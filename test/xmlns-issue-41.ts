@@ -8,7 +8,6 @@ const expect = [
       name: "xmlns:a",
       local: "a",
       prefix: "xmlns",
-      // eslint-disable-next-line @typescript-eslint/tslint/config
       value: "http://ATTRIBUTE",
     },
   ],
@@ -33,7 +32,6 @@ const expect = [
           name: "a:attr",
           local: "attr",
           prefix: "a",
-          // eslint-disable-next-line @typescript-eslint/tslint/config
           uri: "http://ATTRIBUTE",
           value: "value",
         },
@@ -41,14 +39,11 @@ const expect = [
           name: "xmlns:a",
           local: "a",
           prefix: "xmlns",
-          // eslint-disable-next-line @typescript-eslint/tslint/config
           uri: "http://www.w3.org/2000/xmlns/",
-          // eslint-disable-next-line @typescript-eslint/tslint/config
           value: "http://ATTRIBUTE",
         },
       },
       ns: {
-        // eslint-disable-next-line @typescript-eslint/tslint/config
         a: "http://ATTRIBUTE",
       },
       isSelfClosing: true,
@@ -66,7 +61,6 @@ const expect = [
           name: "a:attr",
           local: "attr",
           prefix: "a",
-          // eslint-disable-next-line @typescript-eslint/tslint/config
           uri: "http://ATTRIBUTE",
           value: "value",
         },
@@ -74,14 +68,11 @@ const expect = [
           name: "xmlns:a",
           local: "a",
           prefix: "xmlns",
-          // eslint-disable-next-line @typescript-eslint/tslint/config
           uri: "http://www.w3.org/2000/xmlns/",
-          // eslint-disable-next-line @typescript-eslint/tslint/config
           value: "http://ATTRIBUTE",
         },
       },
       ns: {
-        // eslint-disable-next-line @typescript-eslint/tslint/config
         a: "http://ATTRIBUTE",
       },
       isSelfClosing: true,

@@ -15,9 +15,7 @@ import isNCNameStartChar = NSed3.isNCNameStartChar;
 import isNCNameChar = NSed3.isNCNameChar;
 import NC_NAME_RE = NSed3.NC_NAME_RE;
 
-// eslint-disable-next-line @typescript-eslint/tslint/config
 const XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace";
-// eslint-disable-next-line @typescript-eslint/tslint/config
 const XMLNS_NAMESPACE = "http://www.w3.org/2000/xmlns/";
 
 const rootNS: Record<string, string> = {

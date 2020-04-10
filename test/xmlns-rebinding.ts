@@ -64,7 +64,6 @@ test({
           "xmlns:x": {
             name: "xmlns:x",
             value: "x1",
-            // eslint-disable-next-line @typescript-eslint/tslint/config
             uri: "http://www.w3.org/2000/xmlns/",
             prefix: "xmlns",
             local: "x",
@@ -72,7 +71,6 @@ test({
           "xmlns:y": {
             name: "xmlns:y",
             value: "y1",
-            // eslint-disable-next-line @typescript-eslint/tslint/config
             uri: "http://www.w3.org/2000/xmlns/",
             prefix: "xmlns",
             local: "y",
@@ -127,7 +125,6 @@ test({
           "xmlns:x": {
             name: "xmlns:x",
             value: "x2",
-            // eslint-disable-next-line @typescript-eslint/tslint/config
             uri: "http://www.w3.org/2000/xmlns/",
             prefix: "xmlns",
             local: "x",
@@ -230,7 +227,6 @@ test({
           "xmlns:x": {
             name: "xmlns:x",
             value: "x2",
-            // eslint-disable-next-line @typescript-eslint/tslint/config
             uri: "http://www.w3.org/2000/xmlns/",
             prefix: "xmlns",
             local: "x",
@@ -333,7 +329,6 @@ test({
           "xmlns:x": {
             name: "xmlns:x",
             value: "x1",
-            // eslint-disable-next-line @typescript-eslint/tslint/config
             uri: "http://www.w3.org/2000/xmlns/",
             prefix: "xmlns",
             local: "x",
@@ -341,7 +336,6 @@ test({
           "xmlns:y": {
             name: "xmlns:y",
             value: "y1",
-            // eslint-disable-next-line @typescript-eslint/tslint/config
             uri: "http://www.w3.org/2000/xmlns/",
             prefix: "xmlns",
             local: "y",

@@ -2,11 +2,9 @@ import { test } from "./testutil";
 
 const xmlnsAttr = {
   name: "xmlns",
-  // eslint-disable-next-line @typescript-eslint/tslint/config
   value: "http://foo",
   prefix: "",
   local: "xmlns",
-  // eslint-disable-next-line @typescript-eslint/tslint/config
   uri: "http://www.w3.org/2000/xmlns/",
 };
 
@@ -34,7 +32,6 @@ test({
       "attribute",
       {
         name: "xmlns",
-        // eslint-disable-next-line @typescript-eslint/tslint/config
         value: "http://foo",
         prefix: "",
         local: "xmlns",
@@ -55,9 +52,7 @@ test({
         name: "elm",
         prefix: "",
         local: "elm",
-        // eslint-disable-next-line @typescript-eslint/tslint/config
         uri: "http://foo",
-        // eslint-disable-next-line @typescript-eslint/tslint/config
         ns: { "": "http://foo" },
         attributes: {
           xmlns: xmlnsAttr,
@@ -72,9 +67,7 @@ test({
         name: "elm",
         prefix: "",
         local: "elm",
-        // eslint-disable-next-line @typescript-eslint/tslint/config
         uri: "http://foo",
-        // eslint-disable-next-line @typescript-eslint/tslint/config
         ns: { "": "http://foo" },
         attributes: {
           xmlns: xmlnsAttr,

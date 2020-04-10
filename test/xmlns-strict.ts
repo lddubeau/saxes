@@ -120,7 +120,6 @@ test({
             value: "uri:default",
             prefix: "",
             local: "xmlns",
-            // eslint-disable-next-line @typescript-eslint/tslint/config
             uri: "http://www.w3.org/2000/xmlns/",
           },
         },
@@ -200,7 +199,6 @@ test({
             value: "uri:default",
             prefix: "",
             local: "xmlns",
-            // eslint-disable-next-line @typescript-eslint/tslint/config
             uri: "http://www.w3.org/2000/xmlns/",
           },
         },
@@ -240,7 +238,6 @@ test({
             value: "uri:nsa",
             prefix: "xmlns",
             local: "a",
-            // eslint-disable-next-line @typescript-eslint/tslint/config
             uri: "http://www.w3.org/2000/xmlns/",
           },
         },
@@ -377,7 +374,6 @@ test({
             value: "uri:nsa",
             prefix: "xmlns",
             local: "a",
-            // eslint-disable-next-line @typescript-eslint/tslint/config
             uri: "http://www.w3.org/2000/xmlns/",
           },
         },

@@ -17,7 +17,6 @@ describe("xml default prefix", () => {
         "opentag",
         {
           name: "xml:root",
-          // eslint-disable-next-line @typescript-eslint/tslint/config
           uri: "http://www.w3.org/XML/1998/namespace",
           prefix: "xml",
           local: "root",
@@ -30,7 +29,6 @@ describe("xml default prefix", () => {
         "closetag",
         {
           name: "xml:root",
-          // eslint-disable-next-line @typescript-eslint/tslint/config
           uri: "http://www.w3.org/XML/1998/namespace",
           prefix: "xml",
           local: "root",
@@ -76,7 +74,6 @@ describe("xml default prefix", () => {
               name: "xml:lang",
               local: "lang",
               prefix: "xml",
-              // eslint-disable-next-line @typescript-eslint/tslint/config
               uri: "http://www.w3.org/XML/1998/namespace",
               value: "en",
             },
@@ -97,7 +94,6 @@ describe("xml default prefix", () => {
               name: "xml:lang",
               local: "lang",
               prefix: "xml",
-              // eslint-disable-next-line @typescript-eslint/tslint/config
               uri: "http://www.w3.org/XML/1998/namespace",
               value: "en",
             },
@@ -148,7 +144,6 @@ http://www.w3.org/XML/1998/namespace.",
               name: "xmlns:xml",
               local: "xml",
               prefix: "xmlns",
-              // eslint-disable-next-line @typescript-eslint/tslint/config
               uri: "http://www.w3.org/2000/xmlns/",
               value: "ERROR",
             },
@@ -171,7 +166,6 @@ http://www.w3.org/XML/1998/namespace.",
               name: "xmlns:xml",
               local: "xml",
               prefix: "xmlns",
-              // eslint-disable-next-line @typescript-eslint/tslint/config
               uri: "http://www.w3.org/2000/xmlns/",
               value: "ERROR",
             },
