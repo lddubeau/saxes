@@ -1526,15 +1526,22 @@ export class SaxesParser<O extends SaxesOptions = {}> {
           start = this.i;
           break;
         case SEMICOLON: {
+          const { entityReturnState } = this;
           const entity = this.entity + chunk.slice(start, this.prevI);
-          this.state = this.entityReturnState!;
+          this.state = entityReturnState!;
+          let parsed: string;
           if (entity === "") {
             this.fail("empty entity name.");
-            this.text += "&;";
-            return;
+            parsed = "&;";
           }
-          this.text += this.parseEntity(entity);
-          this.entity = "";
+          else {
+            parsed = this.parseEntity(entity);
+            this.entity = "";
+          }
+
+          if (entityReturnState !== S_TEXT || this.textHandler !== undefined) {
+            this.text += parsed;
+          }
           // eslint-disable-next-line no-labels
           break loop;
         }
