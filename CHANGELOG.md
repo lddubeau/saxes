@@ -1,3 +1,13 @@
+<a name="5.0.1"></a>
+## [5.0.1](https://github.com/lddubeau/saxes/compare/v5.0.0...v5.0.1) (2020-04-10)
+
+
+### Bug Fixes
+
+* fix corrupted attribute values when there is no text handler ([e135f11](https://github.com/lddubeau/saxes/commit/e135f11)), closes [#38](https://github.com/lddubeau/saxes/issues/38)
+
+
+
 <a name="5.0.0"></a>
 # [5.0.0](https://github.com/lddubeau/saxes/compare/v5.0.0-rc.2...v5.0.0) (2020-02-28)
 
