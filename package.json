@@ -50,7 +50,7 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-simple-import-sort": "^5.0.2",
     "husky": "^4.2.5",
-    "mocha": "^7.1.1",
+    "mocha": "^7.1.2",
     "renovate-config-lddubeau": "^1.0.0",
     "simple-dist-tag": "^1.0.2",
     "ts-node": "^8.9.1",
