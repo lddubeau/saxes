@@ -48,7 +48,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prefer-arrow": "^1.2.0",
     "eslint-plugin-react": "^7.19.0",
-    "eslint-plugin-simple-import-sort": "^5.0.2",
+    "eslint-plugin-simple-import-sort": "^5.0.3",
     "husky": "^4.2.5",
     "mocha": "^7.1.2",
     "renovate-config-lddubeau": "^1.0.0",
