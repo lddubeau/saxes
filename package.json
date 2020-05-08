@@ -39,7 +39,7 @@
     "@xml-conformance-suite/mocha": "^2.0.0",
     "@xml-conformance-suite/test-data": "^2.0.0",
     "chai": "^4.2.0",
-    "conventional-changelog-cli": "^2.0.31",
+    "conventional-changelog-cli": "^2.0.34",
     "eslint": "^6.8.0",
     "eslint-config-lddubeau-base": "^5.2.0",
     "eslint-config-lddubeau-ts": "^1.1.7",
