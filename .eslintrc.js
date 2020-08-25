@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = {
   overrides: [{
     files: [
@@ -29,7 +31,7 @@ module.exports = {
         "no-unused-expressions":
         ["off", "Lots of false positivites due to chai."],
       },
-    },{
+    }, {
       files: [
         "misc/**/*.js",
       ],
@@ -72,21 +74,16 @@ module.exports = {
         project: "test/tsconfig.json",
         sourceType: "module",
       },
-      "settings": {
+      settings: {
         "import/parsers": {
-          "@typescript-eslint/parser": [".ts", ".tsx"]
+          "@typescript-eslint/parser": [".ts", ".tsx"],
         },
         "import/resolver": {
           // use <root>/tsconfig.json
-          "typescript": {
-            "alwaysTryTypes": true // always try to resolve types under `<roo/>@types` directory even it doesn't contain any source code, like `@types/unist`
+          typescript: {
+            directory: "./test",
           },
-
-          // use <root>/path/to/folder/tsconfig.json
-          "typescript": {
-            "directory": "./test"
-          },
-        }
+        },
       },
       rules: {
         "no-unused-expressions":
@@ -100,7 +97,7 @@ module.exports = {
         ],
         // Routinely violated by large describe blocks.
         "max-lines-per-function": "off",
-      }
+      },
     }],
   }],
 };

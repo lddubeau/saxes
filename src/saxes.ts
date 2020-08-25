@@ -832,7 +832,6 @@ export class SaxesParser<O extends SaxesOptions = {}> {
 
     this.ENTITIES = Object.create(XML_ENTITIES);
 
-    // eslint-disable-next-line no-unused-expressions
     this.readyHandler?.();
   }
 
@@ -1358,7 +1357,6 @@ export class SaxesParser<O extends SaxesOptions = {}> {
     const c = this.captureTo(DOCTYPE_TERMINATOR);
     switch (c) {
       case GREATER: {
-        // eslint-disable-next-line no-unused-expressions
         this.doctypeHandler?.(this.text);
         this.text = "";
         this.state = S_TEXT;
@@ -1628,7 +1626,6 @@ export class SaxesParser<O extends SaxesOptions = {}> {
     const c = this.getCodeNorm();
     if (c === MINUS) {
       this.state = S_COMMENT_ENDED;
-      // eslint-disable-next-line no-unused-expressions
       this.commentHandler?.(this.text);
       this.text = "";
     }
@@ -1673,7 +1670,6 @@ export class SaxesParser<O extends SaxesOptions = {}> {
     const c = this.getCodeNorm();
     switch (c) {
       case GREATER: {
-        // eslint-disable-next-line no-unused-expressions
         this.cdataHandler?.(this.text);
         this.text = "";
         this.state = S_TEXT;
@@ -1773,7 +1769,6 @@ export class SaxesParser<O extends SaxesOptions = {}> {
         this.fail(
           "the XML declaration must appear at the start of the document.");
       }
-      // eslint-disable-next-line no-unused-expressions
       this.piHandler?.({
         target: piTarget,
         body: this.text,
@@ -1977,7 +1972,6 @@ export class SaxesParser<O extends SaxesOptions = {}> {
                this.xmlDeclExpects.includes("version")) {
         this.fail("XML declaration must contain a version.");
       }
-      // eslint-disable-next-line no-unused-expressions
       this.xmldeclHandler?.(this.xmlDecl);
       this.name = "";
       this.piTarget = this.text = "";
@@ -2009,7 +2003,6 @@ export class SaxesParser<O extends SaxesOptions = {}> {
       this.topNS = tag.ns = Object.create(null);
     }
 
-    // eslint-disable-next-line no-unused-expressions
     this.openTagStartHandler?.(tag as StartTagForOptions<O>);
     this.sawRoot = true;
     if (!this.fragmentOpt && this.closedRoot) {
@@ -2401,7 +2394,6 @@ export class SaxesParser<O extends SaxesOptions = {}> {
     const { prefix, local } = this.qname(name);
     const attr = { name, prefix, local, value };
     this.attribList.push(attr);
-    // eslint-disable-next-line no-unused-expressions
     this.attributeHandler?.(attr as AttributeEventForOptions<O>);
     if (prefix === "xmlns") {
       const trimmed = value.trim();
@@ -2421,7 +2413,6 @@ export class SaxesParser<O extends SaxesOptions = {}> {
   private pushAttribPlain(name: string, value: string): void {
     const attr = { name, value };
     this.attribList.push(attr);
-    // eslint-disable-next-line no-unused-expressions
     this.attributeHandler?.(attr as AttributeEventForOptions<O>);
   }
 
@@ -2445,12 +2436,10 @@ export class SaxesParser<O extends SaxesOptions = {}> {
     }
     const { text } = this;
     if (text.length !== 0) {
-      // eslint-disable-next-line no-unused-expressions
       this.textHandler?.(text);
       this.text = "";
     }
     this._closed = true;
-    // eslint-disable-next-line no-unused-expressions
     this.endHandler?.();
     this._init();
     return this;
@@ -2598,7 +2587,6 @@ export class SaxesParser<O extends SaxesOptions = {}> {
 
     // There cannot be any pending text here due to the onopentagstart that was
     // necessarily emitted before we get here. So we do not check text.
-    // eslint-disable-next-line no-unused-expressions
     this.openTagHandler?.(tag as TagForOptions<O>);
     tags.push(tag);
     this.state = S_TEXT;
@@ -2619,9 +2607,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
 
     // There cannot be any pending text here due to the onopentagstart that was
     // necessarily emitted before we get here. So we do not check text.
-    // eslint-disable-next-line no-unused-expressions
     this.openTagHandler?.(tag as TagForOptions<O>);
-    // eslint-disable-next-line no-unused-expressions
     this.closeTagHandler?.(tag as TagForOptions<O>);
     const top = this.tag = tags[tags.length - 1] ?? null;
     if (top === null) {
@@ -2655,7 +2641,6 @@ export class SaxesParser<O extends SaxesOptions = {}> {
     while (l-- > 0) {
       const tag = this.tag = tags.pop() as SaxesTag;
       this.topNS = tag.ns!;
-      // eslint-disable-next-line no-unused-expressions
       handler?.(tag as TagForOptions<O>);
       if (tag.name === name) {
         break;
