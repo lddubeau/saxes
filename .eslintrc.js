@@ -81,7 +81,7 @@ module.exports = {
         "import/resolver": {
           // use <root>/tsconfig.json
           typescript: {
-            directory: "./test",
+            project: "./test",
           },
         },
       },

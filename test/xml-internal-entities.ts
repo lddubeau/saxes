@@ -37,7 +37,6 @@ for (const entity in entitiesToTest) {
   if (!entitiesToTest[entity]) {
     const pos = xmlStart.length + entity.length + 1;
 
-    // eslint-disable-next-line @typescript-eslint/prefer-string-starts-ends-with
     const msg = entity[0] === "#" ? "malformed character entity." :
       "disallowed character in entity name.";
     attributeErrors.push(["error", `1:${pos}: ${msg}`]);

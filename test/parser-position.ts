@@ -3,29 +3,37 @@ import { expect } from "chai";
 import { EVENTS, SaxesOptions, SaxesParser } from "../build/dist/saxes";
 import { test } from "./testutil";
 
+interface ExpectedPosition {
+  position?: number;
+  line?: number;
+  column?: number;
+}
+
+type ExpectedEvent = readonly [string, ExpectedPosition, string?];
+
 function testPosition(name: string, chunks: string[],
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                      expectedEvents: any[], options?: SaxesOptions): void {
+                      expectedEvents: readonly ExpectedEvent[],
+                      options?: SaxesOptions): void {
   it(name, () => {
     const parser = new SaxesParser(options);
     let expectedIx = 0;
     for (const ev of EVENTS) {
       // eslint-disable-next-line no-loop-func, @typescript-eslint/no-explicit-any
-      (parser as any)[`on${ev}`] = (thing: any) => {
+      parser.on(ev, (thing: any) => {
         const [expectedEvent, expectedPosition, expectedText] =
               expectedEvents[expectedIx++];
         expect(expectedEvent).to.equal(ev);
         // eslint-disable-next-line guard-for-in
         for (const prop in expectedPosition) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
           expect((parser as any)[prop], `bad ${prop}`)
-            .to.deep.equal(expectedPosition[prop]);
+            .to.deep.equal(expectedPosition[prop as keyof ExpectedPosition]);
         }
 
         if (expectedEvent === "text" && expectedText !== undefined) {
           expect(thing).to.equal(expectedText);
         }
-      };
+      });
     }
 
     for (const chunk of chunks) {
@@ -71,7 +79,7 @@ describe("parser position", () => {
       ["text", { position: 30, line: 5, column: 6 },
        "f\ngh\n\ni\u0085j\u2028k"],
       ["closetag", { position: 35, line: 5, column: 11 }],
-    ];
+    ] as const;
 
     testPosition("with various newlines", [newlines], expected);
     testPosition("with various newlines (one-by-one)", oneByOne, expected);
@@ -88,7 +96,7 @@ describe("parser position", () => {
       ["closetag", { position: 18, line: 2, column: 6 }],
       ["text", { position: 30, line: 7, column: 2 }, "f\ngh\n\ni\nj\nk"],
       ["closetag", { position: 35, line: 7, column: 7 }],
-    ];
+    ] as const;
 
     testPosition("with various newlines", [newlines], expected, {
       defaultXMLVersion: "1.1",

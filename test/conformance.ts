@@ -198,7 +198,7 @@ class SaxesSelection extends BaseSelection {
       case "error":
         return "skip";
       default:
-        throw new Error(`unexpected test type: ${testType}`);
+        throw new Error(`unexpected test type: ${testType as string}`);
     }
   }
 
@@ -262,7 +262,7 @@ class CharByCharDriver extends SaxesDriver {
 }
 
 const resourceLoader = new ResourceLoader();
-loadTests(resourceLoader)
+void loadTests(resourceLoader)
   .then(suite => Promise.all([
     build(suite, "conformance (one write)", resourceLoader,
           SaxesDriver, SaxesSelection),

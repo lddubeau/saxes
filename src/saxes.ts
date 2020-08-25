@@ -19,14 +19,14 @@ const XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace";
 const XMLNS_NAMESPACE = "http://www.w3.org/2000/xmlns/";
 
 const rootNS: Record<string, string> = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
   __proto__: null as any,
   xml: XML_NAMESPACE,
   xmlns: XMLNS_NAMESPACE,
 };
 
 const XML_ENTITIES: Record<string, string> = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
   __proto__: null as any,
   amp: "&",
   gt: ">",
@@ -114,7 +114,7 @@ const DTD_TERMINATOR = [...QUOTES, LESS, CLOSE_BRACKET];
 const XML_DECL_NAME_TERMINATOR = [EQUAL, QUESTION, ...S_LIST];
 const ATTRIB_VALUE_UNQUOTED_TERMINATOR = [...S_LIST, GREATER, AMP, LESS];
 
-function nsPairCheck(parser: SaxesParser<{}>, prefix: string,
+function nsPairCheck(parser: SaxesParser<SaxesOptions>, prefix: string,
                      uri: string): void {
   switch (prefix) {
     case "xml":
@@ -153,7 +153,7 @@ ${XMLNS_NAMESPACE}.`);
   }
 }
 
-function nsMappingCheck(parser: SaxesParser<{}>,
+function nsMappingCheck(parser: SaxesParser<SaxesOptions>,
                         mapping: Record<string, string>): void {
   for (const local of Object.keys(mapping)) {
     nsPairCheck(parser, local, mapping[local]);
@@ -566,6 +566,7 @@ export type StartTagForOptions<O extends SaxesOptions> =
     O extends { xmlns?: false | undefined } ? SaxesStartTagPlain :
       SaxesStartTag;
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export class SaxesParser<O extends SaxesOptions = {}> {
   private readonly fragmentOpt: boolean;
   private readonly xmlnsOpt: boolean;
@@ -697,7 +698,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
       // eslint-disable-next-line @typescript-eslint/unbound-method
       this.pushAttrib = this.pushAttribNS;
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
       this.ns = { __proto__: null as any, ...rootNS };
       const additional = this.opt.additionalNamespaces;
       if (additional != null) {
@@ -830,7 +831,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
     this.line = 1;
     this.column = 0;
 
-    this.ENTITIES = Object.create(XML_ENTITIES);
+    this.ENTITIES = Object.create(XML_ENTITIES) as Record<string, string>;
 
     this.readyHandler?.();
   }
@@ -872,7 +873,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
    * @param handler The handler to set.
    */
   on<N extends EventName>(name: N, handler: EventNameToHandler<O, N>): void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
     (this as any)[EVENT_NAME_TO_HANDLER_NAME[name]] = handler;
   }
 
@@ -882,7 +883,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
    * @parma name The event to stop listening to.
    */
   off(name: EventName): void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
     (this as any)[EVENT_NAME_TO_HANDLER_NAME[name]] = undefined;
   }
 
@@ -938,7 +939,10 @@ export class SaxesParser<O extends SaxesOptions = {}> {
    *
    * @returns this
    */
-  write(chunk: string | {} | null): this {
+  // We do need object for the type here. Yes, it often causes problems
+  // but not in this case.
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  write(chunk: string | object | null): this {
     if (this.closed) {
       return this.fail("cannot write after close; assign an onready handler.");
     }
@@ -966,8 +970,8 @@ export class SaxesParser<O extends SaxesOptions = {}> {
       this.carriedFromPrevious = undefined;
     }
 
-    let limit = (chunk as string).length;
-    const lastCode = (chunk as string).charCodeAt(limit - 1);
+    let limit = chunk.length;
+    const lastCode = chunk.charCodeAt(limit - 1);
     if (!end &&
         // A trailing CR or surrogate must be carried over to the next
         // chunk.
@@ -975,13 +979,13 @@ export class SaxesParser<O extends SaxesOptions = {}> {
       // The chunk ends with a character that must be carried over. We cannot
       // know how to handle it until we get the next chunk or the end of the
       // stream. So save it for later.
-      this.carriedFromPrevious = (chunk as string)[limit - 1];
+      this.carriedFromPrevious = chunk[limit - 1];
       limit--;
-      chunk = (chunk as string).slice(0, limit);
+      chunk = chunk.slice(0, limit);
     }
 
     const { stateTable } = this;
-    this.chunk = chunk as string;
+    this.chunk = chunk;
     this.i = 0;
     while (this.i < limit) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -2000,7 +2004,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
     this.name = "";
 
     if (this.xmlnsOpt) {
-      this.topNS = tag.ns = Object.create(null);
+      this.topNS = tag.ns = Object.create(null) as Record<string, string>;
     }
 
     this.openTagStartHandler?.(tag as StartTagForOptions<O>);
@@ -2666,7 +2670,6 @@ export class SaxesParser<O extends SaxesOptions = {}> {
    */
   private parseEntity(entity: string): string {
     // startsWith would be significantly slower for this test.
-    // eslint-disable-next-line @typescript-eslint/prefer-string-starts-ends-with
     if (entity[0] !== "#") {
       const defined = this.ENTITIES[entity];
       if (defined !== undefined) {

@@ -8,6 +8,7 @@ export interface TestOptions {
   name: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   expect: readonly any[];
+  // eslint-disable-next-line @typescript-eslint/ban-types
   fn?: (parser: SaxesParser<{}>) => void;
   opt?: SaxesOptions;
   events?: readonly EventName[];
@@ -23,6 +24,7 @@ export function test(options: TestOptions): void {
       parser.on(ev, (n: any) => {
         if (process.env.DEBUG !== undefined) {
           console.error({
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             expected: expected[expectedIx],
             actual: [ev, n],
           });
@@ -31,6 +33,7 @@ export function test(options: TestOptions): void {
           return;
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         expect([ev, ev === "error" ? n.message : n]).to.deep
           .equal(expected[expectedIx]);
         expectedIx++;
@@ -48,7 +51,7 @@ export function test(options: TestOptions): void {
         parser.close();
       }
       else {
-        parser.write(xml).close();
+        parser.write(xml as string).close();
       }
     }
 
