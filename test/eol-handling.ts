@@ -221,7 +221,6 @@ abc
       expect.map(x => (x[0] === "xmldecl" ?
         [x[0], { ...x[1], version: "1.1" }] : x));
 
-
     describe("nl", () => {
       test({
         name: "one chunk",

@@ -153,7 +153,6 @@ ${XMLNS_NAMESPACE}.`);
   }
 }
 
-
 function nsMappingCheck(parser: SaxesParser<{}>,
                         mapping: Record<string, string>): void {
   for (const local of Object.keys(mapping)) {
@@ -226,7 +225,6 @@ export type TextHandler = (text: string) => void;
  * @param data The target and body of the processing instruction.
  */
 export type PIHandler = (data: { target: string; body: string }) => void;
-
 
 /**
  * Event handler for doctype.
@@ -699,7 +697,6 @@ export class SaxesParser<O extends SaxesOptions = {}> {
       // eslint-disable-next-line @typescript-eslint/unbound-method
       this.pushAttrib = this.pushAttribNS;
 
-
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       this.ns = { __proto__: null as any, ...rootNS };
       const additional = this.opt.additionalNamespaces;
@@ -1087,7 +1084,6 @@ export class SaxesParser<O extends SaxesOptions = {}> {
 
     return final;
   }
-
 
   /**
    * Get a single code point out of the current chunk. This updates the current

@@ -185,7 +185,6 @@ const PLATFORM_ISSUES: Record<string, string> = {
   "hst-lhs-007": "xml declaration encoding",
 };
 
-
 class SaxesSelection extends BaseSelection {
   // eslint-disable-next-line class-methods-use-this
   getHandlingByType(test: TestSpec): TestHandling {
