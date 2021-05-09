@@ -30,7 +30,7 @@
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-angular": "^11.0.0",
-    "@types/chai": "^4.2.14",
+    "@types/chai": "^4.2.18",
     "@types/mocha": "^8.2.0",
     "@types/node": "^14.14.12",
     "@typescript-eslint/eslint-plugin": "^3.10.1",
@@ -39,7 +39,7 @@
     "@xml-conformance-suite/js": "^2.0.0",
     "@xml-conformance-suite/mocha": "^2.0.0",
     "@xml-conformance-suite/test-data": "^2.0.0",
-    "chai": "^4.2.0",
+    "chai": "^4.3.4",
     "conventional-changelog-cli": "^2.1.1",
     "eslint": "^7.15.0",
     "eslint-config-lddubeau-base": "^6.0.0",
