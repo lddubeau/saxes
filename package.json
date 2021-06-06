@@ -41,7 +41,7 @@
     "@xml-conformance-suite/test-data": "^2.0.0",
     "chai": "^4.2.0",
     "conventional-changelog-cli": "^2.1.1",
-    "eslint": "^7.15.0",
+    "eslint": "^7.28.0",
     "eslint-config-lddubeau-base": "^6.0.0",
     "eslint-config-lddubeau-ts": "^2.0.2",
     "eslint-import-resolver-typescript": "^2.3.0",
