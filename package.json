@@ -59,7 +59,7 @@
     "tslint": "^6.1.3",
     "tslint-microsoft-contrib": "^6.2.0",
     "typedoc": "^0.19.2",
-    "typescript": "^4.0.5"
+    "typescript": "^4.3.2"
   },
   "dependencies": {
     "xmlchars": "^2.2.0"
