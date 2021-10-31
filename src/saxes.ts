@@ -941,7 +941,6 @@ export class SaxesParser<O extends SaxesOptions = {}> {
    */
   // We do need object for the type here. Yes, it often causes problems
   // but not in this case.
-  // eslint-disable-next-line @typescript-eslint/ban-types
   write(chunk: string | object | null): this {
     if (this.closed) {
       return this.fail("cannot write after close; assign an onready handler.");
@@ -988,7 +987,7 @@ export class SaxesParser<O extends SaxesOptions = {}> {
     this.chunk = chunk;
     this.i = 0;
     while (this.i < limit) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
       stateTable[this.state].call(this as any);
     }
     this.chunkPosition += limit;

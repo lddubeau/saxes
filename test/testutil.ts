@@ -45,7 +45,7 @@ export function test(options: TestOptions): void {
 
     if (xml !== undefined) {
       if (Array.isArray(xml)) {
-        for (const chunk of xml) {
+        for (const chunk of xml as readonly string[]) {
           parser.write(chunk);
         }
         parser.close();
