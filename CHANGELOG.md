@@ -1,3 +1,18 @@
+# [6.0.0-rc.1](https://github.com/lddubeau/saxes/compare/v5.0.1...v6.0.0-rc.1) (2021-11-07)
+
+
+### Bug Fixes
+
+* fixing linting errors for eslint 8 ([cd4b5c9](https://github.com/lddubeau/saxes/commit/cd4b5c9ddf166d426ece77349bbde7538fb0aaa4))
+* we don't support node 10 anymore ([f2aa1a8](https://github.com/lddubeau/saxes/commit/f2aa1a8e2b379f102010b9c552490f385f7854af))
+
+
+### BREAKING CHANGES
+
+* we don't support node 10.
+
+
+
 <a name="5.0.1"></a>
 ## [5.0.1](https://github.com/lddubeau/saxes/compare/v5.0.0...v5.0.1) (2020-04-10)
 
