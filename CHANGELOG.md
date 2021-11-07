@@ -1,3 +1,7 @@
+# [6.0.0](https://github.com/lddubeau/saxes/compare/v6.0.0-rc.1...v6.0.0) (2021-11-07)
+
+
+
 # [6.0.0-rc.1](https://github.com/lddubeau/saxes/compare/v5.0.1...v6.0.0-rc.1) (2021-11-07)
 
 
