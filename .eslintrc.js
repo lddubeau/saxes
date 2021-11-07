@@ -54,12 +54,15 @@ module.exports = {
     rules: {
       "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
       "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
-      "import/extensions": ["error", "always", {
+      // There's a bug in this plugin.
+      "import/extensions": ["off", "always", {
         pattern: {
           js: "never",
           ts: "never",
         },
       }],
+      // There's a bug in this plugin.
+      "import/no-unresolved": "off",
       // Too useful in this code-base.
       "@typescript-eslint/no-non-null-assertion": "off",
     },

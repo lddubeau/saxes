@@ -269,4 +269,5 @@ void loadTests(resourceLoader)
     build(suite, "conformance (char-by-char)", resourceLoader,
           CharByCharDriver, SaxesSelection),
   ]))
-  .then(run);
+  .then(run)
+  .catch(e => console.log(e));
