@@ -28,8 +28,8 @@
   },
   "repository": "https://github.com/lddubeau/saxes.git",
   "devDependencies": {
-    "@commitlint/cli": "^16.1.0",
-    "@commitlint/config-angular": "^16.0.0",
+    "@commitlint/cli": "^16.2.1",
+    "@commitlint/config-angular": "^16.2.1",
     "@types/chai": "^4.3.0",
     "@types/mocha": "^9.1.0",
     "@types/node": "^16.11.6",
