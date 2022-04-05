@@ -8,7 +8,7 @@
   "types": "saxes.d.ts",
   "license": "ISC",
   "engines": {
-    "node": ">=v12.22.11"
+    "node": ">=v12.22.12"
   },
   "scripts": {
     "tsc": "tsc",
